@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Steps Into Recovery — Mobile v6 Recovery Coach</title>
+<title>Steps Into Recovery — Mobile v7 Personalized Coping</title>
 <style>
 :root{
  --navy:#072631;--navy2:#0c3a49;--navy3:#11505f;--gold:#f1b846;--cream:#fff7e8;--paper:#fffaf2;
@@ -179,13 +179,27 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 .coachActions .btn{width:100%;min-height:46px}
 @media(max-width:520px){.coachActions{grid-template-columns:1fr}.coachSkill{grid-template-columns:54px 1fr}.coachSkill img{width:54px;height:54px}}
 
+
+/* v7 personalized coping picker */
+.copingGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.copingCard{border:2px solid #d8c8ae;background:#fff;color:#142b31;border-radius:14px;padding:10px;text-align:left;min-height:92px}
+.copingCard.recommended{border-color:#d6a52d;background:#fff8dc}
+.copingCard b{display:block;font-size:14px;margin-bottom:3px}.copingCard small{display:block;color:#607276;line-height:1.25}
+.copingEmoji{font-size:25px;display:block;margin-bottom:4px}
+.copingPractice{background:#102f3a;color:#fff;border-radius:15px;padding:13px;margin-top:10px;line-height:1.5}
+.copingPractice h3{margin:0 0 6px;color:#ffd16b}
+.copingActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.copingActions .btn{width:100%;min-height:46px}
+.sceneSubmit{width:100%;margin-top:10px}
+@media(max-width:520px){.copingGrid{grid-template-columns:1fr}.copingCard{min-height:78px}.copingActions{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <div id="app">
 <section id="start" class="screen active">
  <div class="startcard">
-  <div class="brand">Steps Into <span>Recovery</span></div><div style="display:inline-block;margin:6px 0 8px;padding:5px 9px;border-radius:999px;background:#f1b846;color:#2d1d02;font-size:11px;font-weight:1000">TEST BUILD v6 · PERSONAL RECOVERY COACH</div>
+  <div class="brand">Steps Into <span>Recovery</span></div><div style="display:inline-block;margin:6px 0 8px;padding:5px 9px;border-radius:999px;background:#f1b846;color:#2d1d02;font-size:11px;font-weight:1000">TEST BUILD v7 · PERSONALIZED COPING</div>
   <div class="tag">Hope Springs · Explore freely · survive pressure events · build relationships · use real skills in real-time challenges.</div>
   <div class="modeRow">
    <button id="freeMode" class="modeBtn sel"><b>Free Journey</b><small>Day 1 story arc · Levels 1–3 · 6 locations · 4 core skills · 3 playable challenges.</small></button>
@@ -270,6 +284,37 @@ const skills={
  reach:{name:'Reach Out',img:ASSET.reach_out,desc:'Connection +10',power:13,cd:5000,fx:s=>s.connection+=10},
  gratitude:{name:'Gratitude',img:ASSET.gratitude,desc:'Recovery +4 · Stress -3',power:8,cd:3000,fx:s=>{s.recovery+=4;s.stress-=3}}
 };
+const copingTools={
+ breathe:{name:'Longer-Exhale Breathing',emoji:'🌬️',desc:'Settle physical stress',practice:'Breathe in gently for 4 counts and out for 6. Repeat 5 times. Keep it comfortable rather than forcing a deep breath.',fx:s=>s.stress-=8},
+ box:{name:'Box Breathing',emoji:'⬜',desc:'Give racing attention a steady rhythm',practice:'Inhale 4, hold 4, exhale 4, hold 4. Repeat 4 rounds at a comfortable pace.',fx:s=>s.stress-=7},
+ ground54321:{name:'5-4-3-2-1 Grounding',emoji:'🌿',desc:'Come back to the present',practice:'Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, and 1 you taste or can imagine tasting.',fx:s=>{s.stress-=7;s.recovery+=3}},
+ sensory:{name:'Sensory Soothing',emoji:'🕯️',desc:'Use safe sensory input to settle',practice:'Choose one soothing input: warm water, a soft blanket, calming scent, dimmer light, or quiet music. Stay with it for two minutes and notice what shifts.',fx:s=>s.stress-=6},
+ bath:{name:'Bath or Shower Reset',emoji:'🛁',desc:'Use routine and warmth to reset',practice:'Take a shower or bath without rushing. Notice the temperature, sound, and physical sensations. Let it be a reset, not another task to complete.',fx:s=>{s.stress-=7;s.energy+=3}},
+ music:{name:'Music Reset',emoji:'🎵',desc:'Shift mood without denying it',practice:'Choose one song that matches what you feel, then one that moves you one step toward how you want to feel. Notice the difference.',fx:s=>s.stress-=5},
+ movement:{name:'Movement Reset',emoji:'🚶',desc:'Release built-up activation',practice:'Walk, stretch, pace, or shake out your hands and shoulders for 2–5 minutes. Check whether the intensity changes afterward.',fx:s=>{s.stress-=5;s.energy+=4}},
+ hydrate:{name:'Food & Hydration Check',emoji:'🥤',desc:'Meet a basic physical need',practice:'Ask when you last ate and drank water. If needed, have something simple and nourishing before making the next decision.',fx:s=>{s.energy+=6;s.stress-=2}},
+ halt:{name:'HALT Check',emoji:'🧭',desc:'Check Hungry, Angry, Lonely, Tired',practice:'Ask: Am I Hungry, Angry, Lonely, or Tired? Pick the strongest one and meet that need first if you can.',fx:s=>{s.recovery+=4;s.stress-=3}},
+ rest:{name:'Rest Reset',emoji:'😴',desc:'Protect energy before it crashes',practice:'Give yourself a defined rest period. Lower stimulation and set a gentle endpoint so rest does not quietly turn into avoidance.',fx:s=>{s.energy+=8;s.stress-=3}},
+ reach:{name:'Reach Out',emoji:'📱',desc:'Interrupt isolation',practice:'Choose one safe person and send a simple message: “I could use a little support right now. Are you available?”',fx:s=>s.connection+=9},
+ meeting:{name:'Use Your Support Network',emoji:'🤝',desc:'Bring another safe person into the moment',practice:'Choose a meeting, peer, sponsor, counselor, friend, or family member who is safe. Decide exactly who you will contact and how.',fx:s=>{s.connection+=8;s.recovery+=3}},
+ boundary:{name:'Boundary Script',emoji:'🛑',desc:'Protect recovery without overexplaining',practice:'Try: “I cannot do that right now.” Or: “I can help with X, but not Y.” Keep it short and do not argue with your boundary.',fx:s=>{s.recovery+=5;s.stress-=3}},
+ selftalk:{name:'Balanced Self-Talk',emoji:'💬',desc:'Challenge harsh inner talk',practice:'Replace the harshest thought with something accurate and usable: “This is hard, but one hard moment does not define me.” Rewrite it in your own words.',fx:s=>s.recovery+=6},
+ compassion:{name:'Self-Compassion Break',emoji:'💛',desc:'Respond without adding shame',practice:'Name the pain without attacking yourself: “This hurts.” Then add: “I do not have to make it worse by tearing myself apart.”',fx:s=>{s.recovery+=5;s.stress-=3}},
+ journal:{name:'Three-Line Journal',emoji:'📝',desc:'Separate facts, thoughts, and needs',practice:'Write three lines: What happened? What am I telling myself about it? What do I need next?',fx:s=>{s.recovery+=5;s.stress-=2}},
+ thoughtdump:{name:'Thought Dump',emoji:'🧠',desc:'Get mental clutter out of your head',practice:'Write everything circling in your mind for two minutes without organizing it. Then circle just one thing you can act on.',fx:s=>s.stress-=5},
+ onestep:{name:'One Small Step',emoji:'👣',desc:'Shrink an overwhelming task',practice:'Make the task smaller until it feels almost too easy. Choose one action you can finish in 5–10 minutes and do only that first.',fx:s=>{s.recovery+=4;s.energy+=2}},
+ pause:{name:'Pause Before Acting',emoji:'⏸️',desc:'Create space between feeling and action',practice:'Set a 10-minute pause before you act. During the pause, change rooms, drink water, breathe, or contact someone safe.',fx:s=>{s.stress-=4;s.recovery+=4}},
+ delay:{name:'Delay the Urge',emoji:'⏳',desc:'Do not let the urge make the decision',practice:'Tell yourself: “I am not deciding forever. I am waiting 20 minutes.” Recheck the urge after the delay.',fx:s=>{s.stress-=4;s.recovery+=5}},
+ urge:{name:'Urge Surfing',emoji:'🌊',desc:'Ride an urge without obeying it',practice:'Notice where the urge sits in your body. Describe it like a wave—rising, peaking, falling—while you avoid acting on it for the next few minutes.',fx:s=>{s.stress-=5;s.recovery+=7}},
+ tape:{name:'Play the Tape Forward',emoji:'🎬',desc:'Look past the immediate relief',practice:'Imagine the next hour, tomorrow morning, and next week if you act on the urge. Then imagine those same points if you protect your recovery.',fx:s=>s.recovery+=7},
+ environment:{name:'Change the Environment',emoji:'🚪',desc:'Reduce exposure to a trigger',practice:'Move to a safer room or place, leave the triggering situation, remove access if possible, and put distance between you and the cue.',fx:s=>{s.stress-=4;s.recovery+=5}},
+ opposite:{name:'Opposite Action',emoji:'↔️',desc:'Act against an unhelpful impulse',practice:'Name the impulse. If following it would make things worse, choose one safe action in the opposite direction—connect instead of isolate, move instead of freeze.',fx:s=>{s.recovery+=5;s.connection+=3}},
+ accept:{name:'Acceptance Statement',emoji:'🪨',desc:'Stop fighting what is already true',practice:'Try: “I do not have to like this, but this is what is happening right now.” Then ask what is still within your control.',fx:s=>{s.stress-=4;s.recovery+=3}},
+ gratitude:{name:'What Is Still Working?',emoji:'☀️',desc:'Widen attention without fake positivity',practice:'Name one thing that is helping today and why it matters. Keep it specific and believable.',fx:s=>{s.recovery+=4;s.stress-=2}},
+ values:{name:'Values Check',emoji:'🧭',desc:'Choose the next action on purpose',practice:'Ask: “What kind of person do I want to be in the next 10 minutes?” Pick one action that matches that value.',fx:s=>s.recovery+=5},
+ proscons:{name:'Quick Pros & Cons',emoji:'⚖️',desc:'Slow down an impulsive decision',practice:'List two short-term benefits and two costs of acting now, then two benefits and two costs of waiting or choosing differently.',fx:s=>s.recovery+=4}
+};
+
 const places={
  home:{x:.12,y:.76},park:{x:.34,y:.42},cafe:{x:.48,y:.57},support:{x:.77,y:.66},meeting:{x:.57,y:.73},
  gym:{x:.86,y:.82},library:{x:.73,y:.33},market:{x:.24,y:.63},work:{x:.87,y:.49},oldspot:{x:.91,y:.24}
@@ -358,53 +403,97 @@ function useSkill(id){
  renderHUD();toast(skills[id].name+' used');setTimeout(renderQuickbar,skills[id].cd+50)
 }
 
-function analyzeRecoveryResponse(text){
- const t=String(text||'').toLowerCase();
- const has=a=>a.some(w=>t.includes(w));
- if(has(['suicidal','suicide','kill myself','want to die','hurt myself','self harm','self-harm']))return {crisis:true,theme:'a possible immediate safety concern'};
- if(has(['craving','crave','urge','relapse','get high','use again','using','drink','triggered','trigger']))return {skill:'urge',theme:'a craving or strong trigger',why:'Urges tend to rise, peak, and fall. Urge Surfing helps you notice the wave without automatically acting on it.'};
- if(has(['alone','lonely','isolated','isolate','nobody','no one','by myself','withdraw']))return {skill:'reach',theme:'isolation or disconnection',why:'Reaching toward a safe person can interrupt isolation and make the next decision easier to carry.'};
- if(has(['ashamed','shame','guilty','guilt','failure','worthless','hate myself','stupid','loser','not good enough']))return {skill:'self',theme:'shame or harsh self-talk',why:'Balanced Self-Talk can challenge the harshest thought without pretending everything is fine.'};
- if(has(['panic','panicked','anxious','anxiety','racing','overwhelmed','overwhelm','cant breathe',"can't breathe",'heart racing','nervous']))return {skill:'deep',theme:'high stress or racing thoughts',why:'Slower breathing can lower physical arousal enough to make the next choice more deliberate.'};
- if(has(['angry','anger','mad','furious','restless','agitated','pissed','frustrated','frustration']))return {skill:'move',theme:'built-up tension or agitation',why:'Movement can discharge some physical tension so the feeling is easier to work with.'};
- if(has(['confused','stuck','ruminating','overthinking','overthink','dont know',"don't know",'mixed up','cant decide',"can't decide"]))return {skill:'journal',theme:'mental overload or uncertainty',why:'Journaling slows the situation down and separates what happened, what you think, and what you need.'};
- if(has(['hopeless','nothing good','everything sucks','pointless','never gets better','negative','miserable']))return {skill:'gratitude',theme:'hopelessness or a narrowed negative focus',why:'Gratitude does not erase the problem; it widens attention enough to notice what is still supporting you.'};
- return {skill:'ground',theme:'stress that could use a reset',why:'Grounding brings attention back to the present moment before you make the next decision.'};
+
+function analyzeRecoveryResponse(text,contextLabel){
+ const t=String(text||'').toLowerCase(),ctx=String(contextLabel||'').toLowerCase(),r=[];
+ const has=a=>a.some(w=>t.includes(w)),add=(...ids)=>ids.forEach(id=>{if(!r.includes(id))r.push(id)});
+ if(has(['suicidal','suicide','kill myself','want to die','hurt myself','self harm','self-harm']))return {crisis:true,theme:'a possible immediate safety concern',recommendations:[]};
+ let theme='a moment that deserves a deliberate next step';
+ if(has(['bath','bathe','shower','hot water','soak'])){theme='a self-care reset';add('bath','sensory','rest')}
+ if(has(['hungry','eat','food','meal','thirsty','water','dehydrated'])){theme='a basic-needs issue';add('halt','hydrate','onestep')}
+ if(has(['tired','exhausted','sleep','nap','worn out','drained'])){theme='low energy or exhaustion';add('rest','halt','boundary')}
+ if(has(['music','song','playlist','tv','movie'])){theme='using a low-demand activity to regulate';add('music','sensory','rest')}
+ if(has(['walk','walking','exercise','workout','stretch','outside'])){theme='a need to move or change state';add('movement','environment','ground54321')}
+ if(has(['craving','crave','urge','relapse','get high','use again','using','drink','triggered','trigger'])){theme='a craving or strong trigger';add('urge','delay','tape','environment','reach')}
+ if(has(['alone','lonely','isolated','isolate','nobody','no one','by myself','withdraw'])){theme='isolation or disconnection';add('reach','meeting','opposite','selftalk')}
+ if(has(['ashamed','shame','guilty','guilt','failure','worthless','hate myself','stupid','loser','not good enough'])){theme='shame or harsh self-talk';add('compassion','selftalk','journal','reach')}
+ if(has(['panic','panicked','anxious','anxiety','racing','overwhelmed','overwhelm','cant breathe',"can't breathe",'heart racing','nervous'])){theme='high stress or racing thoughts';add('breathe','ground54321','sensory','pause')}
+ if(has(['angry','anger','mad','furious','restless','agitated','pissed','frustrated','frustration'])){theme='built-up tension or agitation';add('movement','pause','boundary','breathe')}
+ if(has(['confused','stuck','ruminating','overthinking','overthink','dont know',"don't know",'mixed up','cant decide',"can't decide"])) {theme='mental overload or uncertainty';add('thoughtdump','journal','onestep','values')}
+ if(has(['hopeless','nothing good','everything sucks','pointless','never gets better','negative','miserable'])){theme='hopelessness or narrowed attention';add('compassion','accept','gratitude','reach')}
+ if(has(['argument','fight','conflict','yelling','pressure me','keeps asking','say no','boundary'])){theme='interpersonal pressure or conflict';add('boundary','pause','reach','values')}
+ if(has(['too much to do','so much to do','chores','clean','laundry','mess','task','procrastinat'])){theme='task overload';add('onestep','thoughtdump','music','pause')}
+ if(has(['bored','boredom','nothing to do'])){theme='boredom or unstructured time';add('values','movement','reach','onestep')}
+ if(!r.length){
+   if(ctx.includes('home'))add('halt','bath','music','rest','onestep');
+   else if(ctx.includes('meeting')||ctx.includes('café')||ctx.includes('cafe')||ctx.includes('support'))add('reach','boundary','selftalk','values');
+   else if(ctx.includes('library'))add('journal','thoughtdump','values','compassion');
+   else if(ctx.includes('work'))add('boundary','onestep','pause','values');
+   else if(ctx.includes('park'))add('ground54321','movement','sensory','breathe');
+   else if(ctx.includes('gym'))add('breathe','movement','ground54321','sensory');
+   else if(ctx.includes('market'))add('halt','hydrate','values','proscons');
+   else if(ctx.includes('old spot'))add('urge','delay','tape','environment','reach');
+   else add('halt','ground54321','pause','values');
+ }
+ return {theme,recommendations:r.slice(0,5)};
 }
-function coachPracticeText(id){
- return {
-  deep:'Breathe in gently for 4 counts, then out for 6. Repeat three times and let your shoulders drop on each exhale.',
-  ground:'Name 5 things you can see, 4 you can feel, 3 you can hear, 2 you can smell, and 1 you can taste or imagine tasting.',
-  self:'Write or say one balanced sentence: “I am having a hard moment, and I can still choose my next step.” Make it sound like your own voice.',
-  urge:'Name the urge without obeying it. Notice where you feel it in your body. Picture it as a wave that rises and falls while you wait before acting.',
-  journal:'Write three short lines: What happened? What am I telling myself about it? What do I need next?',
-  move:'For 30–60 seconds, walk, stretch, shake out your hands, or move your shoulders. Notice whether the intensity changes.',
-  reach:'Choose one safe person. Draft one simple message: “I could use a little support right now. Are you available?”',
-  gratitude:'Name one thing that is still helping you today and one reason it matters. Keep it specific rather than forcing positivity.'
- }[id]||'Pause, notice what is happening, and choose one small action that supports your recovery.';
+function copingWhy(id){
+ const m={
+ bath:'You already identified a soothing self-care action. The game should support that choice instead of replacing it.',
+ halt:'Checking basic needs can reveal when hunger, anger, loneliness, or fatigue is making everything feel harder.',
+ hydrate:'Meeting a physical need first can make emotional decisions easier to handle.',
+ rest:'Protecting energy can prevent exhaustion from turning into impulsive choices.',
+ music:'Music or another low-demand activity can help shift intensity without pretending the feeling is gone.',
+ movement:'Movement can release physical activation and create a state change.',
+ urge:'Urges rise and fall. You can experience one without automatically obeying it.',
+ delay:'A delay creates distance between an urge and an action.',
+ tape:'Looking past immediate relief can reconnect you with consequences and recovery goals.',
+ environment:'Changing your surroundings can lower exposure to a trigger.',
+ reach:'Connection can interrupt isolation and add another safe brain to the problem.',
+ meeting:'Recovery support is often stronger when you do not carry the moment alone.',
+ boundary:'A short boundary protects energy and recovery without requiring a long explanation.',
+ selftalk:'Balanced self-talk challenges the harshest interpretation without pretending everything is fine.',
+ compassion:'Reducing shame makes it easier to make a useful next choice.',
+ journal:'Writing can separate facts, thoughts, feelings, and needs.',
+ thoughtdump:'Getting thoughts out of your head reduces the pressure to hold everything at once.',
+ onestep:'Making the task smaller can turn overwhelm into something actionable.',
+ pause:'A short pause creates room for choice instead of reaction.',
+ opposite:'A safe action opposite to an unhelpful impulse can break the pattern.',
+ accept:'Acceptance frees energy that is being spent fighting what has already happened.',
+ gratitude:'Specific gratitude widens attention without denying what is difficult.',
+ values:'Values can guide the next small choice even when feelings are messy.',
+ proscons:'A quick comparison slows impulsive decisions long enough to see tradeoffs.',
+ breathe:'A longer exhale can help lower physical arousal.',
+ box:'A steady breathing rhythm gives racing attention something simple to follow.',
+ ground54321:'Grounding redirects attention to what is actually happening in the present.',
+ sensory:'Safe sensory input can lower intensity without requiring you to solve everything.'
+ };return m[id]||'This may be useful in this moment.';
+}
+function showCopingPicker(text,contextLabel,onContinue,rec){
+ rec=rec||analyzeRecoveryResponse(text,contextLabel);
+ const ids=Object.keys(copingTools);
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">COPING TOOLBOX</span><h2>Choose what fits you</h2><p>You do not have to use the first suggestion. Pick the tool that makes the most sense for this moment.</p><div class="copingGrid">'+ids.map(id=>{const c=copingTools[id],hot=(rec.recommendations||[]).includes(id);return '<button type="button" class="copingCard '+(hot?'recommended':'')+'" data-coping="'+id+'"><span class="copingEmoji">'+c.emoji+'</span><b>'+c.name+(hot?' · Suggested':'')+'</b><small>'+c.desc+'</small></button>'}).join('')+'</div><button id="copingNone" class="btn navy" style="width:100%;margin-top:10px">Continue without a coping tool</button></div>';
+ $('sceneBox').querySelectorAll('.copingCard').forEach(b=>b.addEventListener('click',()=>showCopingPractice(b.dataset.coping,text,contextLabel,onContinue,rec)));
+ $('copingNone').addEventListener('click',()=>{s.coachHistory=s.coachHistory||[];s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:null,practiced:false});addLog('Continued using own response at '+contextLabel);save();onContinue()});
+}
+function showCopingPractice(id,text,contextLabel,onContinue,rec){
+ const c=copingTools[id];if(!c)return showCopingPicker(text,contextLabel,onContinue,rec);
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">TRY A COPING TOOL</span><h2>'+c.emoji+' '+c.name+'</h2><div class="coachWhy"><b>Why it may fit:</b><br>'+copingWhy(id)+'</div><div class="copingPractice"><h3>Try it now</h3>'+c.practice+'</div><div class="copingActions"><button id="copingDidIt" class="btn gold">I did this</button><button id="copingBack" class="btn navy">Choose a different tool</button><button id="copingContinue" class="btn green">Continue without doing it</button></div></div>';
+ $('copingDidIt').addEventListener('click',()=>{if(c.fx)c.fx(s.stats);norm();gain(4,2);s.coachHistory=s.coachHistory||[];s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:id,practiced:true});addLog('Practiced '+c.name+' at '+contextLabel);save();onContinue()});
+ $('copingBack').addEventListener('click',()=>showCopingPicker(text,contextLabel,onContinue,rec));
+ $('copingContinue').addEventListener('click',()=>{s.coachHistory=s.coachHistory||[];s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:id,practiced:false});addLog('Considered '+c.name+' at '+contextLabel);save();onContinue()});
 }
 function showRecoveryCoach(text,contextLabel,onContinue){
- const rec=analyzeRecoveryResponse(text);
- s.coachHistory=s.coachHistory||[];
+ const rec=analyzeRecoveryResponse(text,contextLabel);s.coachHistory=s.coachHistory||[];
  if(rec.crisis){
   $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">SAFETY FIRST</span><h2>Get real-time support</h2><div class="coachWhy"><b>What you wrote may involve immediate safety.</b><br>If you might act on thoughts of harming yourself, call or text <b>988</b> in the U.S., call <b>911</b> for immediate danger, or get to a trusted person or emergency setting now. The game should not try to handle this alone.</div><button id="coachContinue" class="btn navy" style="width:100%;margin-top:12px">Continue when safe</button></div>';
-  $('coachContinue').addEventListener('click',()=>{addLog('Recovery Coach flagged a safety concern');save();onContinue()});
-  return;
+  $('coachContinue').addEventListener('click',()=>{addLog('Recovery Coach flagged a safety concern');save();onContinue()});return;
  }
- const sk=skills[rec.skill]||skills.ground;
- const practice=coachPracticeText(rec.skill);
- $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">RECOVERY COACH</span><h2>Here is what may help next</h2><div class="coachCard"><p style="margin-top:0">From what you wrote, the game picked up <b>'+rec.theme+'</b>.</p><div class="coachSkill"><img src="'+sk.img+'" alt=""><div><b>'+sk.name+'</b><small>'+sk.desc+'</small></div></div><div class="coachWhy"><b>Why this fits:</b><br>'+rec.why+'</div><div id="coachPractice" class="coachPractice"><b>Try it now</b><br>'+practice+'<button id="coachDidIt" class="btn gold" style="width:100%;margin-top:10px">I did this</button></div><div class="coachActions"><button id="coachPracticeBtn" class="btn green">Practice '+sk.name+'</button><button id="coachSkip" class="btn navy">Continue</button></div></div></div>';
- const finish=(practiced)=>{
-   s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:rec.skill,practiced:!!practiced});
-   if(practiced){
-     if(sk&&typeof sk.fx==='function')sk.fx(s.stats);
-     norm();gain(4,2);addLog('Recovery Coach: practiced '+sk.name);
-   }else addLog('Recovery Coach recommended '+sk.name);
-   save();onContinue();
- };
- $('coachPracticeBtn').addEventListener('click',()=>{$('coachPractice').classList.add('open');$('coachPracticeBtn').disabled=true});
- $('coachDidIt').addEventListener('click',()=>finish(true));
- $('coachSkip').addEventListener('click',()=>finish(false));
+ const primary=rec.recommendations[0],c=copingTools[primary];
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">RECOVERY COACH</span><h2>Your response counts</h2><div class="coachCard"><p style="margin-top:0">The game picked up <b>'+rec.theme+'</b>. Your typed response remains your action; this is only an optional tool.</p><div class="coachSkill"><div style="font-size:42px;text-align:center">'+c.emoji+'</div><div><b>'+c.name+'</b><small>'+c.desc+'</small></div></div><div class="coachWhy"><b>Why this may fit:</b><br>'+copingWhy(primary)+'</div><div class="copingActions"><button id="coachTry" class="btn green">Try '+c.name+'</button><button id="coachChoose" class="btn blue">Choose another tool</button><button id="coachOwn" class="btn gold">Continue with my own response</button></div></div></div>';
+ $('coachTry').addEventListener('click',()=>showCopingPractice(primary,text,contextLabel,onContinue,rec));
+ $('coachChoose').addEventListener('click',()=>showCopingPicker(text,contextLabel,onContinue,rec));
+ $('coachOwn').addEventListener('click',()=>{s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:null,practiced:false});addLog('Used own response at '+contextLabel);gain(2,1);save();onContinue()});
 }
 
 function openLocation(id){
@@ -420,18 +509,27 @@ function openLocation(id){
  if(id==='home')return simpleScene('park','Home Base','You','Your apartment is quiet. What do you do?',[['Cook and recharge',()=>{s.stats.energy+=12;s.stats.stress-=4;gain(8,4)}],['Use a skill from your quickbar instead',()=>{toast('Use the live skill bar at the bottom')} ]]);
  if(id==='work')return simpleScene('cafe','Work Hub','Theo','“Short shift available.”',[['Take the shift',()=>{s.money+=18;s.stats.energy-=12;gain(16,8)}],['Protect your energy today',()=>{s.stats.recovery+=5;gain(10,5)}]]);
 }
-function simpleScene(art,title,speaker,dialog,opts){
- $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET[art]}')"></div><div class="scenePanel"><span class="pill">STORY</span><h2>${title}</h2><div class="dialog"><b>${speaker}</b><p>${dialog}</p></div><label class="answerLabel" for="sceneAnswer">Type your response</label><textarea id="sceneAnswer" class="storyAnswer" maxlength="600" placeholder="Write what you would actually say or do…"></textarea><p class="answerHelp">Your response is saved in your local journey log on this device.</p><div id="answerError" style="display:none;color:#9b2f38;font-weight:800;margin-top:8px">Type an answer first.</div>${opts.map((o,i)=>`<button class="btn ${i%2?'blue':'green'} sceneChoice" data-i="${i}" style="width:100%;margin-top:8px">${o[0]}</button>`).join('')}</div>`;
- $('sceneModal').classList.add('open');
- const answer=$('sceneAnswer'); if(answer)setTimeout(()=>answer.focus(),80);
- $('sceneBox').querySelectorAll('.sceneChoice').forEach(b=>b.addEventListener('click',()=>{
-   const text=(answer&&answer.value||'').trim();
-   if(text.length<2){const e=$('answerError');if(e)e.style.display='block';if(answer)answer.focus();return}
-   addLog(title+' response: '+text);
-   const choice=Number(b.dataset.i);
-   showRecoveryCoach(text,title,()=>{opts[choice][1]();norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save()})
- }))
+
+function applyTypedSceneOutcome(title,text){
+ const t=String(text||'').toLowerCase();
+ if(title==='Home Base'){
+   if(/bath|shower|soak/.test(t)){s.stats.stress-=6;s.stats.energy+=4}
+   else if(/sleep|nap|rest|lay down|lie down/.test(t)){s.stats.energy+=7;s.stats.stress-=3}
+   else if(/cook|eat|meal|food|water|drink/.test(t)){s.stats.energy+=5;s.stats.recovery+=2}
+   else if(/clean|laundry|tidy|dishes/.test(t)){s.stats.recovery+=3;s.stats.energy-=2}
+   else {s.stats.recovery+=3;s.stats.stress-=2}
+ }else if(title==='Meeting Hall'){s.stats.connection+=7;s.stats.recovery+=4;s.quests.meeting=true;if(!s.unlocked.includes('self'))s.unlocked.push('self')}
+ else if(title==='Corner Café'){s.stats.connection+=6;s.relationships.lena+=6}
+ else if(title==='Reflection Library'){s.stats.recovery+=6;if(!s.unlocked.includes('journal'))s.unlocked.push('journal')}
+ else if(title==='Work Hub'){s.stats.recovery+=4}
+ gain(10,5);norm();
 }
+function simpleScene(art,title,speaker,dialog,opts){
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET[art]}')"></div><div class="scenePanel"><span class="pill">STORY</span><h2>${title}</h2><div class="dialog"><b>${speaker}</b><p>${dialog}</p></div><label class="answerLabel" for="sceneAnswer">What do you actually do or say?</label><textarea id="sceneAnswer" class="storyAnswer" maxlength="600" placeholder="Type your own response. You will not have to pick a canned answer afterward."></textarea><p class="answerHelp">Your answer becomes the action. The Recovery Coach can suggest coping tools, but you can also continue with exactly what you chose.</p><div id="answerError" style="display:none;color:#9b2f38;font-weight:800;margin-top:8px">Type an answer first.</div><button id="sceneSubmit" class="btn green sceneSubmit">Use my response</button></div>`;
+ $('sceneModal').classList.add('open');const answer=$('sceneAnswer');if(answer)setTimeout(()=>answer.focus(),80);
+ $('sceneSubmit').addEventListener('click',()=>{const text=(answer&&answer.value||'').trim();if(text.length<2){$('answerError').style.display='block';answer.focus();return}addLog(title+' response: '+text);showRecoveryCoach(text,title,()=>{applyTypedSceneOutcome(title,text);advance(30);$('sceneModal').classList.remove('open');renderWorld();save()})})
+}
+
 function groundRun(){
  challenge={type:'ground',x:50,y:72,shield:25,collected:0,target:5,objects:[
   {x:18,y:28,t:'pickup',e:'🌿'},{x:78,y:24,t:'pickup',e:'🪨'},{x:30,y:65,t:'pickup',e:'💧'},{x:70,y:70,t:'pickup',e:'👟'},{x:50,y:45,t:'pickup',e:'🌤️'},
