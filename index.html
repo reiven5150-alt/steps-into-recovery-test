@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Steps Into Recovery — Mobile v8 Free Map</title>
+<title>Steps Into Recovery — Mobile v9 Journal & Games</title>
 <style>
 :root{
  --navy:#072631;--navy2:#0c3a49;--navy3:#11505f;--gold:#f1b846;--cream:#fff7e8;--paper:#fffaf2;
@@ -98,8 +98,8 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   .statline{display:block;font-size:9px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .statline span:last-child{display:block;font-size:10px;margin-top:2px}
   .meter{height:5px;margin-top:3px}
-  .topbuttons{top:106px;right:6px;gap:4px;z-index:28}
-  .topbuttons button{padding:8px 9px;border-radius:10px;font-size:11px;min-height:40px}
+  .topbuttons{top:106px;right:6px;left:6px;gap:4px;z-index:28;justify-content:flex-end;flex-wrap:wrap}
+  .topbuttons button{padding:8px 9px;border-radius:10px;font-size:11px;min-height:40px;flex:0 0 auto}
   #toast{top:150px;max-width:calc(100% - 28px);text-align:center}
   #hint{display:none}
   .dpad{display:none!important}
@@ -208,6 +208,30 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   #game .dpad{display:none!important}
   #game .location{touch-action:manipulation}
 }
+
+/* v9 journal + mini games */
+.journalTabs{display:flex;gap:7px;margin:8px 0 10px}.journalTabs .btn{flex:1}
+.journalPane{display:none}.journalPane.active{display:block}
+.journalPrompt{width:100%;min-height:46px;border:1px solid var(--line);border-radius:11px;padding:9px;font:inherit;background:#fff;color:var(--ink)}
+.journalWrite{width:100%;min-height:150px;border:2px solid #cfc3b2;border-radius:12px;padding:11px;font:inherit;font-size:16px;line-height:1.4;background:#fff;color:var(--ink);resize:vertical}
+.savedEntry{background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px;margin-top:8px}
+.savedEntry time{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-bottom:5px}
+.savedEntry .entryText{white-space:pre-wrap;line-height:1.4}
+.savedEntry button{margin-top:7px}
+.gamesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+.gameCard{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px;text-align:left;color:var(--ink);min-height:115px}
+.gameCard b{display:block;font-size:17px;margin-bottom:4px}.gameCard small{display:block;color:var(--muted);line-height:1.3}
+.wsGrid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin:10px 0;max-width:520px}
+.wsCell{aspect-ratio:1;border:1px solid #cdbfa9;border-radius:6px;background:#fff;color:#17343d;font-weight:1000;font-size:15px;display:grid;place-items:center;padding:0;min-height:30px}
+.wsCell.pick{outline:3px solid #efb648}.wsCell.found{background:#dff2e5;border-color:#5d9c72}
+.wordBank{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.wordChip{background:#e8eee9;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900}.wordChip.found{text-decoration:line-through;opacity:.55}
+.miniQuestion{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}
+.miniQuestion input{width:100%;min-height:44px;border:2px solid #cfc3b2;border-radius:10px;padding:8px;font:inherit;font-size:16px;margin-top:6px}
+.tileGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.orderTile{min-height:58px;border:2px solid #cfc3b2;background:#fff;border-radius:12px;padding:9px;font-weight:900}.orderTile.sel{background:#fff3ca;border-color:#d5a62f}
+.scenarioOption{display:block;width:100%;text-align:left;margin-top:7px;min-height:48px}
+.gameFeedback{background:#eef5f2;border-radius:12px;padding:10px;margin-top:9px;line-height:1.4}
+@media(max-width:520px){.gamesGrid{grid-template-columns:1fr}.wsCell{font-size:12px;min-height:26px}.tileGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -257,7 +281,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   </div>
   <div class="hudbox quest"><strong>Current Quests</strong><div id="questList"></div></div>
  </div>
- <div class="topbuttons"><button id="toolBtn">Toolbox</button><button id="journalBtn">Journal</button><button id="saveBtn">Save</button></div>
+ <div class="topbuttons"><button id="toolBtn">Toolbox</button><button id="journalBtn">Journal</button><button id="gamesBtn">Games</button><button id="saveBtn">Save</button></div>
  <div id="quickbar" class="quickbar"></div>
  <div id="toast"></div>
  <div id="hint">Drag the map to explore freely. Tap any location you want. Skills in the bottom bar are live.</div>
@@ -274,7 +298,26 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 
 <div id="sceneModal" class="overlay"><button id="sceneClose" class="sceneClose" type="button" aria-label="Back to map">×</button><div id="sceneBox" class="sceneBox"></div></div>
 <div id="toolModal" class="overlay"><div class="panelBox"><button class="close" id="closeTools">×</button><h2>Recovery Toolbox</h2><img src="" data-asset="toolbox" class="toolboxBanner" alt=""><p>Equip up to four skills. Equipped skills appear in the live quickbar during exploration and challenges.</p><div id="toolGrid" class="toolGrid"></div></div></div>
-<div id="journalModal" class="overlay"><div class="panelBox"><button class="close" id="closeJournal">×</button><h2>Journey Log</h2><img src="" data-asset="journal" class="journalBanner" alt=""><div id="journalList"></div></div></div>
+<div id="journalModal" class="overlay"><div class="panelBox"><button class="close" id="closeJournal">×</button><h2>Journal</h2><img src="" data-asset="journal" class="journalBanner" alt="">
+<div class="journalTabs"><button id="myJournalTab" class="btn green">My Journal</button><button id="journeyLogTab" class="btn navy">Journey Log</button></div>
+<div id="myJournalPane" class="journalPane active">
+<select id="journalPrompt" class="journalPrompt">
+<option value="">Free write — no prompt</option>
+<option>What am I feeling right now?</option>
+<option>What helped me today?</option>
+<option>What triggered me and how did I respond?</option>
+<option>What do I need most right now?</option>
+<option>What is one thing I am proud of today?</option>
+<option>What is one thing I am grateful for today?</option>
+</select>
+<textarea id="journalWrite" class="journalWrite" maxlength="4000" placeholder="Write whatever you need to get out of your head…"></textarea>
+<button id="saveJournalEntry" class="btn green" style="width:100%;margin-top:8px">Save journal entry</button>
+<div id="journalSaveError" style="display:none;color:#9b2f38;font-weight:900;margin-top:6px">Write something before saving.</div>
+<h3 style="margin:14px 0 4px">Saved entries</h3><div id="savedJournalEntries"></div>
+</div>
+<div id="journeyLogPane" class="journalPane"><div id="journalList"></div></div>
+</div></div>
+<div id="gamesModal" class="overlay"><div class="panelBox"><button class="close" id="closeGames">×</button><h2>Recovery Games</h2><p>Short activities for practicing recovery skills. Wrong answers do not cost points.</p><div id="gamesGrid" class="gamesGrid"></div></div></div>
 </div>
 
 <script>
@@ -340,13 +383,14 @@ function fresh(){
  const free=selectedMode==='free';
  s={mode:selectedMode,day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
  unlocked:['deep','ground'],equipped:['deep','ground'],cooldowns:{},quests:{park:false,support:false,meeting:false,gym:false,market:false,boss:false},
- visited:[],coachHistory:[],log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:free?3:10};
+ visited:[],coachHistory:[],journalEntries:[],minigames:{wordsearch:false,crossword:false,puzzle:false,scenarios:false},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:free?3:10};
  Object.entries(chosen.bonus).forEach(([k,v])=>s.stats[k]=clamp(s.stats[k]+v))
 }
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active')}
 function tm(){let h=s.h,ap=h>=12?'PM':'AM';h%=12;if(!h)h=12;return `${h}:${String(s.m).padStart(2,'0')} ${ap}`}
 function advance(min){let t=s.h*60+s.m+min;s.h=Math.floor(t/60);s.m=t%60}
 function addLog(t){s.log.unshift(`${tm()} — ${t}`)}
+function escHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function norm(){Object.keys(s.stats).forEach(k=>s.stats[k]=clamp(s.stats[k]))}
 function gain(xp,hope){s.xp+=xp;s.hope+=hope;while(s.xp>=100&&s.level<s.levelCap){s.xp-=100;s.level++;toast('Level up! Level '+s.level)}if(s.level>=s.levelCap)s.xp=Math.min(s.xp,99)}
 function premiumPlace(id){return ['gym','library','work','oldspot'].includes(id)}
@@ -363,7 +407,7 @@ function renderQuickbar(){
 }
 function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.display='none',1400)}
 function save(){try{localStorage.setItem('sir-v10',JSON.stringify(s));toast('Saved')}catch(e){toast('Save unavailable in preview')}}
-function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);mobileMapInitialized=false;s.coachHistory=s.coachHistory||[];selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);mobileMapInitialized=false;s.coachHistory=s.coachHistory||[];s.journalEntries=s.journalEntries||[];s.minigames=s.minigames||{wordsearch:false,crossword:false,puzzle:false,scenarios:false};selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
 
 
 function isMobileMap(){return !!(window.matchMedia&&window.matchMedia('(max-width:850px)').matches)}
@@ -652,7 +696,109 @@ function openTools(){
  $('toolModal').classList.add('open')
 }
 
-function openJournal(){$('journalList').innerHTML=s.log.map(x=>`<div class="logline">${x}</div>`).join('');$('journalModal').classList.add('open')}
+
+function renderSavedJournalEntries(){
+ s.journalEntries=s.journalEntries||[];
+ const box=$('savedJournalEntries');if(!box)return;
+ if(!s.journalEntries.length){box.innerHTML='<div class="logline">No personal journal entries yet.</div>';return}
+ box.innerHTML=s.journalEntries.map((e,i)=>'<div class="savedEntry"><time>'+escHTML(e.when)+'</time>'+(e.prompt?'<b>'+escHTML(e.prompt)+'</b>':'')+'<div class="entryText">'+escHTML(e.text)+'</div><button class="btn navy deleteJournal" data-i="'+i+'">Delete</button></div>').join('');
+ box.querySelectorAll('.deleteJournal').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.i);s.journalEntries.splice(i,1);save();renderSavedJournalEntries()}));
+}
+function showJournalPane(which){
+ const mine=which==='mine';$('myJournalPane').classList.toggle('active',mine);$('journeyLogPane').classList.toggle('active',!mine);
+ $('myJournalTab').className='btn '+(mine?'green':'navy');$('journeyLogTab').className='btn '+(!mine?'green':'navy');
+}
+function openJournal(){
+ s.journalEntries=s.journalEntries||[];
+ $('journalList').innerHTML=s.log.map(x=>'<div class="logline">'+escHTML(x)+'</div>').join('');
+ $('journalWrite').value='';$('journalPrompt').value='';$('journalSaveError').style.display='none';
+ renderSavedJournalEntries();showJournalPane('mine');$('journalModal').classList.add('open')
+}
+function awardMiniGame(key,label,xp=12,hope=6){
+ s.minigames=s.minigames||{};
+ if(!s.minigames[key]){s.minigames[key]=true;gain(xp,hope);addLog('Completed '+label);save();toast(label+' complete')}
+ else toast('Completed again — practice still counts')
+}
+function openGames(){
+ const full=s.mode==='paid';
+ const cards=[
+  ['wordsearch','Word Search','Find recovery words hidden in the grid.','🔎'],
+  ...(full?[
+   ['crossword','Mini Crossword','Solve short recovery clues.','✏️'],
+   ['puzzle','Recovery Puzzle','Put a coping sequence in the right order.','🧩'],
+   ['scenarios','Recovery Scenarios','Choose responses to realistic situations.','💭']
+  ]:[])
+ ];
+ $('gamesGrid').innerHTML=cards.map(([id,name,desc,emoji])=>'<button type="button" class="gameCard" data-game="'+id+'"><span style="font-size:28px">'+emoji+'</span><b>'+name+'</b><small>'+desc+(s.minigames&&s.minigames[id]?' · Completed':'')+'</small></button>').join('');
+ $('gamesGrid').querySelectorAll('.gameCard').forEach(b=>b.addEventListener('click',()=>{ $('gamesModal').classList.remove('open'); const id=b.dataset.game;if(id==='wordsearch')openWordSearch();if(id==='crossword')openCrossword();if(id==='puzzle')openRecoveryPuzzle();if(id==='scenarios')openScenarios()}));
+ $('gamesModal').classList.add('open')
+}
+function miniGameBack(){
+ $('sceneModal').classList.remove('open');openGames()
+}
+function openWordSearch(){
+ const words=['SUPPORT','BREATHE','SOBER','PAUSE','HOPE'];
+ const placements=[
+  {word:'SUPPORT',r:0,c:1,dr:0,dc:1},
+  {word:'BREATHE',r:1,c:9,dr:1,dc:0},
+  {word:'SOBER',r:8,c:7,dr:0,dc:-1},
+  {word:'PAUSE',r:2,c:1,dr:1,dc:1},
+  {word:'HOPE',r:4,c:0,dr:1,dc:0}
+ ];
+ const N=10,letters='RECOVERYHOPESTRENGTHCALM',grid=Array.from({length:N},(_,r)=>Array.from({length:N},(_,c)=>letters[(r*7+c*3+r+c)%letters.length]));
+ placements.forEach(p=>[...p.word].forEach((ch,i)=>grid[p.r+p.dr*i][p.c+p.dc*i]=ch));
+ let first=null,found=new Set();
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>Recovery Word Search</h2><p>Tap the <b>first</b> and <b>last</b> letter of a word. Words may go across, down, diagonal, or backward.</p><div id="wordBank" class="wordBank">'+words.map(w=>'<span class="wordChip" data-word="'+w+'">'+w+'</span>').join('')+'</div><div id="wsGrid" class="wsGrid">'+grid.flatMap((row,r)=>row.map((ch,c)=>'<button type="button" class="wsCell" data-r="'+r+'" data-c="'+c+'">'+ch+'</button>')).join('')+'</div><div id="wsMsg" class="gameFeedback">Find all 5 words.</div><button id="miniBack" class="btn navy" style="width:100%;margin-top:10px">Back to games</button></div>';
+ $('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);
+ const cell=(r,c)=>$('wsGrid').querySelector('[data-r="'+r+'"][data-c="'+c+'"]');
+ function pathBetween(a,b){
+  const dr=b.r-a.r,dc=b.c-a.c,steps=Math.max(Math.abs(dr),Math.abs(dc));if(!steps)return [];
+  const sr=dr===0?0:dr/Math.abs(dr),sc=dc===0?0:dc/Math.abs(dc);
+  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return [];
+  return Array.from({length:steps+1},(_,i)=>({r:a.r+sr*i,c:a.c+sc*i}));
+ }
+ $('wsGrid').querySelectorAll('.wsCell').forEach(btn=>btn.addEventListener('click',()=>{
+   const p={r:Number(btn.dataset.r),c:Number(btn.dataset.c)};
+   if(!first){first=p;btn.classList.add('pick');$('wsMsg').textContent='Now tap the last letter.';return}
+   cell(first.r,first.c).classList.remove('pick');const path=pathBetween(first,p),str=path.map(q=>grid[q.r][q.c]).join(''),match=words.find(w=>!found.has(w)&&(str===w||str===[...w].reverse().join('')));
+   if(match){found.add(match);path.forEach(q=>cell(q.r,q.c).classList.add('found'));const chip=$('wordBank').querySelector('[data-word="'+match+'"]');if(chip)chip.classList.add('found');$('wsMsg').textContent='Found '+match+'! '+found.size+'/5'}
+   else $('wsMsg').textContent='Not one of the words. Try another line.';
+   first=null;if(found.size===words.length){$('wsMsg').innerHTML='<b>Great job — you found every recovery word.</b>';awardMiniGame('wordsearch','Recovery Word Search',14,7)}
+ }))
+}
+function openCrossword(){
+ const clues=[
+  ['A short break before reacting (5)','PAUSE'],
+  ['People who help you stay connected (7)','SUPPORT'],
+  ['What you protect one day at a time (8)','RECOVERY'],
+  ['Something that rises and falls without needing action (4)','URGE']
+ ];
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>Mini Recovery Crossword</h2><p>Fill the recovery word for each clue.</p>'+clues.map((q,i)=>'<div class="miniQuestion"><b>'+(i+1)+'. '+q[0]+'</b><input id="cw'+i+'" maxlength="'+q[1].length+'" autocomplete="off"></div>').join('')+'<div id="cwFeedback"></div><button id="cwCheck" class="btn green" style="width:100%;margin-top:10px">Check answers</button><button id="miniBack" class="btn navy" style="width:100%;margin-top:8px">Back to games</button></div>';
+ $('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);
+ $('cwCheck').addEventListener('click',()=>{let correct=0;clues.forEach((q,i)=>{if(($('cw'+i).value||'').trim().toUpperCase()===q[1])correct++});$('cwFeedback').className='gameFeedback';$('cwFeedback').textContent=correct===clues.length?'All four are correct.':correct+' of '+clues.length+' correct. Change any answer and try again.';if(correct===clues.length)awardMiniGame('crossword','Mini Recovery Crossword',16,8)})
+}
+function openRecoveryPuzzle(){
+ const correct=['Stop','Take a breath','Observe','Proceed on purpose'],chosen=[];
+ const shuffled=['Observe','Proceed on purpose','Stop','Take a breath'];
+ function draw(){
+  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>STOP Skill Puzzle</h2><p>Tap the four steps in the order you would use them. Tap your selected list to reset.</p><div class="tileGrid">'+shuffled.map(x=>'<button type="button" class="orderTile" data-step="'+escHTML(x)+'">'+escHTML(x)+'</button>').join('')+'</div><div id="orderPicked" class="gameFeedback">'+(chosen.length?'Your order: '+chosen.map((x,i)=>(i+1)+'. '+x).join(' → '):'No steps selected yet.')+'</div><button id="orderReset" class="btn navy" style="width:100%;margin-top:8px">Reset order</button><button id="miniBack" class="btn navy" style="width:100%;margin-top:8px">Back to games</button></div>';
+  $('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);$('orderReset').addEventListener('click',()=>{chosen.length=0;draw()});
+  $('sceneBox').querySelectorAll('.orderTile').forEach(b=>b.addEventListener('click',()=>{const step=b.dataset.step;if(chosen.includes(step))return;chosen.push(step);if(chosen.length===4){const ok=chosen.every((x,i)=>x===correct[i]);if(ok){awardMiniGame('puzzle','STOP Skill Puzzle',14,7);$('orderPicked').innerHTML='<b>Correct:</b> Stop → Take a breath → Observe → Proceed on purpose.'}else{$('orderPicked').innerHTML='Not quite. Reset and try again — wrong answers do not cost anything.'}}else draw()}))
+ }draw()
+}
+function openScenarios(){
+ const qs=[
+  {q:'A stressful text makes you want to react immediately. What is the strongest first move?',a:['Send the first response that comes to mind','Pause, breathe, and decide what outcome you want','Ignore every message for a week'],correct:1,why:'A pause creates space between emotion and action.'},
+  {q:'You notice a strong craving after a difficult day. Which response protects recovery best?',a:['Change your environment and contact safe support','Stay alone with access to the trigger','Tell yourself cravings should never happen'],correct:0,why:'Distance from the trigger plus connection can reduce risk while the urge passes.'},
+  {q:'You are exhausted and everything feels harder. What should you check before making a big decision?',a:['Whether you are hungry, angry, lonely, or tired','Whether you can push through without rest','Whether everyone else is doing better'],correct:0,why:'HALT catches basic needs that can amplify stress.'}
+ ];
+ let i=0,score=0;
+ function draw(){
+  const q=qs[i];$('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>Recovery Scenario '+(i+1)+'/'+qs.length+'</h2><div class="miniQuestion"><b>'+q.q+'</b>'+q.a.map((a,j)=>'<button type="button" class="btn navy scenarioOption" data-i="'+j+'">'+a+'</button>').join('')+'</div><div id="scenarioFeedback"></div><button id="miniBack" class="btn navy" style="width:100%;margin-top:10px">Back to games</button></div>';$('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);
+  $('sceneBox').querySelectorAll('.scenarioOption').forEach(b=>b.addEventListener('click',()=>{const pick=Number(b.dataset.i),ok=pick===q.correct;if(ok)score++;$('scenarioFeedback').className='gameFeedback';$('scenarioFeedback').innerHTML=(ok?'<b>Good choice.</b> ':'<b>Try another way next time.</b> ')+q.why+'<button id="scenarioNext" class="btn green" style="width:100%;margin-top:8px">'+(i===qs.length-1?'Finish':'Next scenario')+'</button>';$('sceneBox').querySelectorAll('.scenarioOption').forEach(x=>x.disabled=true);$('scenarioNext').addEventListener('click',()=>{i++;if(i>=qs.length){$('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">COMPLETE</span><h2>Scenario Practice</h2><div class="gameFeedback">You chose '+score+' of '+qs.length+' strongest responses. The point is practice, not perfection.</div><button id="scenarioDone" class="btn green" style="width:100%;margin-top:10px">Back to games</button></div>';awardMiniGame('scenarios','Recovery Scenarios',16,8);$('scenarioDone').addEventListener('click',miniGameBack)}else draw()})}))
+ }draw()
+}
+
 function nextDay(){if(s.mode==='free'){showPaywall('work');return}if(s.day<3)s.day++;mobileMapInitialized=false;s.h=9;s.m=0;s.x=.5;s.y=.62;s.stats.energy=clamp(s.stats.energy+15);s.stats.stress=clamp(s.stats.stress-5);addLog(`Day ${s.day} begins.`);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
 function buildChars(){chars.forEach((c,i)=>{const b=document.createElement('button');b.className='char'+(i===0?' sel':'');b.innerHTML=`<img src="${c.img}"><b>${c.name}</b><small>${c.role}</small>`;b.addEventListener('click',()=>{chosen=c;document.querySelectorAll('.char').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')});$('chargrid').appendChild(b)})}
 
@@ -661,8 +807,15 @@ $('freeMode').addEventListener('click',()=>{selectedMode='free';$('freeMode').cl
 $('paidMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
 document.querySelectorAll('.location').forEach(b=>{b.setAttribute('type','button');b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();if(suppressMapTap)return;travelTo(b.dataset.place)})});
 $('startBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop);if(isMobileMap())setTimeout(()=>toast('Drag the map freely • Tap any location'),350)});
-$('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);
-$('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));$('sceneClose').addEventListener('click',()=>{challenge=null;$('sceneModal').classList.remove('open');renderWorld()});
+$('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);$('gamesBtn').addEventListener('click',openGames);
+$('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));$('closeGames').addEventListener('click',()=>$('gamesModal').classList.remove('open'));$('myJournalTab').addEventListener('click',()=>showJournalPane('mine'));
+$('journeyLogTab').addEventListener('click',()=>showJournalPane('log'));
+$('saveJournalEntry').addEventListener('click',()=>{
+ const text=($('journalWrite').value||'').trim();if(!text){$('journalSaveError').style.display='block';$('journalWrite').focus();return}
+ $('journalSaveError').style.display='none';s.journalEntries=s.journalEntries||[];
+ const prompt=$('journalPrompt').value||'';s.journalEntries.unshift({when:new Date().toLocaleString(),prompt,text});addLog('Saved a personal journal entry');gain(3,1);save();$('journalWrite').value='';$('journalPrompt').value='';renderSavedJournalEntries();toast('Journal entry saved')
+});
+$('sceneClose').addEventListener('click',()=>{challenge=null;$('sceneModal').classList.remove('open');renderWorld()});
 $('replayBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
 window.addEventListener('resize',()=>{if(!s)return;if(isMobileMap()){clampMobilePan();applyMobilePan();renderHUD()}else renderWorld()});window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
 
