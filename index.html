@@ -232,6 +232,17 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 .gameFeedback{background:#eef5f2;border-radius:12px;padding:10px;margin-top:9px;line-height:1.4}
 @media(max-width:520px){.gamesGrid{grid-template-columns:1fr}.wsCell{font-size:12px;min-height:26px}.tileGrid{grid-template-columns:1fr}}
 
+
+/* paid-access messaging */
+.upgradeCard{background:linear-gradient(135deg,#2f3f62,#173844);color:#fff;border-radius:16px;padding:14px;margin:10px 0}
+.upgradeCard h3{margin:0 0 6px;font-size:20px}.upgradeCard p{margin:5px 0 9px;line-height:1.4}
+.upgradeFeatures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0}
+.upgradeFeature{background:rgba(255,255,255,.10);border-radius:10px;padding:8px;font-size:12px;font-weight:800}
+.upgradeActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.upgradeActions a{text-decoration:none;text-align:center;display:block}
+.lockedGame{opacity:.72;border-style:dashed}.lockedGame .lockTag{display:inline-block;background:#7657ae;color:#fff;border-radius:999px;padding:3px 7px;font-size:10px;font-weight:900;margin-bottom:5px}
+@media(max-width:520px){.upgradeFeatures,.upgradeActions{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -243,6 +254,20 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   <div class="modeRow">
    <button id="freeMode" class="modeBtn sel"><b>Chapter One</b><small>Begin your journey through Hope Springs.</small></button>
    <button id="paidMode" class="modeBtn"><b>Full Journey</b><small>Continue farther through Hope Springs.</small></button>
+  </div>
+  <div id="startUpgradeCard" class="upgradeCard">
+    <h3>Continue beyond Chapter One</h3>
+    <p>The paid Full Journey — or access through a paid Steps Into Hope subscription — adds more levels, locations, recovery challenges, mini-games, scenarios, and longer progression.</p>
+    <div class="upgradeFeatures">
+      <div class="upgradeFeature">More levels & longer progression</div>
+      <div class="upgradeFeature">More Hope Springs locations</div>
+      <div class="upgradeFeature">Additional recovery mini-games</div>
+      <div class="upgradeFeature">Deeper scenarios & challenges</div>
+    </div>
+    <div class="upgradeActions">
+      <a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a>
+      <a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">View Subscription Access</a>
+    </div>
   </div>
   <div id="chargrid" class="chargrid"></div>
   <button id="startBtn" class="btn gold">Start Chapter One →</button>
@@ -293,6 +318,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   <div style="color:var(--gold);font-weight:1000">DAY COMPLETE</div><h1 id="endTitle">You made it through.</h1><p id="endBody"></p>
   <div id="endStats" class="endstats"></div>
   <div class="endactions"><button id="replayBtn" class="btn gold">Replay Day</button><button id="nextBtn" class="btn navy">Continue</button></div>
+  <div id="endUpgradeCard" class="upgradeCard" style="display:none"><h3>Keep going with the Full Journey</h3><p>Continue into more levels, locations, mini-games, scenarios, and recovery challenges with paid game access or a paid subscription.</p><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">Subscription Access</a></div></div>
  </div>
 </section>
 
@@ -396,7 +422,7 @@ function gain(xp,hope){s.xp+=xp;s.hope+=hope;while(s.xp>=100&&s.level<s.levelCap
 function premiumPlace(id){return ['gym','library','work','oldspot'].includes(id)}
 function unlockedPlace(id){if(s.mode==='free'&&premiumPlace(id))return false;if(id==='work')return s.day>=2;if(id==='oldspot')return s.day>=3;return true}
 function renderHUD(){
- norm();$('heroName').textContent=chosen.name;$('clock').textContent=`${'Day '+s.day} · ${tm()} · Lv ${s.level} · ${s.hope} Hope`;$('xpBar').style.width=Math.min(100,s.xp)+'%';
+ norm();const eu=$('endUpgradeCard');if(eu)eu.style.display=s&&s.mode==='free'?'block':'none';$('heroName').textContent=chosen.name;$('clock').textContent=`${'Day '+s.day} · ${tm()} · Lv ${s.level} · ${s.hope} Hope`;$('xpBar').style.width=Math.min(100,s.xp)+'%';
  for(const k of ['recovery','stress','connection','energy']){const map={recovery:['rv','rb'],stress:['sv','sb'],connection:['cv','cb'],energy:['ev','eb']}[k];$(map[0]).textContent=s.stats[k];$(map[1]).style.width=s.stats[k]+'%'}
  $('questList').innerHTML=[['park','Grounding Run'],['support','Support Quest'],['meeting','Meeting Hall'],['gym','Breathing Rhythm'],['market','Budget Puzzle'],['boss','Day 3 Boss']].map(([k,l])=>`<div class="qline">${s.quests[k]?'✓':'□'} ${l}</div>`).join('');
  $('playerImg').src=chosen.img;document.querySelectorAll('.location').forEach(b=>{b.classList.toggle('locked',!unlockedPlace(b.dataset.place));b.classList.toggle('visited',s.visited.includes(b.dataset.place))});renderQuickbar()
@@ -437,9 +463,10 @@ function renderPositionOnly(){
 }
 function renderWorld(){renderPositionOnly();renderHUD()}
 
+
 function showPaywall(id){
- const title=id==='oldspot'?'The Hard Evening':'Path Not Open Yet';
- $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">KEEP EXPLORING</span><h2>${title}</h2><div class="dialog"><b>This part of Hope Springs is not open yet.</b><p>Keep moving through your journey and come back later.</p></div><button id="lockedBack" class="btn navy" style="width:100%">Back to map</button></div>`;
+ const title=id==='oldspot'?'Continue the Journey':'More of Hope Springs';
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">FULL JOURNEY</span><h2>${title}</h2><div class="upgradeCard"><h3>More opens with paid access</h3><p>Unlock additional levels, locations, recovery challenges, mini-games, scenarios, and longer character progression with the paid Full Journey or a paid Steps Into Hope subscription.</p><div class="upgradeFeatures"><div class="upgradeFeature">More levels</div><div class="upgradeFeature">More locations</div><div class="upgradeFeature">More mini-games</div><div class="upgradeFeature">Deeper scenarios</div></div><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">Subscription Access</a></div></div><button id="lockedBack" class="btn navy" style="width:100%;margin-top:8px">Back to map</button></div>`;
  $('sceneModal').classList.add('open');
  $('lockedBack').addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld()})
 }
@@ -719,20 +746,24 @@ function awardMiniGame(key,label,xp=12,hope=6){
  if(!s.minigames[key]){s.minigames[key]=true;gain(xp,hope);addLog('Completed '+label);save();toast(label+' complete')}
  else toast('Completed again — practice still counts')
 }
+
 function openGames(){
  const full=s.mode==='paid';
- const cards=[
-  ['wordsearch','Word Search','Find recovery words hidden in the grid.','🔎'],
-  ...(full?[
-   ['crossword','Mini Crossword','Solve short recovery clues.','✏️'],
-   ['puzzle','Recovery Puzzle','Put a coping sequence in the right order.','🧩'],
-   ['scenarios','Recovery Scenarios','Choose responses to realistic situations.','💭']
-  ]:[])
+ const freeCard='<button type="button" class="gameCard" data-game="wordsearch"><span style="font-size:28px">🔎</span><b>Word Search</b><small>Find recovery words hidden in the grid.'+(s.minigames&&s.minigames.wordsearch?' · Completed':'')+'</small></button>';
+ const fullCards=[
+  ['crossword','Mini Crossword','Solve short recovery clues.','✏️'],
+  ['puzzle','Recovery Puzzle','Put a coping sequence in the right order.','🧩'],
+  ['scenarios','Recovery Scenarios','Choose responses to realistic situations.','💭']
  ];
- $('gamesGrid').innerHTML=cards.map(([id,name,desc,emoji])=>'<button type="button" class="gameCard" data-game="'+id+'"><span style="font-size:28px">'+emoji+'</span><b>'+name+'</b><small>'+desc+(s.minigames&&s.minigames[id]?' · Completed':'')+'</small></button>').join('');
- $('gamesGrid').querySelectorAll('.gameCard').forEach(b=>b.addEventListener('click',()=>{ $('gamesModal').classList.remove('open'); const id=b.dataset.game;if(id==='wordsearch')openWordSearch();if(id==='crossword')openCrossword();if(id==='puzzle')openRecoveryPuzzle();if(id==='scenarios')openScenarios()}));
+ const paidPreview=fullCards.map(([id,name,desc,emoji])=>full
+   ? '<button type="button" class="gameCard" data-game="'+id+'"><span style="font-size:28px">'+emoji+'</span><b>'+name+'</b><small>'+desc+(s.minigames&&s.minigames[id]?' · Completed':'')+'</small></button>'
+   : '<div class="gameCard lockedGame"><span class="lockTag">FULL JOURNEY</span><span style="font-size:28px">'+emoji+'</span><b>'+name+'</b><small>'+desc+'</small></div>'
+ ).join('');
+ $('gamesGrid').innerHTML=freeCard+paidPreview+(!full?'<div style="grid-column:1/-1" class="upgradeCard"><h3>More games in the Full Journey</h3><p>Paid game access or a paid Steps Into Hope subscription adds the crossword, recovery puzzle, scenario practice, more levels, more locations, and longer progression.</p><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">View Subscription Access</a></div></div>':'');
+ $('gamesGrid').querySelectorAll('.gameCard[data-game]').forEach(b=>b.addEventListener('click',()=>{ $('gamesModal').classList.remove('open'); const id=b.dataset.game;if(id==='wordsearch')openWordSearch();if(id==='crossword')openCrossword();if(id==='puzzle')openRecoveryPuzzle();if(id==='scenarios')openScenarios()}));
  $('gamesModal').classList.add('open')
 }
+
 function miniGameBack(){
  $('sceneModal').classList.remove('open');openGames()
 }
