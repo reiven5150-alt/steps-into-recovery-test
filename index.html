@@ -61,6 +61,36 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  .startcard{left:4vw;right:4vw;width:auto}.modeRow,.chargrid{grid-template-columns:repeat(2,1fr)}.hud{grid-template-columns:1fr}.quest{display:none}.statgrid{grid-template-columns:repeat(2,1fr)}.topbuttons{top:168px;right:8px}
  .dpad{display:block}.sceneBox{grid-template-columns:1fr}.sceneArt{min-height:240px}.toolGrid,.skillgrid{grid-template-columns:repeat(2,1fr)}.quickbar{bottom:176px}.challengeStage{height:280px}.budgetgrid{grid-template-columns:repeat(2,1fr)}
 }
+
+/* Mobile public-test fix: keep the opening screen scrollable and the start action reachable. */
+@media(max-width:850px){
+  #start.screen.active{
+    display:block;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:10px 0 30px;
+  }
+  #start .startcard{
+    position:relative;
+    left:auto;
+    right:auto;
+    top:auto;
+    transform:none;
+    width:calc(100% - 18px);
+    max-width:590px;
+    margin:0 auto;
+    padding:14px;
+  }
+  #start .chargrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  #start .char img{max-height:145px;object-position:top;}
+  #startBtn{
+    position:sticky;
+    bottom:8px;
+    z-index:15;
+    box-shadow:0 10px 28px rgba(0,0,0,.38);
+  }
+}
+
 </style>
 </head>
 <body>
