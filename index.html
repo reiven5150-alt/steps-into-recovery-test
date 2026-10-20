@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Steps Into Recovery — Hope Springs RPG v10 Mobile v4</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Steps Into Recovery — Mobile v6 Recovery Coach</title>
 <style>
 :root{
  --navy:#072631;--navy2:#0c3a49;--navy3:#11505f;--gold:#f1b846;--cream:#fff7e8;--paper:#fffaf2;
@@ -163,13 +166,26 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   .sceneChoice{min-height:48px}
 }
 
+
+/* v6 personalized recovery coach */
+.coachCard{background:#fff;border:2px solid #d8c8ae;border-radius:16px;padding:13px;margin-top:10px}
+.coachSkill{display:grid;grid-template-columns:64px 1fr;gap:11px;align-items:center;background:#eef5f2;border-radius:14px;padding:10px}
+.coachSkill img{width:64px;height:64px;object-fit:cover;border-radius:12px}
+.coachSkill b{display:block;font-size:18px}.coachSkill small{display:block;color:#51666b;margin-top:3px;line-height:1.3}
+.coachWhy{background:#fff8dc;border:1px solid #e4c36f;border-radius:12px;padding:10px;margin-top:10px;line-height:1.4}
+.coachPractice{display:none;background:#102f3a;color:#fff;border-radius:14px;padding:12px;margin-top:10px;line-height:1.45}
+.coachPractice.open{display:block}.coachPractice b{color:#ffd16b}
+.coachActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.coachActions .btn{width:100%;min-height:46px}
+@media(max-width:520px){.coachActions{grid-template-columns:1fr}.coachSkill{grid-template-columns:54px 1fr}.coachSkill img{width:54px;height:54px}}
+
 </style>
 </head>
 <body>
 <div id="app">
 <section id="start" class="screen active">
  <div class="startcard">
-  <div class="brand">Steps Into <span>Recovery</span></div>
+  <div class="brand">Steps Into <span>Recovery</span></div><div style="display:inline-block;margin:6px 0 8px;padding:5px 9px;border-radius:999px;background:#f1b846;color:#2d1d02;font-size:11px;font-weight:1000">TEST BUILD v6 · PERSONAL RECOVERY COACH</div>
   <div class="tag">Hope Springs · Explore freely · survive pressure events · build relationships · use real skills in real-time challenges.</div>
   <div class="modeRow">
    <button id="freeMode" class="modeBtn sel"><b>Free Journey</b><small>Day 1 story arc · Levels 1–3 · 6 locations · 4 core skills · 3 playable challenges.</small></button>
@@ -264,7 +280,7 @@ function fresh(){
  const free=selectedMode==='free';
  s={mode:selectedMode,day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
  unlocked:['deep','ground'],equipped:['deep','ground'],cooldowns:{},quests:{park:false,support:false,meeting:false,gym:false,market:false,boss:false},
- visited:[],log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:free?3:10};
+ visited:[],coachHistory:[],log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:free?3:10};
  Object.entries(chosen.bonus).forEach(([k,v])=>s.stats[k]=clamp(s.stats[k]+v))
 }
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active')}
@@ -287,7 +303,7 @@ function renderQuickbar(){
 }
 function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.display='none',1400)}
 function save(){try{localStorage.setItem('sir-v10',JSON.stringify(s));toast('Saved')}catch(e){toast('Save unavailable in preview')}}
-function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);s.coachHistory=s.coachHistory||[];selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
 function renderPositionOnly(){
  $('player').style.left=(s.x*100)+'%';$('player').style.top=(s.y*100)+'%';const vp=$('viewport').getBoundingClientRect(),pw=vp.width*2.1,ph=vp.height*1.9;
  let tx=vp.width/2-s.x*pw,ty=vp.height/2-s.y*ph;tx=Math.min(0,Math.max(vp.width-pw,tx));ty=Math.min(0,Math.max(vp.height-ph,ty));$('worldplane').style.transform=`translate(${tx}px,${ty}px)`;
@@ -298,10 +314,24 @@ function showPaywall(id){
  $('sceneModal').classList.add('open');$('previewPaid').addEventListener('click',()=>{s.mode='paid';s.levelCap=10;$('sceneModal').classList.remove('open');renderWorld();toast('Extended preview unlocked')})
 }
 function safeOpenLocation(id){
- try{openLocation(id)}catch(err){
+ try{
+  const typedFirst=['park','gym','market','oldspot'].includes(id);
+  if(!typedFirst){openLocation(id);return}
+  const label={park:'Riverside Park',gym:'Recovery Gym',market:'Market Square',oldspot:'Old Spot'}[id]||id;
+  const prompt={park:'What are you noticing right now?',gym:'What do you notice in your body right now?',market:'What matters most in the choice you are about to make?',oldspot:'What is the pressure telling you right now?'}[id]||'What are you thinking or feeling right now?';
+  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">YOUR RESPONSE</span><h2>'+label+'</h2><div class="dialog"><b>Type before continuing</b><p>'+prompt+'</p></div><textarea id="locationAnswer" maxlength="600" placeholder="Type your own answer here…" style="width:100%;min-height:120px;border:2px solid #b9aa92;border-radius:12px;padding:12px;font:inherit;font-size:16px;background:#fff;color:#142b31;resize:vertical"></textarea><div id="locationAnswerError" style="display:none;color:#a13640;font-weight:900;margin-top:7px">Please type an answer first.</div><button id="locationContinue" class="btn green" style="width:100%;margin-top:10px">Continue into '+label+'</button></div>';
+  $('sceneModal').classList.add('open');
+  const a=$('locationAnswer');if(a)setTimeout(()=>a.focus(),100);
+  $('locationContinue').addEventListener('click',()=>{
+    const text=(a&&a.value||'').trim();
+    if(text.length<2){$('locationAnswerError').style.display='block';if(a)a.focus();return}
+    addLog(label+' — your response: '+text);
+    showRecoveryCoach(text,label,()=>openLocation(id));
+  });
+ }catch(err){
   console.error('Location error',id,err);
   challenge=null;
-  $('sceneBox').innerHTML=`<div class="scenePanel"><span class="pill">TEST BUILD</span><h2>${id}</h2><div class="dialog"><b>This location hit an error.</b><p>Please tell me this location name and I can fix it. You can return to the map now.</p></div><button id="errorBack" class="btn navy" style="width:100%">Back to map</button></div>`;
+  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">TEST BUILD</span><h2>'+id+'</h2><div class="dialog"><b>This location hit an error.</b><p>Please tell me this location name and I can fix it. You can return to the map now.</p></div><button id="errorBack" class="btn navy" style="width:100%">Back to map</button></div>';
   $('sceneModal').classList.add('open');
   const b=$('errorBack'); if(b)b.addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld()});
  }
@@ -327,6 +357,56 @@ function useSkill(id){
  if(challenge&&challenge.type==='ground'){challenge.shield=Math.min(100,challenge.shield+skills[id].power)}
  renderHUD();toast(skills[id].name+' used');setTimeout(renderQuickbar,skills[id].cd+50)
 }
+
+function analyzeRecoveryResponse(text){
+ const t=String(text||'').toLowerCase();
+ const has=a=>a.some(w=>t.includes(w));
+ if(has(['suicidal','suicide','kill myself','want to die','hurt myself','self harm','self-harm']))return {crisis:true,theme:'a possible immediate safety concern'};
+ if(has(['craving','crave','urge','relapse','get high','use again','using','drink','triggered','trigger']))return {skill:'urge',theme:'a craving or strong trigger',why:'Urges tend to rise, peak, and fall. Urge Surfing helps you notice the wave without automatically acting on it.'};
+ if(has(['alone','lonely','isolated','isolate','nobody','no one','by myself','withdraw']))return {skill:'reach',theme:'isolation or disconnection',why:'Reaching toward a safe person can interrupt isolation and make the next decision easier to carry.'};
+ if(has(['ashamed','shame','guilty','guilt','failure','worthless','hate myself','stupid','loser','not good enough']))return {skill:'self',theme:'shame or harsh self-talk',why:'Balanced Self-Talk can challenge the harshest thought without pretending everything is fine.'};
+ if(has(['panic','panicked','anxious','anxiety','racing','overwhelmed','overwhelm','cant breathe',"can't breathe",'heart racing','nervous']))return {skill:'deep',theme:'high stress or racing thoughts',why:'Slower breathing can lower physical arousal enough to make the next choice more deliberate.'};
+ if(has(['angry','anger','mad','furious','restless','agitated','pissed','frustrated','frustration']))return {skill:'move',theme:'built-up tension or agitation',why:'Movement can discharge some physical tension so the feeling is easier to work with.'};
+ if(has(['confused','stuck','ruminating','overthinking','overthink','dont know',"don't know",'mixed up','cant decide',"can't decide"]))return {skill:'journal',theme:'mental overload or uncertainty',why:'Journaling slows the situation down and separates what happened, what you think, and what you need.'};
+ if(has(['hopeless','nothing good','everything sucks','pointless','never gets better','negative','miserable']))return {skill:'gratitude',theme:'hopelessness or a narrowed negative focus',why:'Gratitude does not erase the problem; it widens attention enough to notice what is still supporting you.'};
+ return {skill:'ground',theme:'stress that could use a reset',why:'Grounding brings attention back to the present moment before you make the next decision.'};
+}
+function coachPracticeText(id){
+ return {
+  deep:'Breathe in gently for 4 counts, then out for 6. Repeat three times and let your shoulders drop on each exhale.',
+  ground:'Name 5 things you can see, 4 you can feel, 3 you can hear, 2 you can smell, and 1 you can taste or imagine tasting.',
+  self:'Write or say one balanced sentence: “I am having a hard moment, and I can still choose my next step.” Make it sound like your own voice.',
+  urge:'Name the urge without obeying it. Notice where you feel it in your body. Picture it as a wave that rises and falls while you wait before acting.',
+  journal:'Write three short lines: What happened? What am I telling myself about it? What do I need next?',
+  move:'For 30–60 seconds, walk, stretch, shake out your hands, or move your shoulders. Notice whether the intensity changes.',
+  reach:'Choose one safe person. Draft one simple message: “I could use a little support right now. Are you available?”',
+  gratitude:'Name one thing that is still helping you today and one reason it matters. Keep it specific rather than forcing positivity.'
+ }[id]||'Pause, notice what is happening, and choose one small action that supports your recovery.';
+}
+function showRecoveryCoach(text,contextLabel,onContinue){
+ const rec=analyzeRecoveryResponse(text);
+ s.coachHistory=s.coachHistory||[];
+ if(rec.crisis){
+  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">SAFETY FIRST</span><h2>Get real-time support</h2><div class="coachWhy"><b>What you wrote may involve immediate safety.</b><br>If you might act on thoughts of harming yourself, call or text <b>988</b> in the U.S., call <b>911</b> for immediate danger, or get to a trusted person or emergency setting now. The game should not try to handle this alone.</div><button id="coachContinue" class="btn navy" style="width:100%;margin-top:12px">Continue when safe</button></div>';
+  $('coachContinue').addEventListener('click',()=>{addLog('Recovery Coach flagged a safety concern');save();onContinue()});
+  return;
+ }
+ const sk=skills[rec.skill]||skills.ground;
+ const practice=coachPracticeText(rec.skill);
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">RECOVERY COACH</span><h2>Here is what may help next</h2><div class="coachCard"><p style="margin-top:0">From what you wrote, the game picked up <b>'+rec.theme+'</b>.</p><div class="coachSkill"><img src="'+sk.img+'" alt=""><div><b>'+sk.name+'</b><small>'+sk.desc+'</small></div></div><div class="coachWhy"><b>Why this fits:</b><br>'+rec.why+'</div><div id="coachPractice" class="coachPractice"><b>Try it now</b><br>'+practice+'<button id="coachDidIt" class="btn gold" style="width:100%;margin-top:10px">I did this</button></div><div class="coachActions"><button id="coachPracticeBtn" class="btn green">Practice '+sk.name+'</button><button id="coachSkip" class="btn navy">Continue</button></div></div></div>';
+ const finish=(practiced)=>{
+   s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:rec.skill,practiced:!!practiced});
+   if(practiced){
+     if(sk&&typeof sk.fx==='function')sk.fx(s.stats);
+     norm();gain(4,2);addLog('Recovery Coach: practiced '+sk.name);
+   }else addLog('Recovery Coach recommended '+sk.name);
+   save();onContinue();
+ };
+ $('coachPracticeBtn').addEventListener('click',()=>{$('coachPractice').classList.add('open');$('coachPracticeBtn').disabled=true});
+ $('coachDidIt').addEventListener('click',()=>finish(true));
+ $('coachSkip').addEventListener('click',()=>finish(false));
+}
+
 function openLocation(id){
  if(!s.visited.includes(id))s.visited.push(id);
  if(id==='park')return groundRun();
@@ -348,7 +428,8 @@ function simpleScene(art,title,speaker,dialog,opts){
    const text=(answer&&answer.value||'').trim();
    if(text.length<2){const e=$('answerError');if(e)e.style.display='block';if(answer)answer.focus();return}
    addLog(title+' response: '+text);
-   opts[Number(b.dataset.i)][1]();norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save()
+   const choice=Number(b.dataset.i);
+   showRecoveryCoach(text,title,()=>{opts[choice][1]();norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save()})
  }))
 }
 function groundRun(){
@@ -392,8 +473,11 @@ function supportQuest(){
    const need=($('supportNeed').value||'').trim(), ask=($('supportAsk').value||'').trim(), no=($('supportNo').value||'').trim();
    if(need.length<2||ask.length<2||no.length<2){$('supportError').style.display='block';return}
    addLog('Support need: '+need); addLog('Support ask: '+ask); addLog('Room for no: '+no);
-   s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);
-   challenge=null;norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save();toast('Reach Out unlocked')
+   const combined=need+' '+ask+' '+no;
+   showRecoveryCoach(combined,'Support Center',()=>{
+     s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);
+     challenge=null;norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save();toast('Reach Out unlocked')
+   })
  })
 }
 function bossFight(){
