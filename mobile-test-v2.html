@@ -62,65 +62,83 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  .dpad{display:block}.sceneBox{grid-template-columns:1fr}.sceneArt{min-height:240px}.toolGrid,.skillgrid{grid-template-columns:repeat(2,1fr)}.quickbar{bottom:176px}.challengeStage{height:280px}.budgetgrid{grid-template-columns:repeat(2,1fr)}
 }
 
-/* Mobile public-test fix: keep the opening screen scrollable and the start action reachable. */
+/* === Mobile public test v3: phone-first layout and reliable touch interactions === */
+.sceneClose{display:none}
 @media(max-width:850px){
-  #start.screen.active{
-    display:block;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-    padding:10px 0 30px;
-  }
-  #start .startcard{
-    position:relative;
-    left:auto;
-    right:auto;
-    top:auto;
-    transform:none;
-    width:calc(100% - 18px);
-    max-width:590px;
-    margin:0 auto;
-    padding:14px;
-  }
-  #start .chargrid{grid-template-columns:repeat(2,minmax(0,1fr));}
-  #start .char img{max-height:145px;object-position:top;}
-  #startBtn{
-    position:sticky;
-    bottom:8px;
-    z-index:15;
-    box-shadow:0 10px 28px rgba(0,0,0,.38);
-  }
-}
+  html,body{height:100%;width:100%;overflow:hidden}
+  button{touch-action:manipulation}
 
+  /* Start screen */
+  #start.screen.active{display:block;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 0 126px}
+  #start .startcard{position:relative;left:auto;right:auto;top:auto;transform:none;width:calc(100% - 12px);max-width:590px;margin:0 auto;padding:10px;border-radius:16px}
+  #start .brand{font-size:clamp(26px,8vw,36px)}
+  #start .tag{font-size:11px;line-height:1.2;margin:5px 0 7px}
+  #start .modeRow{gap:5px;margin:5px 0 7px}
+  #start .modeBtn{padding:7px;border-radius:10px;min-height:66px}
+  #start .modeBtn b{font-size:13px}
+  #start .modeBtn small{font-size:9px;line-height:1.15}
+  #start .chargrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+  #start .char{padding:3px;border-radius:9px;min-width:0}
+  #start .char img{height:82px;max-height:82px;width:100%;aspect-ratio:auto;object-fit:cover;object-position:top;border-radius:7px}
+  #start .char b{font-size:10px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #start .char small{display:none}
+  #startBtn,#continueBtn{position:fixed;left:8px;right:8px;width:auto;z-index:80;margin:0!important;min-height:48px}
+  #startBtn{bottom:62px;box-shadow:0 8px 26px rgba(0,0,0,.5)}
+  #continueBtn{bottom:8px;box-shadow:0 8px 26px rgba(0,0,0,.42)}
 
-/* Mobile start-screen v2: compact character picker + always-visible actions. */
-@media(max-width:850px){
-  #start.screen.active{padding-bottom:132px;}
-  #start .brand{font-size:clamp(28px,9vw,40px);}
-  #start .tag{font-size:12px;line-height:1.25;margin:6px 0 8px;}
-  #start .modeRow{gap:6px;margin:6px 0 9px;}
-  #start .modeBtn{padding:8px;border-radius:11px;}
-  #start .modeBtn small{font-size:10px;line-height:1.15;}
-  #start .chargrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;}
-  #start .char{padding:4px;border-radius:11px;min-width:0;}
-  #start .char img{height:94px;max-height:94px;aspect-ratio:auto;object-fit:cover;object-position:top;border-radius:8px;}
-  #start .char b{font-size:11px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  #start .char small{display:none;}
-  #startBtn,#continueBtn{
-    position:fixed;
-    left:12px;
-    right:12px;
-    width:auto;
-    z-index:50;
-    margin:0!important;
-  }
-  #startBtn{bottom:66px;box-shadow:0 8px 26px rgba(0,0,0,.48);}
-  #continueBtn{bottom:12px;box-shadow:0 8px 26px rgba(0,0,0,.38);}
+  /* Main game map */
+  .hud{left:6px;right:6px;top:6px;grid-template-columns:1fr;gap:4px}
+  .hudbox{padding:7px 8px;border-radius:12px}
+  .hudbox.quest{display:none}
+  .statgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+  .stat{padding:5px 4px;border-radius:8px;min-width:0}
+  .statline{display:block;font-size:9px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .statline span:last-child{display:block;font-size:10px;margin-top:2px}
+  .meter{height:5px;margin-top:3px}
+  .topbuttons{top:106px;right:6px;gap:4px;z-index:28}
+  .topbuttons button{padding:8px 9px;border-radius:10px;font-size:11px;min-height:40px}
+  #toast{top:150px;max-width:calc(100% - 28px);text-align:center}
+  #hint{display:none}
+  .dpad{display:none!important}
+  .quickbar{bottom:10px;gap:5px;z-index:28}
+  .qskill{width:52px;height:52px;border-radius:11px}
+  .location{min-width:96px;max-width:130px;padding:8px 8px;border-radius:12px;font-size:12px;line-height:1.05;touch-action:manipulation}
+  .location small{font-size:9px;line-height:1.05}
+
+  /* Every story/challenge sheet must scroll on a phone */
+  .overlay{position:absolute;inset:0;padding:6px;align-items:flex-start;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .overlay.open{display:flex}
+  .sceneBox{width:100%;max-width:none;max-height:calc(100% - 12px);margin:6px 0;display:block;overflow-y:auto!important;overflow-x:hidden!important;border-radius:16px;-webkit-overflow-scrolling:touch}
+  .sceneArt{min-height:0!important;height:132px;background-position:center 30%}
+  .scenePanel{padding:12px 11px 18px}
+  .scenePanel h2{font-size:25px;line-height:1.05;margin:7px 0 4px}
+  .dialog{padding:9px;margin:8px 0;font-size:14px}
+  .scenePanel .btn{min-height:46px;font-size:14px}
+  .sceneClose{display:block;position:sticky;top:4px;margin-left:auto;margin-right:4px;margin-bottom:-46px;z-index:75;width:42px;height:42px;border:0;border-radius:50%;background:#f5ead9;color:#14333b;font-size:26px;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.28)}
+
+  .panelBox{width:100%;max-width:none;max-height:calc(100% - 12px);margin:6px 0;border-radius:16px;padding:11px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .toolboxBanner,.journalBanner{max-height:155px;object-fit:cover}
+  .toolGrid,.skillgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .toolCard button{min-height:44px}
+  .challengeShell{padding:9px;border-radius:13px}
+  .challengeStage{height:230px}
+  .challengeHud{grid-template-columns:1fr 1fr;gap:5px}
+  .challengeCard{padding:7px;font-size:12px}
+  .challengeControls{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+  .challengeControls button{min-height:48px}
+  .budgetgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .item{padding:10px 5px;min-height:48px}
+  .breatheCircle{width:118px;height:118px;margin:10px auto}
+  .paywall{padding:11px;border-radius:13px}
+  .endcard{position:relative;left:auto;right:auto;top:auto;transform:none;width:calc(100% - 12px);margin:8px auto;padding:14px;max-height:calc(100% - 16px);overflow:auto}
+  .endcard h1{font-size:30px}
 }
-@media(max-width:850px) and (max-height:720px){
-  #start .tag{display:none;}
-  #start .modeBtn small{display:none;}
-  #start .char img{height:76px;max-height:76px;}
-  #start .startcard{padding:10px;}
+@media(max-width:390px){
+  #start .char img{height:70px;max-height:70px}
+  #start .modeBtn small{display:none}
+  #start .modeBtn{min-height:48px}
+  .qskill{width:48px;height:48px}
+  .location{min-width:88px;font-size:11px}
 }
 
 </style>
@@ -187,7 +205,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  </div>
 </section>
 
-<div id="sceneModal" class="overlay"><div id="sceneBox" class="sceneBox"></div></div>
+<div id="sceneModal" class="overlay"><button id="sceneClose" class="sceneClose" type="button" aria-label="Back to map">×</button><div id="sceneBox" class="sceneBox"></div></div>
 <div id="toolModal" class="overlay"><div class="panelBox"><button class="close" id="closeTools">×</button><h2>Recovery Toolbox</h2><img src="" data-asset="toolbox" class="toolboxBanner" alt=""><p>Equip up to four skills. Equipped skills appear in the live quickbar during exploration and challenges.</p><div id="toolGrid" class="toolGrid"></div></div></div>
 <div id="journalModal" class="overlay"><div class="panelBox"><button class="close" id="closeJournal">×</button><h2>Journey Log</h2><img src="" data-asset="journal" class="journalBanner" alt=""><div id="journalList"></div></div></div>
 </div>
@@ -248,19 +266,36 @@ function renderQuickbar(){
 function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.display='none',1400)}
 function save(){try{localStorage.setItem('sir-v10',JSON.stringify(s));toast('Saved')}catch(e){toast('Save unavailable in preview')}}
 function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
-function renderWorld(){
+function renderPositionOnly(){
  $('player').style.left=(s.x*100)+'%';$('player').style.top=(s.y*100)+'%';const vp=$('viewport').getBoundingClientRect(),pw=vp.width*2.1,ph=vp.height*1.9;
- let tx=vp.width/2-s.x*pw,ty=vp.height/2-s.y*ph;tx=Math.min(0,Math.max(vp.width-pw,tx));ty=Math.min(0,Math.max(vp.height-ph,ty));$('worldplane').style.transform=`translate(${tx}px,${ty}px)`;renderHUD()
+ let tx=vp.width/2-s.x*pw,ty=vp.height/2-s.y*ph;tx=Math.min(0,Math.max(vp.width-pw,tx));ty=Math.min(0,Math.max(vp.height-ph,ty));$('worldplane').style.transform=`translate(${tx}px,${ty}px)`;
 }
+function renderWorld(){renderPositionOnly();renderHUD()}
 function showPaywall(id){
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">EXTENDED JOURNEY</span><h2>${id==='oldspot'?'The Hard Evening':'More of Hope Springs'}</h2><div class="paywall"><h3>This area is part of the extended paid game.</h3><div class="featurelist"><div class="feature">Days 2–3+ and higher levels</div><div class="feature">4 additional locations</div><div class="feature">4 additional recovery skills</div><div class="feature">Boss encounters and deeper relationships</div><div class="feature">Longer progression and replayability</div></div><button id="previewPaid" class="btn gold" style="width:100%;margin-top:12px">Preview Extended Mode in this test build</button></div></div>`;
  $('sceneModal').classList.add('open');$('previewPaid').addEventListener('click',()=>{s.mode='paid';s.levelCap=10;$('sceneModal').classList.remove('open');renderWorld();toast('Extended preview unlocked')})
 }
+function safeOpenLocation(id){
+ try{openLocation(id)}catch(err){
+  console.error('Location error',id,err);
+  challenge=null;
+  $('sceneBox').innerHTML=`<div class="scenePanel"><span class="pill">TEST BUILD</span><h2>${id}</h2><div class="dialog"><b>This location hit an error.</b><p>Please tell me this location name and I can fix it. You can return to the map now.</p></div><button id="errorBack" class="btn navy" style="width:100%">Back to map</button></div>`;
+  $('sceneModal').classList.add('open');
+  const b=$('errorBack'); if(b)b.addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld()});
+ }
+}
 function travelTo(id){
+ if(!s){return}
+ if(travelRAF){cancelAnimationFrame(travelRAF);travelRAF=null}
  if(s.mode==='free'&&premiumPlace(id)){showPaywall(id);return}
  if(!unlockedPlace(id)){toast(id==='work'?'Work Hub opens Day 2':'Old Spot opens Day 3');return}
- const p=places[id],sx=s.x,sy=s.y,dx=p.x-sx,dy=p.y-sy,start=performance.now(),dur=650;$('player').classList.add('walking');
- function step(now){const t=Math.min(1,(now-start)/dur),e=1-Math.pow(1-t,3);s.x=sx+dx*e;s.y=sy+dy*e;renderWorld();if(t<1)travelRAF=requestAnimationFrame(step);else{$('player').classList.remove('walking');s.x=p.x;s.y=p.y;advance(15);openLocation(id)}}travelRAF=requestAnimationFrame(step)
+ const p=places[id];if(!p){toast('Location unavailable');return}
+ const mobile=window.matchMedia&&window.matchMedia('(max-width:850px)').matches;
+ if(mobile){
+  s.x=p.x;s.y=p.y;advance(15);renderWorld();toast('Opening '+id+'…');setTimeout(()=>safeOpenLocation(id),80);return
+ }
+ const sx=s.x,sy=s.y,dx=p.x-sx,dy=p.y-sy,start=performance.now(),dur=650;$('player').classList.add('walking');
+ function step(now){const t=Math.min(1,(now-start)/dur),e=1-Math.pow(1-t,3);s.x=sx+dx*e;s.y=sy+dy*e;renderPositionOnly();if(t<1)travelRAF=requestAnimationFrame(step);else{travelRAF=null;$('player').classList.remove('walking');s.x=p.x;s.y=p.y;advance(15);renderWorld();safeOpenLocation(id)}}travelRAF=requestAnimationFrame(step)
 }
 function loop(ts){if(!$('game').classList.contains('active'))return;const dt=Math.min(40,ts-last||16);last=ts;let st=.00023*dt,dx=0,dy=0;if(keys.ArrowUp||keys.w)dy-=st;if(keys.ArrowDown||keys.s)dy+=st;if(keys.ArrowLeft||keys.a)dx-=st;if(keys.ArrowRight||keys.d)dx+=st;if(dx||dy){s.x=clamp01(s.x+dx);s.y=clamp01(s.y+dy);renderWorld()}requestAnimationFrame(loop)}
 function useSkill(id){
@@ -297,7 +332,7 @@ function groundRun(){
 function drawGround(){
  const c=challenge;
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.park)"></div><div class="scenePanel"><span class="pill">ACTIVE CHALLENGE</span><h2>Grounding Run</h2><p>Move through the park. Collect 5 grounding cues. Avoid stress spikes. Your live quickbar skills can protect you.</p><div class="challengeShell"><div class="challengeStage" id="groundStage"><div class="avatar" id="gavatar" style="left:${c.x}%;top:${c.y}%"><img src="${chosen.img}"></div>${c.objects.map((o,i)=>`<div class="${o.t}" data-i="${i}" style="left:${o.x}%;top:${o.y}%">${o.e}</div>`).join('')}</div><div class="challengeHud"><div class="challengeCard">Grounding cues <b>${c.collected}/${c.target}</b></div><div class="challengeCard">Calm shield <b>${c.shield}</b></div></div><div class="challengeControls"><button class="btn navy moveg" data-dx="-7" data-dy="0">←</button><button class="btn navy moveg" data-dx="0" data-dy="-7">↑</button><button class="btn navy moveg" data-dx="0" data-dy="7">↓</button><button class="btn navy moveg" data-dx="7" data-dy="0">→</button></div><p style="font-size:12px">Tip: you can close this challenge only by finishing it.</p></div></div>`;
- $('sceneBox').querySelectorAll('.moveg').forEach(b=>b.addEventListener('click',()=>{c.x=clamp(c.x+Number(b.dataset.dx));c.y=clamp(c.y+Number(b.dataset.dy));checkGround();drawGround()}))
+ $('sceneBox').querySelectorAll('.moveg').forEach(b=>b.addEventListener('click',()=>{if(!challenge||challenge.type!=='ground')return;c.x=clamp(c.x+Number(b.dataset.dx));c.y=clamp(c.y+Number(b.dataset.dy));checkGround();if(challenge&&challenge.type==='ground')drawGround()}))
 }
 function checkGround(){
  const c=challenge;for(let i=c.objects.length-1;i>=0;i--){const o=c.objects[i],d=Math.hypot(c.x-o.x,c.y-o.y);if(d<10){if(o.t==='pickup'){c.collected++;c.objects.splice(i,1);gain(2,1)}else{c.shield-=18;c.objects.splice(i,1);s.stats.stress+=5}}}
@@ -353,10 +388,10 @@ function buildChars(){chars.forEach((c,i)=>{const b=document.createElement('butt
 buildChars();
 $('freeMode').addEventListener('click',()=>{selectedMode='free';$('freeMode').classList.add('sel');$('paidMode').classList.remove('sel')});
 $('paidMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
-document.querySelectorAll('.location').forEach(b=>b.addEventListener('click',()=>travelTo(b.dataset.place)));
+document.querySelectorAll('.location').forEach(b=>{b.setAttribute('type','button');b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();travelTo(b.dataset.place)})});
 $('startBtn').addEventListener('click',()=>{fresh();show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});
 $('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);
-$('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));
+$('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));$('sceneClose').addEventListener('click',()=>{challenge=null;$('sceneModal').classList.remove('open');renderWorld()});
 $('replayBtn').addEventListener('click',()=>{fresh();show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
 window.addEventListener('resize',()=>s&&renderWorld());window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
 document.querySelectorAll('.dpad button').forEach(b=>{const map={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'},k=map[b.dataset.dir];const dn=e=>{e.preventDefault();keys[k]=true},up=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('pointerleave',up)});
