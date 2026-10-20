@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Steps Into Recovery — Mobile v9 Journal & Games</title>
+<title>Steps Into Recovery — Chapter One Free</title>
 <style>
 :root{
  --navy:#072631;--navy2:#0c3a49;--navy3:#11505f;--gold:#f1b846;--cream:#fff7e8;--paper:#fffaf2;
@@ -58,7 +58,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 .budgetgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.item{border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px;cursor:pointer}.item.sel{border-color:var(--green);background:#e8f3eb}.bossStage{background:linear-gradient(180deg,#2b2331,#132f39);border-radius:16px;padding:12px}.skillgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.skillbtn{background:#123d49;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:7px;cursor:pointer}.skillbtn img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px}.skillbtn:disabled{opacity:.35}
 
 
-.modeRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.modeBtn{border:2px solid rgba(255,255,255,.13);background:#0d3a48;color:white;border-radius:15px;padding:11px;text-align:left;cursor:pointer}.modeBtn.sel{border-color:var(--gold);background:#124757}.modeBtn b{display:block}.modeBtn small{display:block;opacity:.8;margin-top:3px;line-height:1.3}.xpTrack{height:7px;background:#1f5864;border-radius:999px;overflow:hidden;margin-top:6px}.xpTrack i{display:block;height:100%;background:var(--gold)}.location.paid::after{content:"PAID";position:absolute;top:-8px;right:-8px;background:#6e4fa2;color:white;border-radius:999px;padding:2px 6px;font-size:9px;border:1px solid #fff}.paywall{background:linear-gradient(135deg,#3d2f5d,#172f39);color:#fff;border-radius:18px;padding:16px}.paywall h3{margin:0 0 7px}.featurelist{display:grid;gap:6px;font-size:13px}.feature{background:rgba(255,255,255,.08);border-radius:10px;padding:8px}
+.modeRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.modeBtn{border:2px solid rgba(255,255,255,.13);background:#0d3a48;color:white;border-radius:15px;padding:11px;text-align:left;cursor:pointer}.modeBtn.sel{border-color:var(--gold);background:#124757}.modeBtn b{display:block}.modeBtn small{display:block;opacity:.8;margin-top:3px;line-height:1.3}.xpTrack{height:7px;background:#1f5864;border-radius:999px;overflow:hidden;margin-top:6px}.xpTrack i{display:block;height:100%;background:var(--gold)}.paywall{background:linear-gradient(135deg,#3d2f5d,#172f39);color:#fff;border-radius:18px;padding:16px}.paywall h3{margin:0 0 7px}.featurelist{display:grid;gap:6px;font-size:13px}.feature{background:rgba(255,255,255,.08);border-radius:10px;padding:8px}
 #end{background:linear-gradient(90deg,rgba(2,20,27,.48),rgba(2,20,27,.70));background-size:cover;background-position:center}.endcard{position:absolute;right:5vw;top:50%;transform:translateY(-50%);width:min(650px,92vw);background:rgba(5,34,44,.95);border:1px solid rgba(255,255,255,.15);border-radius:22px;padding:19px;box-shadow:0 30px 80px rgba(0,0,0,.45)}.endcard h1{font-size:42px;margin:6px 0}.endstats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.endstat{background:#0f4050;border-radius:12px;padding:10px}.endactions{display:flex;gap:8px}.endactions button{flex:1}
 @media(max-width:850px){
  .startcard{left:4vw;right:4vw;width:auto}.modeRow,.chargrid{grid-template-columns:repeat(2,1fr)}.hud{grid-template-columns:1fr}.quest{display:none}.statgrid{grid-template-columns:repeat(2,1fr)}.topbuttons{top:168px;right:8px}
@@ -251,9 +251,8 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  <div class="startcard">
   <div class="brand">Steps Into <span>Recovery</span></div>
   <div class="tag">Hope Springs · Explore freely · survive pressure events · build relationships · use real skills in real-time challenges.</div>
-  <div class="modeRow">
-   <button id="freeMode" class="modeBtn sel"><b>Chapter One</b><small>Begin your journey through Hope Springs.</small></button>
-   <button id="paidMode" class="modeBtn"><b>Full Journey</b><small>Continue farther through Hope Springs.</small></button>
+  <div class="modeRow" style="grid-template-columns:1fr">
+   <div class="modeBtn sel"><b>Chapter One — Free</b><small>Explore Hope Springs, journal, practice coping tools, and play the Recovery Word Search.</small></div>
   </div>
   <div id="startUpgradeCard" class="upgradeCard">
     <h3>Continue beyond Chapter One</h3>
@@ -285,11 +284,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
    <button class="location" data-place="cafe" style="left:48%;top:57%">Corner Café<small>Lena</small></button>
    <button class="location" data-place="support" style="left:77%;top:66%">Support Center<small>Support quest</small></button>
    <button class="location" data-place="meeting" style="left:57%;top:73%">Meeting Hall<small>Marcus</small></button>
-   <button class="location paid" data-place="gym" style="left:86%;top:82%">Recovery Gym<small>Breathing rhythm</small></button>
-   <button class="location paid" data-place="library" style="left:73%;top:33%">Reflection Library<small>Journal</small></button>
    <button class="location" data-place="market" style="left:24%;top:63%">Market Square<small>Budget challenge</small></button>
-   <button class="location paid locked" data-place="work" style="left:87%;top:49%">Work Hub<small>Day 2</small></button>
-   <button class="location risk paid locked" data-place="oldspot" style="left:91%;top:24%">Old Spot<small>Day 3 boss</small></button>
    <div id="player"><img id="playerImg" src="" data-asset="ava" alt=""></div>
   </div>
  </div>
@@ -406,10 +401,9 @@ const places={
 let selectedMode='free',chosen=chars[0],s=null,keys={},last=0,travelRAF=null,challenge=null,mobileMapInitialized=false,mapPanX=0,mapPanY=0,mapDrag=null,suppressMapTap=false;
 
 function fresh(){
- const free=selectedMode==='free';
- s={mode:selectedMode,day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
+ s={mode:'free',day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
  unlocked:['deep','ground'],equipped:['deep','ground'],cooldowns:{},quests:{park:false,support:false,meeting:false,gym:false,market:false,boss:false},
- visited:[],coachHistory:[],journalEntries:[],minigames:{wordsearch:false,crossword:false,puzzle:false,scenarios:false},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:free?3:10};
+ visited:[],coachHistory:[],journalEntries:[],minigames:{wordsearch:false},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:3};
  Object.entries(chosen.bonus).forEach(([k,v])=>s.stats[k]=clamp(s.stats[k]+v))
 }
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active')}
@@ -419,12 +413,11 @@ function addLog(t){s.log.unshift(`${tm()} — ${t}`)}
 function escHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function norm(){Object.keys(s.stats).forEach(k=>s.stats[k]=clamp(s.stats[k]))}
 function gain(xp,hope){s.xp+=xp;s.hope+=hope;while(s.xp>=100&&s.level<s.levelCap){s.xp-=100;s.level++;toast('Level up! Level '+s.level)}if(s.level>=s.levelCap)s.xp=Math.min(s.xp,99)}
-function premiumPlace(id){return ['gym','library','work','oldspot'].includes(id)}
-function unlockedPlace(id){if(s.mode==='free'&&premiumPlace(id))return false;if(id==='work')return s.day>=2;if(id==='oldspot')return s.day>=3;return true}
+function unlockedPlace(id){return ['home','park','cafe','support','meeting','market'].includes(id)}
 function renderHUD(){
  norm();const eu=$('endUpgradeCard');if(eu)eu.style.display=s&&s.mode==='free'?'block':'none';$('heroName').textContent=chosen.name;$('clock').textContent=`${'Day '+s.day} · ${tm()} · Lv ${s.level} · ${s.hope} Hope`;$('xpBar').style.width=Math.min(100,s.xp)+'%';
  for(const k of ['recovery','stress','connection','energy']){const map={recovery:['rv','rb'],stress:['sv','sb'],connection:['cv','cb'],energy:['ev','eb']}[k];$(map[0]).textContent=s.stats[k];$(map[1]).style.width=s.stats[k]+'%'}
- $('questList').innerHTML=[['park','Grounding Run'],['support','Support Quest'],['meeting','Meeting Hall'],['gym','Breathing Rhythm'],['market','Budget Puzzle'],['boss','Day 3 Boss']].map(([k,l])=>`<div class="qline">${s.quests[k]?'✓':'□'} ${l}</div>`).join('');
+ $('questList').innerHTML=[['park','Grounding Run'],['support','Support Quest'],['meeting','Meeting Hall'],['market','Budget Puzzle']].map(([k,l])=>`<div class="qline">${s.quests[k]?'✓':'□'} ${l}</div>`).join('');
  $('playerImg').src=chosen.img;document.querySelectorAll('.location').forEach(b=>{b.classList.toggle('locked',!unlockedPlace(b.dataset.place));b.classList.toggle('visited',s.visited.includes(b.dataset.place))});renderQuickbar()
 }
 function renderQuickbar(){
@@ -433,7 +426,7 @@ function renderQuickbar(){
 }
 function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.display='none',1400)}
 function save(){try{localStorage.setItem('sir-v10',JSON.stringify(s));toast('Saved')}catch(e){toast('Save unavailable in preview')}}
-function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);mobileMapInitialized=false;s.coachHistory=s.coachHistory||[];s.journalEntries=s.journalEntries||[];s.minigames=s.minigames||{wordsearch:false,crossword:false,puzzle:false,scenarios:false};selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);mobileMapInitialized=false;s.mode='free';s.levelCap=3;s.coachHistory=s.coachHistory||[];s.journalEntries=s.journalEntries||[];s.minigames={wordsearch:!!(s.minigames&&s.minigames.wordsearch)};selectedMode='free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
 
 
 function isMobileMap(){return !!(window.matchMedia&&window.matchMedia('(max-width:850px)').matches)}
@@ -473,10 +466,10 @@ function showPaywall(id){
 
 function safeOpenLocation(id){
  try{
-  const typedFirst=['park','gym','market','oldspot'].includes(id);
+  const typedFirst=['park','market'].includes(id);
   if(!typedFirst){openLocation(id);return}
-  const label={park:'Riverside Park',gym:'Recovery Gym',market:'Market Square',oldspot:'Old Spot'}[id]||id;
-  const prompt={park:'What are you noticing right now?',gym:'What do you notice in your body right now?',market:'What matters most in the choice you are about to make?',oldspot:'What is the pressure telling you right now?'}[id]||'What are you thinking or feeling right now?';
+  const label={park:'Riverside Park',market:'Market Square'}[id]||id;
+  const prompt={park:'What are you noticing right now?',market:'What matters most in the choice you are about to make?'}[id]||'What are you thinking or feeling right now?';
   $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">YOUR RESPONSE</span><h2>'+label+'</h2><div class="dialog"><b>Type before continuing</b><p>'+prompt+'</p></div><textarea id="locationAnswer" maxlength="600" placeholder="Type your own answer here…" style="width:100%;min-height:120px;border:2px solid #b9aa92;border-radius:12px;padding:12px;font:inherit;font-size:16px;background:#fff;color:#142b31;resize:vertical"></textarea><div id="locationAnswerError" style="display:none;color:#a13640;font-weight:900;margin-top:7px">Please type an answer first.</div><button id="locationContinue" class="btn green" style="width:100%;margin-top:10px">Continue into '+label+'</button></div>';
   $('sceneModal').classList.add('open');
   const a=$('locationAnswer');if(a)setTimeout(()=>a.focus(),100);
@@ -498,7 +491,6 @@ function safeOpenLocation(id){
 function travelTo(id){
  if(!s)return;
  if(travelRAF){cancelAnimationFrame(travelRAF);travelRAF=null}
- if(s.mode==='free'&&premiumPlace(id)){showPaywall(id);return}
  if(!unlockedPlace(id)){toast(id==='work'?'Work Hub opens Day 2':'Old Spot opens Day 3');return}
  const p=places[id];if(!p){toast('Location unavailable');return}
  if(isMobileMap()){
@@ -617,17 +609,12 @@ function showRecoveryCoach(text,contextLabel,onContinue){
 function openLocation(id){
  if(!s.visited.includes(id))s.visited.push(id);
  if(id==='park')return groundRun();
- if(id==='gym')return breathingRhythm();
  if(id==='market')return budgetPuzzle();
- if(id==='oldspot')return bossFight();
  if(id==='support')return supportQuest();
- if(id==='meeting')return simpleScene('meeting','Meeting Hall','Marcus','“You can share, listen, or just be here.”',[['Share one honest sentence',()=>{s.stats.connection+=10;s.stats.recovery+=7;s.relationships.marcus+=10;s.quests.meeting=true;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(16,9)}],['Stay and talk after',()=>{s.relationships.marcus+=14;s.stats.connection+=6;s.quests.meeting=true;gain(14,7)}]]);
- if(id==='cafe')return simpleScene('cafe','Corner Café','Lena','“Rough day?”',[['Tell Lena the truth',()=>{s.relationships.lena+=12;s.stats.connection+=8;if(!s.unlocked.includes('gratitude'))s.unlocked.push('gratitude');gain(12,7)}],['Ask what helps her on bad nights',()=>{s.relationships.lena+=8;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(12,6)}]]);
- if(id==='library')return simpleScene('journal','Reflection Library','Mara','“Write down what worked before your brain edits the story.”',[['Write a short reflection',()=>{s.stats.recovery+=6;if(!s.unlocked.includes('journal'))s.unlocked.push('journal');gain(12,6)}]]);
- if(id==='home')return simpleScene('park','Home Base','You','Your apartment is quiet. What do you do?',[['Cook and recharge',()=>{s.stats.energy+=12;s.stats.stress-=4;gain(8,4)}],['Use a skill from your quickbar instead',()=>{toast('Use the live skill bar at the bottom')} ]]);
- if(id==='work')return simpleScene('cafe','Work Hub','Theo','“Short shift available.”',[['Take the shift',()=>{s.money+=18;s.stats.energy-=12;gain(16,8)}],['Protect your energy today',()=>{s.stats.recovery+=5;gain(10,5)}]]);
+ if(id==='meeting')return simpleScene('meeting','Meeting Hall','Marcus','“You can share, listen, or just be here.”',[]);
+ if(id==='cafe')return simpleScene('cafe','Corner Café','Lena','“Rough day?”',[]);
+ if(id==='home')return simpleScene('park','Home Base','You','Your apartment is quiet. What do you do?',[]);
 }
-
 function applyTypedSceneOutcome(title,text){
  const t=String(text||'').toLowerCase();
  if(title==='Home Base'){
@@ -638,8 +625,6 @@ function applyTypedSceneOutcome(title,text){
    else {s.stats.recovery+=3;s.stats.stress-=2}
  }else if(title==='Meeting Hall'){s.stats.connection+=7;s.stats.recovery+=4;s.quests.meeting=true;if(!s.unlocked.includes('self'))s.unlocked.push('self')}
  else if(title==='Corner Café'){s.stats.connection+=6;s.relationships.lena+=6}
- else if(title==='Reflection Library'){s.stats.recovery+=6;if(!s.unlocked.includes('journal'))s.unlocked.push('journal')}
- else if(title==='Work Hub'){s.stats.recovery+=4}
  gain(10,5);norm();
 }
 function simpleScene(art,title,speaker,dialog,opts){
@@ -664,13 +649,6 @@ function checkGround(){
  const c=challenge;for(let i=c.objects.length-1;i>=0;i--){const o=c.objects[i],d=Math.hypot(c.x-o.x,c.y-o.y);if(d<10){if(o.t==='pickup'){c.collected++;c.objects.splice(i,1);gain(2,1)}else{c.shield-=18;c.objects.splice(i,1);s.stats.stress+=5}}}
  if(c.collected>=c.target){s.quests.park=true;s.stats.stress-=10;s.stats.recovery+=7;if(!s.unlocked.includes('move'))s.unlocked.push('move');gain(20,12);addLog('Completed Grounding Run');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Grounding Run complete')}
 }
-function breathingRhythm(){
- challenge={type:'breath',phase:0,score:0,pos:0,dir:1,seq:['INHALE','HOLD','EXHALE','INHALE','HOLD','EXHALE']};drawBreath();$('sceneModal').classList.add('open');startBreathTicker()
-}
-function drawBreath(){
- const c=challenge;$('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.park)"></div><div class="scenePanel"><span class="pill">TIMING CHALLENGE</span><h2>Breathing Rhythm</h2><p>Tap when the moving marker enters the green zone. Build a full breathing cycle.</p><div class="challengeShell"><div class="breatheCircle ${c.seq[c.phase]==='INHALE'?'in':''}">${c.seq[c.phase]}</div><div class="timingTrack"><div class="zone"></div><div class="marker" id="marker" style="left:${c.pos}%"></div></div><button id="breathTap" class="btn green" style="width:100%;margin-top:12px">Tap in the green zone</button><p>Hits ${c.score}/6</p></div></div>`;$('breathTap').addEventListener('click',()=>{const ok=c.pos>=42&&c.pos<=58;if(ok){c.score++;c.phase++}else{s.stats.stress+=2}if(c.phase>=c.seq.length){s.quests.gym=true;s.stats.stress-=12;s.stats.energy+=6;if(!s.unlocked.includes('move'))s.unlocked.push('move');gain(22,12);addLog('Completed Breathing Rhythm');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Breathing Rhythm complete')}else drawBreath()})
-}
-function startBreathTicker(){function tick(){if(!challenge||challenge.type!=='breath')return;challenge.pos+=challenge.dir*1.6;if(challenge.pos>=95||challenge.pos<=0)challenge.dir*=-1;const m=$('marker');if(m)m.style.left=challenge.pos+'%';requestAnimationFrame(tick)}requestAnimationFrame(tick)}
 function budgetPuzzle(){
  challenge={type:'budget',budget:12,items:[['Fruit',4],['Protein',5],['Coffee',6],['Soda',3],['Bread',3],['Snacks',5]],sel:[]};drawBudget();$('sceneModal').classList.add('open')
 }
@@ -696,25 +674,6 @@ function supportQuest(){
    })
  })
 }
-function bossFight(){
- challenge={type:'boss',phase:1,pressure:100,timer:30};
- drawBoss();$('sceneModal').classList.add('open');startBossTimer()
-}
-function drawBoss(){
- const c=challenge;$('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.cafe)"></div><div class="scenePanel"><span class="pill">BOSS ENCOUNTER</span><h2>The Hard Evening</h2><p>${c.phase===1?'You are tired and lonely. The invitation hits at exactly the wrong time.':c.phase===2?'The pressure changes: “You can handle one night.”':'The last wave is shame, boredom, and craving together.'}</p><div class="bossStage"><div style="display:flex;justify-content:space-between"><b>Pressure Phase ${c.phase}/3</b><b>${c.pressure}/100</b></div><div class="pressure"><i style="width:${c.pressure}%"></i></div><p>Survive ${c.timer}s. Use your equipped skills below. Pressure rises if you wait too long.</p><div class="skillgrid">${s.equipped.map(id=>`<button class="skillbtn bossSkill" data-skill="${id}"><img src="${skills[id].img}"><b>${skills[id].name}</b></button>`).join('')}</div></div></div>`;
- $('sceneBox').querySelectorAll('.bossSkill').forEach(b=>b.addEventListener('click',()=>{useSkill(b.dataset.skill);if(challenge)drawBoss()}))
-}
-function startBossTimer(){
- function tick(){
-  if(!challenge||challenge.type!=='boss')return;
-  challenge.timer--;challenge.pressure=Math.min(100,challenge.pressure+3);s.stats.stress=Math.min(100,s.stats.stress+1);
-  if(challenge.pressure<=0){if(challenge.phase<3){challenge.phase++;challenge.pressure=80;challenge.timer=24;toast('Next phase')}else{finishBoss();return}}
-  if(challenge.timer<=0){challenge.pressure=Math.max(0,challenge.pressure-25);challenge.timer=24}
-  drawBoss();setTimeout(tick,1000)
- }setTimeout(tick,1000)
-}
-function finishBoss(){s.quests.boss=true;if(!s.unlocked.includes('urge'))s.unlocked.push('urge');gain(40,25);addLog('Cleared The Hard Evening');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Boss cleared — Urge Surfing unlocked')}
-
 function openTools(){
  $('toolGrid').innerHTML='<div style="grid-column:1/-1"><h3 style="margin:4px 0">Quickbar game skills</h3><p style="margin:4px 0 8px;color:#607276">These are the skills you can equip during map challenges.</p></div>'+Object.entries(skills).map(([id,sk])=>{const un=s.unlocked.includes(id),eq=s.equipped.includes(id);return `<div class="toolCard ${un?'':'lock'}"><img src="${sk.img}"><b>${sk.name}</b><small>${sk.desc}</small><button class="btn ${un?'green':'navy'} useTool" data-skill="${id}" ${un?'':'disabled'}>${un?'Use now':'Locked'}</button><button class="btn navy equipTool" data-skill="${id}" ${un?'':'disabled'}>${eq?'Unequip':'Equip'}</button></div>`}).join('')+'<div style="grid-column:1/-1;margin-top:14px"><h3 style="margin:4px 0">Coping tools</h3><p style="margin:4px 0 8px;color:#607276">Always available. Pick any one that fits—no typing required.</p><div class="copingGrid">'+Object.entries(copingTools).map(([id,c])=>'<button type="button" class="copingCard toolCoping" data-coping="'+id+'"><span class="copingEmoji">'+c.emoji+'</span><b>'+c.name+'</b><small>'+c.desc+'</small></button>').join('')+'</div></div>';
  $('toolGrid').querySelectorAll('.useTool').forEach(b=>b.addEventListener('click',()=>{useSkill(b.dataset.skill);openTools()}));
@@ -748,22 +707,12 @@ function awardMiniGame(key,label,xp=12,hope=6){
 }
 
 function openGames(){
- const full=s.mode==='paid';
- const freeCard='<button type="button" class="gameCard" data-game="wordsearch"><span style="font-size:28px">🔎</span><b>Word Search</b><small>Find recovery words hidden in the grid.'+(s.minigames&&s.minigames.wordsearch?' · Completed':'')+'</small></button>';
- const fullCards=[
-  ['crossword','Mini Crossword','Solve short recovery clues.','✏️'],
-  ['puzzle','Recovery Puzzle','Put a coping sequence in the right order.','🧩'],
-  ['scenarios','Recovery Scenarios','Choose responses to realistic situations.','💭']
- ];
- const paidPreview=fullCards.map(([id,name,desc,emoji])=>full
-   ? '<button type="button" class="gameCard" data-game="'+id+'"><span style="font-size:28px">'+emoji+'</span><b>'+name+'</b><small>'+desc+(s.minigames&&s.minigames[id]?' · Completed':'')+'</small></button>'
-   : '<div class="gameCard lockedGame"><span class="lockTag">FULL JOURNEY</span><span style="font-size:28px">'+emoji+'</span><b>'+name+'</b><small>'+desc+'</small></div>'
- ).join('');
- $('gamesGrid').innerHTML=freeCard+paidPreview+(!full?'<div style="grid-column:1/-1" class="upgradeCard"><h3>More games in the Full Journey</h3><p>Paid game access or a paid Steps Into Hope subscription adds the crossword, recovery puzzle, scenario practice, more levels, more locations, and longer progression.</p><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">View Subscription Access</a></div></div>':'');
- $('gamesGrid').querySelectorAll('.gameCard[data-game]').forEach(b=>b.addEventListener('click',()=>{ $('gamesModal').classList.remove('open'); const id=b.dataset.game;if(id==='wordsearch')openWordSearch();if(id==='crossword')openCrossword();if(id==='puzzle')openRecoveryPuzzle();if(id==='scenarios')openScenarios()}));
+ const freeCard='<button type="button" class="gameCard" data-game="wordsearch"><span style="font-size:28px">🔎</span><b>Recovery Word Search</b><small>Find recovery words hidden in the grid.'+(s.minigames&&s.minigames.wordsearch?' · Completed':'')+'</small></button>';
+ const paidPreview='<div class="gameCard lockedGame"><span class="lockTag">FULL JOURNEY</span><span style="font-size:28px">✏️</span><b>More Recovery Games</b><small>Crosswords, coping puzzles, scenario practice, and additional games continue in the Full Journey.</small></div>';
+ $('gamesGrid').innerHTML=freeCard+paidPreview+'<div style="grid-column:1/-1" class="upgradeCard"><h3>Continue beyond Chapter One</h3><p>Full Journey and subscription access add more levels, locations, recovery games, scenarios, challenges, and ongoing progression.</p><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">Subscription Access</a></div></div>';
+ $('gamesGrid').querySelector('[data-game="wordsearch"]').addEventListener('click',()=>{$('gamesModal').classList.remove('open');openWordSearch()});
  $('gamesModal').classList.add('open')
 }
-
 function miniGameBack(){
  $('sceneModal').classList.remove('open');openGames()
 }
@@ -797,45 +746,10 @@ function openWordSearch(){
    first=null;if(found.size===words.length){$('wsMsg').innerHTML='<b>Great job — you found every recovery word.</b>';awardMiniGame('wordsearch','Recovery Word Search',14,7)}
  }))
 }
-function openCrossword(){
- const clues=[
-  ['A short break before reacting (5)','PAUSE'],
-  ['People who help you stay connected (7)','SUPPORT'],
-  ['What you protect one day at a time (8)','RECOVERY'],
-  ['Something that rises and falls without needing action (4)','URGE']
- ];
- $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>Mini Recovery Crossword</h2><p>Fill the recovery word for each clue.</p>'+clues.map((q,i)=>'<div class="miniQuestion"><b>'+(i+1)+'. '+q[0]+'</b><input id="cw'+i+'" maxlength="'+q[1].length+'" autocomplete="off"></div>').join('')+'<div id="cwFeedback"></div><button id="cwCheck" class="btn green" style="width:100%;margin-top:10px">Check answers</button><button id="miniBack" class="btn navy" style="width:100%;margin-top:8px">Back to games</button></div>';
- $('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);
- $('cwCheck').addEventListener('click',()=>{let correct=0;clues.forEach((q,i)=>{if(($('cw'+i).value||'').trim().toUpperCase()===q[1])correct++});$('cwFeedback').className='gameFeedback';$('cwFeedback').textContent=correct===clues.length?'All four are correct.':correct+' of '+clues.length+' correct. Change any answer and try again.';if(correct===clues.length)awardMiniGame('crossword','Mini Recovery Crossword',16,8)})
-}
-function openRecoveryPuzzle(){
- const correct=['Stop','Take a breath','Observe','Proceed on purpose'],chosen=[];
- const shuffled=['Observe','Proceed on purpose','Stop','Take a breath'];
- function draw(){
-  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>STOP Skill Puzzle</h2><p>Tap the four steps in the order you would use them. Tap your selected list to reset.</p><div class="tileGrid">'+shuffled.map(x=>'<button type="button" class="orderTile" data-step="'+escHTML(x)+'">'+escHTML(x)+'</button>').join('')+'</div><div id="orderPicked" class="gameFeedback">'+(chosen.length?'Your order: '+chosen.map((x,i)=>(i+1)+'. '+x).join(' → '):'No steps selected yet.')+'</div><button id="orderReset" class="btn navy" style="width:100%;margin-top:8px">Reset order</button><button id="miniBack" class="btn navy" style="width:100%;margin-top:8px">Back to games</button></div>';
-  $('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);$('orderReset').addEventListener('click',()=>{chosen.length=0;draw()});
-  $('sceneBox').querySelectorAll('.orderTile').forEach(b=>b.addEventListener('click',()=>{const step=b.dataset.step;if(chosen.includes(step))return;chosen.push(step);if(chosen.length===4){const ok=chosen.every((x,i)=>x===correct[i]);if(ok){awardMiniGame('puzzle','STOP Skill Puzzle',14,7);$('orderPicked').innerHTML='<b>Correct:</b> Stop → Take a breath → Observe → Proceed on purpose.'}else{$('orderPicked').innerHTML='Not quite. Reset and try again — wrong answers do not cost anything.'}}else draw()}))
- }draw()
-}
-function openScenarios(){
- const qs=[
-  {q:'A stressful text makes you want to react immediately. What is the strongest first move?',a:['Send the first response that comes to mind','Pause, breathe, and decide what outcome you want','Ignore every message for a week'],correct:1,why:'A pause creates space between emotion and action.'},
-  {q:'You notice a strong craving after a difficult day. Which response protects recovery best?',a:['Change your environment and contact safe support','Stay alone with access to the trigger','Tell yourself cravings should never happen'],correct:0,why:'Distance from the trigger plus connection can reduce risk while the urge passes.'},
-  {q:'You are exhausted and everything feels harder. What should you check before making a big decision?',a:['Whether you are hungry, angry, lonely, or tired','Whether you can push through without rest','Whether everyone else is doing better'],correct:0,why:'HALT catches basic needs that can amplify stress.'}
- ];
- let i=0,score=0;
- function draw(){
-  const q=qs[i];$('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>Recovery Scenario '+(i+1)+'/'+qs.length+'</h2><div class="miniQuestion"><b>'+q.q+'</b>'+q.a.map((a,j)=>'<button type="button" class="btn navy scenarioOption" data-i="'+j+'">'+a+'</button>').join('')+'</div><div id="scenarioFeedback"></div><button id="miniBack" class="btn navy" style="width:100%;margin-top:10px">Back to games</button></div>';$('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);
-  $('sceneBox').querySelectorAll('.scenarioOption').forEach(b=>b.addEventListener('click',()=>{const pick=Number(b.dataset.i),ok=pick===q.correct;if(ok)score++;$('scenarioFeedback').className='gameFeedback';$('scenarioFeedback').innerHTML=(ok?'<b>Good choice.</b> ':'<b>Try another way next time.</b> ')+q.why+'<button id="scenarioNext" class="btn green" style="width:100%;margin-top:8px">'+(i===qs.length-1?'Finish':'Next scenario')+'</button>';$('sceneBox').querySelectorAll('.scenarioOption').forEach(x=>x.disabled=true);$('scenarioNext').addEventListener('click',()=>{i++;if(i>=qs.length){$('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">COMPLETE</span><h2>Scenario Practice</h2><div class="gameFeedback">You chose '+score+' of '+qs.length+' strongest responses. The point is practice, not perfection.</div><button id="scenarioDone" class="btn green" style="width:100%;margin-top:10px">Back to games</button></div>';awardMiniGame('scenarios','Recovery Scenarios',16,8);$('scenarioDone').addEventListener('click',miniGameBack)}else draw()})}))
- }draw()
-}
-
-function nextDay(){if(s.mode==='free'){showPaywall('work');return}if(s.day<3)s.day++;mobileMapInitialized=false;s.h=9;s.m=0;s.x=.5;s.y=.62;s.stats.energy=clamp(s.stats.energy+15);s.stats.stress=clamp(s.stats.stress-5);addLog(`Day ${s.day} begins.`);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function nextDay(){showPaywall('full')}
 function buildChars(){chars.forEach((c,i)=>{const b=document.createElement('button');b.className='char'+(i===0?' sel':'');b.innerHTML=`<img src="${c.img}"><b>${c.name}</b><small>${c.role}</small>`;b.addEventListener('click',()=>{chosen=c;document.querySelectorAll('.char').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')});$('chargrid').appendChild(b)})}
 
 buildChars();
-$('freeMode').addEventListener('click',()=>{selectedMode='free';$('freeMode').classList.add('sel');$('paidMode').classList.remove('sel')});
-$('paidMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
 document.querySelectorAll('.location').forEach(b=>{b.setAttribute('type','button');b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();if(suppressMapTap)return;travelTo(b.dataset.place)})});
 $('startBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop);if(isMobileMap())setTimeout(()=>toast('Drag the map freely • Tap any location'),350)});
 $('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);$('gamesBtn').addEventListener('click',openGames);
