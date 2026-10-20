@@ -194,42 +194,31 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 @media(max-width:520px){.copingGrid{grid-template-columns:1fr}.copingCard{min-height:78px}.copingActions{grid-template-columns:1fr}}
 
 
-/* v8 mobile map: native drag/swipe exploration */
+
+/* v8 mobile map: drag/swipe exploration */
 @media(max-width:850px){
-  #game .viewport{
-    overflow:auto!important;
-    touch-action:pan-x pan-y!important;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior:contain;
-    scrollbar-width:none;
-  }
-  #game .viewport::-webkit-scrollbar{display:none}
+  #game .viewport{overflow:hidden!important;touch-action:none!important}
   #game .worldplane{
-    position:relative!important;
-    left:auto!important;
-    top:auto!important;
-    width:210%!important;
-    height:190%!important;
-    min-width:210%!important;
-    min-height:190%!important;
-    transform:none!important;
-    will-change:auto!important;
+    position:absolute!important;
+    left:0!important;top:0!important;
+    width:210%!important;height:190%!important;
+    min-width:210%!important;min-height:190%!important;
+    will-change:transform!important;
   }
   #game .dpad{display:none!important}
   #game .location{touch-action:manipulation}
 }
-
 </style>
 </head>
 <body>
 <div id="app">
 <section id="start" class="screen active">
  <div class="startcard">
-  <div class="brand">Steps Into <span>Recovery</span></div><div style="display:inline-block;margin:6px 0 8px;padding:5px 9px;border-radius:999px;background:#f1b846;color:#2d1d02;font-size:11px;font-weight:1000">TEST BUILD v8 · DRAG-TO-EXPLORE MAP</div>
+  <div class="brand">Steps Into <span>Recovery</span></div>
   <div class="tag">Hope Springs · Explore freely · survive pressure events · build relationships · use real skills in real-time challenges.</div>
   <div class="modeRow">
-   <button id="freeMode" class="modeBtn sel"><b>Free Journey</b><small>Day 1 story arc · Levels 1–3 · 6 locations · 4 core skills · 3 playable challenges.</small></button>
-   <button id="paidMode" class="modeBtn"><b>Extended Journey</b><small>Days 1–3+ · Levels 1–10+ · all 10 locations · all 8 skills · boss encounters and deeper progression.</small></button>
+   <button id="freeMode" class="modeBtn sel"><b>Chapter One</b><small>Begin your journey through Hope Springs.</small></button>
+   <button id="paidMode" class="modeBtn"><b>Full Journey</b><small>Continue farther through Hope Springs.</small></button>
   </div>
   <div id="chargrid" class="chargrid"></div>
   <button id="startBtn" class="btn gold">Start Chapter One →</button>
@@ -345,7 +334,7 @@ const places={
  home:{x:.12,y:.76},park:{x:.34,y:.42},cafe:{x:.48,y:.57},support:{x:.77,y:.66},meeting:{x:.57,y:.73},
  gym:{x:.86,y:.82},library:{x:.73,y:.33},market:{x:.24,y:.63},work:{x:.87,y:.49},oldspot:{x:.91,y:.24}
 };
-let selectedMode='free',chosen=chars[0],s=null,keys={},last=0,travelRAF=null,challenge=null,mobileMapInitialized=false;
+let selectedMode='free',chosen=chars[0],s=null,keys={},last=0,travelRAF=null,challenge=null,mobileMapInitialized=false,mapPanX=0,mapPanY=0,mapDrag=null,suppressMapTap=false;
 
 function fresh(){
  const free=selectedMode==='free';
@@ -363,7 +352,7 @@ function gain(xp,hope){s.xp+=xp;s.hope+=hope;while(s.xp>=100&&s.level<s.levelCap
 function premiumPlace(id){return ['gym','library','work','oldspot'].includes(id)}
 function unlockedPlace(id){if(s.mode==='free'&&premiumPlace(id))return false;if(id==='work')return s.day>=2;if(id==='oldspot')return s.day>=3;return true}
 function renderHUD(){
- norm();$('heroName').textContent=chosen.name;$('clock').textContent=`${s.mode==='free'?'FREE':'EXTENDED'} · Day ${s.day} · ${tm()} · Lv ${s.level}/${s.levelCap} · ${s.hope} Hope`;$('xpBar').style.width=Math.min(100,s.xp)+'%';
+ norm();$('heroName').textContent=chosen.name;$('clock').textContent=`${'Day '+s.day} · ${tm()} · Lv ${s.level} · ${s.hope} Hope`;$('xpBar').style.width=Math.min(100,s.xp)+'%';
  for(const k of ['recovery','stress','connection','energy']){const map={recovery:['rv','rb'],stress:['sv','sb'],connection:['cv','cb'],energy:['ev','eb']}[k];$(map[0]).textContent=s.stats[k];$(map[1]).style.width=s.stats[k]+'%'}
  $('questList').innerHTML=[['park','Grounding Run'],['support','Support Quest'],['meeting','Meeting Hall'],['gym','Breathing Rhythm'],['market','Budget Puzzle'],['boss','Day 3 Boss']].map(([k,l])=>`<div class="qline">${s.quests[k]?'✓':'□'} ${l}</div>`).join('');
  $('playerImg').src=chosen.img;document.querySelectorAll('.location').forEach(b=>{b.classList.toggle('locked',!unlockedPlace(b.dataset.place));b.classList.toggle('visited',s.visited.includes(b.dataset.place))});renderQuickbar()
@@ -376,21 +365,27 @@ function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';
 function save(){try{localStorage.setItem('sir-v10',JSON.stringify(s));toast('Saved')}catch(e){toast('Save unavailable in preview')}}
 function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);mobileMapInitialized=false;s.coachHistory=s.coachHistory||[];selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
 
+
 function isMobileMap(){return !!(window.matchMedia&&window.matchMedia('(max-width:850px)').matches)}
+function clampMobilePan(){
+ const vp=$('viewport'),wp=$('worldplane');if(!vp||!wp)return;
+ const minX=Math.min(0,vp.clientWidth-wp.offsetWidth),minY=Math.min(0,vp.clientHeight-wp.offsetHeight);
+ mapPanX=Math.max(minX,Math.min(0,mapPanX));mapPanY=Math.max(minY,Math.min(0,mapPanY));
+}
+function applyMobilePan(){clampMobilePan();$('worldplane').style.transform=`translate(${mapPanX}px,${mapPanY}px)`}
 function centerMobileMapOnPlayer(){
  if(!isMobileMap()||!s)return;
  const vp=$('viewport'),wp=$('worldplane');if(!vp||!wp)return;
  requestAnimationFrame(()=>{
-   const left=Math.max(0,Math.min(vp.scrollWidth-vp.clientWidth,s.x*wp.offsetWidth-vp.clientWidth/2));
-   const top=Math.max(0,Math.min(vp.scrollHeight-vp.clientHeight,s.y*wp.offsetHeight-vp.clientHeight/2));
-   vp.scrollLeft=left;vp.scrollTop=top;
+   mapPanX=vp.clientWidth/2-s.x*wp.offsetWidth;
+   mapPanY=vp.clientHeight/2-s.y*wp.offsetHeight;
+   applyMobilePan();
  });
 }
 function renderPositionOnly(){
  $('player').style.left=(s.x*100)+'%';$('player').style.top=(s.y*100)+'%';
  if(isMobileMap()){
-   $('worldplane').style.transform='none';
-   if(!mobileMapInitialized){mobileMapInitialized=true;centerMobileMapOnPlayer()}
+   if(!mobileMapInitialized){mobileMapInitialized=true;centerMobileMapOnPlayer()}else applyMobilePan();
    return;
  }
  const vp=$('viewport').getBoundingClientRect(),pw=vp.width*2.1,ph=vp.height*1.9;
@@ -399,9 +394,12 @@ function renderPositionOnly(){
 function renderWorld(){renderPositionOnly();renderHUD()}
 
 function showPaywall(id){
- $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">EXTENDED JOURNEY</span><h2>${id==='oldspot'?'The Hard Evening':'More of Hope Springs'}</h2><div class="paywall"><h3>This area is part of the extended paid game.</h3><div class="featurelist"><div class="feature">Days 2–3+ and higher levels</div><div class="feature">4 additional locations</div><div class="feature">4 additional recovery skills</div><div class="feature">Boss encounters and deeper relationships</div><div class="feature">Longer progression and replayability</div></div><button id="previewPaid" class="btn gold" style="width:100%;margin-top:12px">Preview Extended Mode in this test build</button></div></div>`;
- $('sceneModal').classList.add('open');$('previewPaid').addEventListener('click',()=>{s.mode='paid';s.levelCap=10;$('sceneModal').classList.remove('open');renderWorld();toast('Extended preview unlocked')})
+ const title=id==='oldspot'?'The Hard Evening':'Path Not Open Yet';
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">KEEP EXPLORING</span><h2>${title}</h2><div class="dialog"><b>This part of Hope Springs is not open yet.</b><p>Keep moving through your journey and come back later.</p></div><button id="lockedBack" class="btn navy" style="width:100%">Back to map</button></div>`;
+ $('sceneModal').classList.add('open');
+ $('lockedBack').addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld()})
 }
+
 function safeOpenLocation(id){
  try{
   const typedFirst=['park','gym','market','oldspot'].includes(id);
@@ -420,7 +418,7 @@ function safeOpenLocation(id){
  }catch(err){
   console.error('Location error',id,err);
   challenge=null;
-  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">TEST BUILD</span><h2>'+id+'</h2><div class="dialog"><b>This location hit an error.</b><p>Please tell me this location name and I can fix it. You can return to the map now.</p></div><button id="errorBack" class="btn navy" style="width:100%">Back to map</button></div>';
+  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">HOPE SPRINGS</span><h2>'+id+'</h2><div class="dialog"><b>This location is temporarily unavailable.</b><p>Return to the map and choose another place.</p></div><button id="errorBack" class="btn navy" style="width:100%">Back to map</button></div>';
   $('sceneModal').classList.add('open');
   const b=$('errorBack'); if(b)b.addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld()});
  }
@@ -661,12 +659,35 @@ function buildChars(){chars.forEach((c,i)=>{const b=document.createElement('butt
 buildChars();
 $('freeMode').addEventListener('click',()=>{selectedMode='free';$('freeMode').classList.add('sel');$('paidMode').classList.remove('sel')});
 $('paidMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
-document.querySelectorAll('.location').forEach(b=>{b.setAttribute('type','button');b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();travelTo(b.dataset.place)})});
-$('startBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop);if(isMobileMap())setTimeout(()=>toast('Drag the map to explore • Tap any location'),350)});
+document.querySelectorAll('.location').forEach(b=>{b.setAttribute('type','button');b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();if(suppressMapTap)return;travelTo(b.dataset.place)})});
+$('startBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop);if(isMobileMap())setTimeout(()=>toast('Drag the map freely • Tap any location'),350)});
 $('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);
 $('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));$('sceneClose').addEventListener('click',()=>{challenge=null;$('sceneModal').classList.remove('open');renderWorld()});
 $('replayBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
-window.addEventListener('resize',()=>s&&renderWorld());window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
+window.addEventListener('resize',()=>{if(!s)return;if(isMobileMap()){clampMobilePan();applyMobilePan();renderHUD()}else renderWorld()});window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
+
+const mapViewport=$('viewport');
+mapViewport.addEventListener('pointerdown',e=>{
+ if(!isMobileMap()||e.button>0||e.target.closest('button,.hud,.topbuttons,.quickbar,.overlay'))return;
+ mapDrag={id:e.pointerId,x:e.clientX,y:e.clientY,startX:mapPanX,startY:mapPanY,moved:false};
+ suppressMapTap=false;
+ try{mapViewport.setPointerCapture(e.pointerId)}catch(_){}
+ e.preventDefault();
+});
+mapViewport.addEventListener('pointermove',e=>{
+ if(!mapDrag||e.pointerId!==mapDrag.id)return;
+ const dx=e.clientX-mapDrag.x,dy=e.clientY-mapDrag.y;
+ if(Math.abs(dx)>5||Math.abs(dy)>5){mapDrag.moved=true;suppressMapTap=true}
+ mapPanX=mapDrag.startX+dx;mapPanY=mapDrag.startY+dy;applyMobilePan();e.preventDefault();
+});
+function endMapDrag(e){
+ if(!mapDrag||e.pointerId!==mapDrag.id)return;
+ const moved=mapDrag.moved;mapDrag=null;
+ try{mapViewport.releasePointerCapture(e.pointerId)}catch(_){}
+ if(moved)setTimeout(()=>suppressMapTap=false,120);
+}
+mapViewport.addEventListener('pointerup',endMapDrag);
+mapViewport.addEventListener('pointercancel',endMapDrag);
 document.querySelectorAll('.dpad button').forEach(b=>{const map={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'},k=map[b.dataset.dir];const dn=e=>{e.preventDefault();keys[k]=true},up=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('pointerleave',up)});
 </script>
 </body>
