@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Steps Into Recovery — Mobile v7 Personalized Coping</title>
+<title>Steps Into Recovery — Mobile v8 Free Map</title>
 <style>
 :root{
  --navy:#072631;--navy2:#0c3a49;--navy3:#11505f;--gold:#f1b846;--cream:#fff7e8;--paper:#fffaf2;
@@ -193,13 +193,39 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 .sceneSubmit{width:100%;margin-top:10px}
 @media(max-width:520px){.copingGrid{grid-template-columns:1fr}.copingCard{min-height:78px}.copingActions{grid-template-columns:1fr}}
 
+
+/* v8 mobile map: native drag/swipe exploration */
+@media(max-width:850px){
+  #game .viewport{
+    overflow:auto!important;
+    touch-action:pan-x pan-y!important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    scrollbar-width:none;
+  }
+  #game .viewport::-webkit-scrollbar{display:none}
+  #game .worldplane{
+    position:relative!important;
+    left:auto!important;
+    top:auto!important;
+    width:210%!important;
+    height:190%!important;
+    min-width:210%!important;
+    min-height:190%!important;
+    transform:none!important;
+    will-change:auto!important;
+  }
+  #game .dpad{display:none!important}
+  #game .location{touch-action:manipulation}
+}
+
 </style>
 </head>
 <body>
 <div id="app">
 <section id="start" class="screen active">
  <div class="startcard">
-  <div class="brand">Steps Into <span>Recovery</span></div><div style="display:inline-block;margin:6px 0 8px;padding:5px 9px;border-radius:999px;background:#f1b846;color:#2d1d02;font-size:11px;font-weight:1000">TEST BUILD v7 · PERSONALIZED COPING</div>
+  <div class="brand">Steps Into <span>Recovery</span></div><div style="display:inline-block;margin:6px 0 8px;padding:5px 9px;border-radius:999px;background:#f1b846;color:#2d1d02;font-size:11px;font-weight:1000">TEST BUILD v8 · DRAG-TO-EXPLORE MAP</div>
   <div class="tag">Hope Springs · Explore freely · survive pressure events · build relationships · use real skills in real-time challenges.</div>
   <div class="modeRow">
    <button id="freeMode" class="modeBtn sel"><b>Free Journey</b><small>Day 1 story arc · Levels 1–3 · 6 locations · 4 core skills · 3 playable challenges.</small></button>
@@ -245,7 +271,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  <div class="topbuttons"><button id="toolBtn">Toolbox</button><button id="journalBtn">Journal</button><button id="saveBtn">Save</button></div>
  <div id="quickbar" class="quickbar"></div>
  <div id="toast"></div>
- <div id="hint">Tap a location or move around. Skills in the bottom bar are live and can be used at any time.</div>
+ <div id="hint">Drag the map to explore freely. Tap any location you want. Skills in the bottom bar are live.</div>
  <div class="dpad"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="right" data-dir="right">▶</button><button class="down" data-dir="down">▼</button></div>
 </section>
 
@@ -319,7 +345,7 @@ const places={
  home:{x:.12,y:.76},park:{x:.34,y:.42},cafe:{x:.48,y:.57},support:{x:.77,y:.66},meeting:{x:.57,y:.73},
  gym:{x:.86,y:.82},library:{x:.73,y:.33},market:{x:.24,y:.63},work:{x:.87,y:.49},oldspot:{x:.91,y:.24}
 };
-let selectedMode='free',chosen=chars[0],s=null,keys={},last=0,travelRAF=null,challenge=null;
+let selectedMode='free',chosen=chars[0],s=null,keys={},last=0,travelRAF=null,challenge=null,mobileMapInitialized=false;
 
 function fresh(){
  const free=selectedMode==='free';
@@ -348,12 +374,30 @@ function renderQuickbar(){
 }
 function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.display='none',1400)}
 function save(){try{localStorage.setItem('sir-v10',JSON.stringify(s));toast('Saved')}catch(e){toast('Save unavailable in preview')}}
-function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);s.coachHistory=s.coachHistory||[];selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);mobileMapInitialized=false;s.coachHistory=s.coachHistory||[];selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+
+function isMobileMap(){return !!(window.matchMedia&&window.matchMedia('(max-width:850px)').matches)}
+function centerMobileMapOnPlayer(){
+ if(!isMobileMap()||!s)return;
+ const vp=$('viewport'),wp=$('worldplane');if(!vp||!wp)return;
+ requestAnimationFrame(()=>{
+   const left=Math.max(0,Math.min(vp.scrollWidth-vp.clientWidth,s.x*wp.offsetWidth-vp.clientWidth/2));
+   const top=Math.max(0,Math.min(vp.scrollHeight-vp.clientHeight,s.y*wp.offsetHeight-vp.clientHeight/2));
+   vp.scrollLeft=left;vp.scrollTop=top;
+ });
+}
 function renderPositionOnly(){
- $('player').style.left=(s.x*100)+'%';$('player').style.top=(s.y*100)+'%';const vp=$('viewport').getBoundingClientRect(),pw=vp.width*2.1,ph=vp.height*1.9;
+ $('player').style.left=(s.x*100)+'%';$('player').style.top=(s.y*100)+'%';
+ if(isMobileMap()){
+   $('worldplane').style.transform='none';
+   if(!mobileMapInitialized){mobileMapInitialized=true;centerMobileMapOnPlayer()}
+   return;
+ }
+ const vp=$('viewport').getBoundingClientRect(),pw=vp.width*2.1,ph=vp.height*1.9;
  let tx=vp.width/2-s.x*pw,ty=vp.height/2-s.y*ph;tx=Math.min(0,Math.max(vp.width-pw,tx));ty=Math.min(0,Math.max(vp.height-ph,ty));$('worldplane').style.transform=`translate(${tx}px,${ty}px)`;
 }
 function renderWorld(){renderPositionOnly();renderHUD()}
+
 function showPaywall(id){
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">EXTENDED JOURNEY</span><h2>${id==='oldspot'?'The Hard Evening':'More of Hope Springs'}</h2><div class="paywall"><h3>This area is part of the extended paid game.</h3><div class="featurelist"><div class="feature">Days 2–3+ and higher levels</div><div class="feature">4 additional locations</div><div class="feature">4 additional recovery skills</div><div class="feature">Boss encounters and deeper relationships</div><div class="feature">Longer progression and replayability</div></div><button id="previewPaid" class="btn gold" style="width:100%;margin-top:12px">Preview Extended Mode in this test build</button></div></div>`;
  $('sceneModal').classList.add('open');$('previewPaid').addEventListener('click',()=>{s.mode='paid';s.levelCap=10;$('sceneModal').classList.remove('open');renderWorld();toast('Extended preview unlocked')})
@@ -381,19 +425,24 @@ function safeOpenLocation(id){
   const b=$('errorBack'); if(b)b.addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld()});
  }
 }
+
 function travelTo(id){
- if(!s){return}
+ if(!s)return;
  if(travelRAF){cancelAnimationFrame(travelRAF);travelRAF=null}
  if(s.mode==='free'&&premiumPlace(id)){showPaywall(id);return}
  if(!unlockedPlace(id)){toast(id==='work'?'Work Hub opens Day 2':'Old Spot opens Day 3');return}
  const p=places[id];if(!p){toast('Location unavailable');return}
- const mobile=window.matchMedia&&window.matchMedia('(max-width:850px)').matches;
- if(mobile){
-  s.x=p.x;s.y=p.y;advance(15);renderWorld();toast('Opening '+id+'…');setTimeout(()=>safeOpenLocation(id),80);return
+ if(isMobileMap()){
+   s.x=p.x;s.y=p.y;advance(15);
+   $('player').style.left=(s.x*100)+'%';$('player').style.top=(s.y*100)+'%';
+   renderHUD();
+   setTimeout(()=>safeOpenLocation(id),60);
+   return;
  }
  const sx=s.x,sy=s.y,dx=p.x-sx,dy=p.y-sy,start=performance.now(),dur=650;$('player').classList.add('walking');
  function step(now){const t=Math.min(1,(now-start)/dur),e=1-Math.pow(1-t,3);s.x=sx+dx*e;s.y=sy+dy*e;renderPositionOnly();if(t<1)travelRAF=requestAnimationFrame(step);else{travelRAF=null;$('player').classList.remove('walking');s.x=p.x;s.y=p.y;advance(15);renderWorld();safeOpenLocation(id)}}travelRAF=requestAnimationFrame(step)
 }
+
 function loop(ts){if(!$('game').classList.contains('active'))return;const dt=Math.min(40,ts-last||16);last=ts;let st=.00023*dt,dx=0,dy=0;if(keys.ArrowUp||keys.w)dy-=st;if(keys.ArrowDown||keys.s)dy+=st;if(keys.ArrowLeft||keys.a)dx-=st;if(keys.ArrowRight||keys.d)dx+=st;if(dx||dy){s.x=clamp01(s.x+dx);s.y=clamp01(s.y+dy);renderWorld()}requestAnimationFrame(loop)}
 function useSkill(id){
  if(!s.unlocked.includes(id))return;if((s.cooldowns[id]||0)>Date.now()){toast('Skill cooling down');return}
@@ -606,17 +655,17 @@ function openTools(){
 }
 
 function openJournal(){$('journalList').innerHTML=s.log.map(x=>`<div class="logline">${x}</div>`).join('');$('journalModal').classList.add('open')}
-function nextDay(){if(s.mode==='free'){showPaywall('work');return}if(s.day<3)s.day++;s.h=9;s.m=0;s.x=.5;s.y=.62;s.stats.energy=clamp(s.stats.energy+15);s.stats.stress=clamp(s.stats.stress-5);addLog(`Day ${s.day} begins.`);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function nextDay(){if(s.mode==='free'){showPaywall('work');return}if(s.day<3)s.day++;mobileMapInitialized=false;s.h=9;s.m=0;s.x=.5;s.y=.62;s.stats.energy=clamp(s.stats.energy+15);s.stats.stress=clamp(s.stats.stress-5);addLog(`Day ${s.day} begins.`);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
 function buildChars(){chars.forEach((c,i)=>{const b=document.createElement('button');b.className='char'+(i===0?' sel':'');b.innerHTML=`<img src="${c.img}"><b>${c.name}</b><small>${c.role}</small>`;b.addEventListener('click',()=>{chosen=c;document.querySelectorAll('.char').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')});$('chargrid').appendChild(b)})}
 
 buildChars();
 $('freeMode').addEventListener('click',()=>{selectedMode='free';$('freeMode').classList.add('sel');$('paidMode').classList.remove('sel')});
 $('paidMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
 document.querySelectorAll('.location').forEach(b=>{b.setAttribute('type','button');b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();travelTo(b.dataset.place)})});
-$('startBtn').addEventListener('click',()=>{fresh();show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});
+$('startBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop);if(isMobileMap())setTimeout(()=>toast('Drag the map to explore • Tap any location'),350)});
 $('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);
 $('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));$('sceneClose').addEventListener('click',()=>{challenge=null;$('sceneModal').classList.remove('open');renderWorld()});
-$('replayBtn').addEventListener('click',()=>{fresh();show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
+$('replayBtn').addEventListener('click',()=>{fresh();mobileMapInitialized=false;show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
 window.addEventListener('resize',()=>s&&renderWorld());window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
 document.querySelectorAll('.dpad button').forEach(b=>{const map={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'},k=map[b.dataset.dir];const dn=e=>{e.preventDefault();keys[k]=true},up=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('pointerleave',up)});
 </script>
