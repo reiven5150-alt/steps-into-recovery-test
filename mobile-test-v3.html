@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Steps Into Recovery — Hope Springs RPG v10</title>
+<title>Steps Into Recovery — Hope Springs RPG v10 Mobile v4</title>
 <style>
 :root{
  --navy:#072631;--navy2:#0c3a49;--navy3:#11505f;--gold:#f1b846;--cream:#fff7e8;--paper:#fffaf2;
@@ -139,6 +139,28 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   #start .modeBtn{min-height:48px}
   .qskill{width:48px;height:48px}
   .location{min-width:88px;font-size:11px}
+}
+
+
+/* Typed-answer scenes */
+.storyAnswer,.supportAnswer{
+  width:100%;min-height:92px;border:2px solid #cfc3b2;border-radius:12px;
+  padding:11px 12px;font:inherit;font-size:16px;line-height:1.35;
+  background:#fff;color:var(--ink);resize:vertical;outline:none;
+}
+.storyAnswer:focus,.supportAnswer:focus{border-color:#397fb8;box-shadow:0 0 0 3px rgba(57,127,184,.14)}
+.answerLabel{display:block;font-weight:900;margin:12px 0 6px}
+.answerHelp{font-size:12px;color:var(--muted);margin:5px 0 0}
+.supportField{margin-top:11px}
+.supportField label{display:block;font-weight:900;margin-bottom:5px}
+.supportField input{
+  width:100%;min-height:46px;border:2px solid #cfc3b2;border-radius:12px;
+  padding:10px 12px;font:inherit;font-size:16px;background:#fff;color:var(--ink);outline:none;
+}
+.supportField input:focus{border-color:#397fb8;box-shadow:0 0 0 3px rgba(57,127,184,.14)}
+@media(max-width:850px){
+  .storyAnswer,.supportAnswer{min-height:110px}
+  .sceneChoice{min-height:48px}
 }
 
 </style>
@@ -319,8 +341,15 @@ function openLocation(id){
  if(id==='work')return simpleScene('cafe','Work Hub','Theo','“Short shift available.”',[['Take the shift',()=>{s.money+=18;s.stats.energy-=12;gain(16,8)}],['Protect your energy today',()=>{s.stats.recovery+=5;gain(10,5)}]]);
 }
 function simpleScene(art,title,speaker,dialog,opts){
- $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET[art]}')"></div><div class="scenePanel"><span class="pill">STORY</span><h2>${title}</h2><div class="dialog"><b>${speaker}</b><p>${dialog}</p></div>${opts.map((o,i)=>`<button class="btn ${i%2?'blue':'green'} sceneChoice" data-i="${i}" style="width:100%;margin-top:8px">${o[0]}</button>`).join('')}</div>`;
- $('sceneModal').classList.add('open');$('sceneBox').querySelectorAll('.sceneChoice').forEach(b=>b.addEventListener('click',()=>{opts[Number(b.dataset.i)][1]();norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save()}))
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET[art]}')"></div><div class="scenePanel"><span class="pill">STORY</span><h2>${title}</h2><div class="dialog"><b>${speaker}</b><p>${dialog}</p></div><label class="answerLabel" for="sceneAnswer">Type your response</label><textarea id="sceneAnswer" class="storyAnswer" maxlength="600" placeholder="Write what you would actually say or do…"></textarea><p class="answerHelp">Your response is saved in your local journey log on this device.</p><div id="answerError" style="display:none;color:#9b2f38;font-weight:800;margin-top:8px">Type an answer first.</div>${opts.map((o,i)=>`<button class="btn ${i%2?'blue':'green'} sceneChoice" data-i="${i}" style="width:100%;margin-top:8px">${o[0]}</button>`).join('')}</div>`;
+ $('sceneModal').classList.add('open');
+ const answer=$('sceneAnswer'); if(answer)setTimeout(()=>answer.focus(),80);
+ $('sceneBox').querySelectorAll('.sceneChoice').forEach(b=>b.addEventListener('click',()=>{
+   const text=(answer&&answer.value||'').trim();
+   if(text.length<2){const e=$('answerError');if(e)e.style.display='block';if(answer)answer.focus();return}
+   addLog(title+' response: '+text);
+   opts[Number(b.dataset.i)][1]();norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save()
+ }))
 }
 function groundRun(){
  challenge={type:'ground',x:50,y:72,shield:25,collected:0,target:5,objects:[
@@ -355,7 +384,17 @@ function drawBudget(){
  $('budgetSubmit').addEventListener('click',()=>{const t=c.sel.reduce((a,i)=>a+c.items[i][1],0);if(t<=12&&c.sel.length>=2){s.money-=t;s.stats.recovery+=5;s.quests.market=true;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(16,8);addLog('Completed Market budget puzzle');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Budget challenge complete')}else toast(t>12?'Over budget':'Pick at least 2 items')})
 }
 function supportQuest(){
- challenge={type:'support',need:50};$('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.cafe)"></div><div class="scenePanel"><span class="pill">SUPPORT QUEST</span><h2>Ask Clearly</h2><div class="dialog"><b>Mara</b><p>“Tell me what kind of help you need, not what you think you should say.”</p></div><div class="challengeShell"><p>Build a clear request by completing all three actions:</p><button id="nameNeed" class="btn blue" style="width:100%;margin-top:7px">1. Name the need</button><button id="nameAsk" class="btn green" style="width:100%;margin-top:7px">2. Make a specific ask</button><button id="acceptNo" class="btn orange" style="width:100%;margin-top:7px">3. Leave room for “no”</button><p id="supportProgress">0/3 complete</p></div></div>`;$('sceneModal').classList.add('open');let n=0;['nameNeed','nameAsk','acceptNo'].forEach(id=>$(id).addEventListener('click',e=>{if(e.currentTarget.disabled)return;e.currentTarget.disabled=true;n++;$('supportProgress').textContent=n+'/3 complete';if(n===3){s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);addLog('Completed support request challenge');setTimeout(()=>{$('sceneModal').classList.remove('open');renderWorld();toast('Reach Out unlocked')},250)}}))
+ challenge={type:'support'};
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.cafe)"></div><div class="scenePanel"><span class="pill">SUPPORT QUEST</span><h2>Ask Clearly</h2><div class="dialog"><b>Mara</b><p>“Tell me what kind of help you need, not what you think you should say.”</p></div><div class="challengeShell"><p>Build the request in your own words.</p><div class="supportField"><label for="supportNeed">1. What do you need right now?</label><input id="supportNeed" maxlength="180" placeholder="Example: I need someone to listen"></div><div class="supportField"><label for="supportAsk">2. What specific help are you asking for?</label><textarea id="supportAsk" class="supportAnswer" maxlength="400" placeholder="Type the specific request you would make…"></textarea></div><div class="supportField"><label for="supportNo">3. How can you leave room for the other person to say no?</label><textarea id="supportNo" class="supportAnswer" maxlength="300" placeholder="Type how you would say that respectfully…"></textarea></div><div id="supportError" style="display:none;color:#ffd1d1;background:#6d2730;border-radius:10px;padding:9px;margin-top:10px;font-weight:800">Complete all three answers before submitting.</div><button id="supportSubmit" class="btn green" style="width:100%;margin-top:12px">Submit my request</button></div></div>`;
+ $('sceneModal').classList.add('open');
+ const first=$('supportNeed'); if(first)setTimeout(()=>first.focus(),80);
+ $('supportSubmit').addEventListener('click',()=>{
+   const need=($('supportNeed').value||'').trim(), ask=($('supportAsk').value||'').trim(), no=($('supportNo').value||'').trim();
+   if(need.length<2||ask.length<2||no.length<2){$('supportError').style.display='block';return}
+   addLog('Support need: '+need); addLog('Support ask: '+ask); addLog('Room for no: '+no);
+   s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);
+   challenge=null;norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save();toast('Reach Out unlocked')
+ })
 }
 function bossFight(){
  challenge={type:'boss',phase:1,pressure:100,timer:30};
