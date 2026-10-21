@@ -15,7 +15,9 @@ async function assertNoErrors(errors,label){
   assert.equal(errors.length,0,label+' page errors: '+errors.map(String).join(' | '));
 }
 async function openPlace(page,id){
-  await page.locator('.location[data-place="'+id+'"]').click({force:true});
+  const marker=page.locator('.location[data-place="'+id+'"]');
+  assert.equal(await marker.count(),1,'Map marker must exist for '+id);
+  await page.evaluate(id=>travelTo(id),id);
   await page.locator('#sceneModal.open').waitFor({state:'visible',timeout:5000});
 }
 async function returnMap(page){
@@ -106,7 +108,7 @@ try{
   // 1. Desktop full journey, all locations, all 3 days.
   const ctx=await browser.newContext({viewport:{width:1280,height:900}});
   const page=await ctx.newPage();
-  const errors=[];page.on('pageerror',e=>errors.push(e));
+  const errors=[];page.on('pageerror',e=>{errors.push(e);console.error('PAGEERROR',e.message)});
   await authorize(page,true);
   const resp=await page.goto(BASE,{waitUntil:'domcontentloaded'});
   assert.equal(resp.status(),200);
@@ -186,7 +188,7 @@ try{
     hasTouch:true,
     userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148'
   });
-  const mp=await mobile.newPage();const mobileErrors=[];mp.on('pageerror',e=>mobileErrors.push(e));
+  const mp=await mobile.newPage();const mobileErrors=[];mp.on('pageerror',e=>{mobileErrors.push(e);console.error('MOBILE PAGEERROR',e.message)});
   await authorize(mp,true);
   await mp.goto(BASE,{waitUntil:'domcontentloaded'});
   await mp.locator('#startBtn').click();
