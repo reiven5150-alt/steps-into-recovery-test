@@ -39,10 +39,10 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 .qskill{width:62px;height:62px;border:2px solid rgba(255,255,255,.15);border-radius:13px;background:rgba(8,46,58,.95);padding:4px;color:white;position:relative;cursor:pointer}.qskill img{width:100%;height:100%;object-fit:cover;border-radius:9px}.qskill span{position:absolute;right:4px;bottom:2px;background:#061b23;border-radius:8px;padding:1px 4px;font-size:10px;font-weight:900}.qskill.cool{opacity:.35}
 .dpad{position:absolute;left:14px;bottom:14px;width:150px;height:150px;z-index:22;display:none}.dpad button{position:absolute;width:48px;height:48px;border:none;border-radius:14px;background:rgba(5,42,54,.94);color:#fff;font-size:22px;box-shadow:0 8px 18px rgba(0,0,0,.25)}.dpad .up{left:51px}.dpad .left{left:0;top:51px}.dpad .right{right:0;top:51px}.dpad .down{left:51px;bottom:0}
 
-.overlay{position:absolute;inset:0;background:rgba(0,0,0,.68);z-index:40;display:none;align-items:center;justify-content:center;padding:10px}.overlay.open{display:flex}
-.sceneBox{width:min(1120px,96vw);max-height:94vh;overflow:auto;background:var(--cream);color:var(--ink);border-radius:22px;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.68);z-index:40;display:none;align-items:center;justify-content:center;padding:10px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.overlay.open{display:flex}
+.sceneBox{width:min(1120px,96vw);max-height:94vh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;background:var(--cream);color:var(--ink);border-radius:22px;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .sceneArt{min-height:590px;background-size:cover;background-position:center}.scenePanel{padding:18px}.pill{display:inline-block;background:#e7efe7;color:#1b5746;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900}.scenePanel h2{font-size:34px;margin:8px 0 4px}.dialog{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px;margin:11px 0}
-.panelBox{width:min(1000px,95vw);max-height:93vh;overflow:auto;background:var(--cream);color:var(--ink);border-radius:22px;padding:16px;box-shadow:0 30px 80px rgba(0,0,0,.5)}.close{float:right;border:none;width:36px;height:36px;border-radius:50%;background:#e9dfd0;font-size:20px;cursor:pointer}
+.panelBox{width:min(1000px,95vw);max-height:93vh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;background:var(--cream);color:var(--ink);border-radius:22px;padding:16px;box-shadow:0 30px 80px rgba(0,0,0,.5)}.close{float:right;border:none;width:36px;height:36px;border-radius:50%;background:#e9dfd0;font-size:20px;cursor:pointer}
 .toolboxBanner,.journalBanner{width:100%;border-radius:16px;display:block;margin:9px 0}.toolGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.toolCard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;text-align:center}.toolCard.lock{opacity:.32}.toolCard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}.toolCard b{font-size:12px;display:block;margin-top:4px}.toolCard small{font-size:10px;color:var(--muted);display:block;min-height:26px}.toolCard button{width:100%;margin-top:6px;padding:9px}.logline{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px;margin-top:7px}
 
 .challengeShell{position:relative;background:linear-gradient(135deg,#1b2d37,#2f2331);color:white;border-radius:18px;padding:14px;overflow:hidden}
@@ -58,8 +58,8 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 .modeRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.modeBtn{border:2px solid rgba(255,255,255,.13);background:#0d3a48;color:white;border-radius:15px;padding:11px;text-align:left;cursor:pointer}.modeBtn.sel{border-color:var(--gold);background:#124757}.modeBtn b{display:block}.modeBtn small{display:block;opacity:.8;margin-top:3px;line-height:1.3}.xpTrack{height:7px;background:#1f5864;border-radius:999px;overflow:hidden;margin-top:6px}.xpTrack i{display:block;height:100%;background:var(--gold)}.location.paid::after{content:"PAID";position:absolute;top:-8px;right:-8px;background:#6e4fa2;color:white;border-radius:999px;padding:2px 6px;font-size:9px;border:1px solid #fff}.paywall{background:linear-gradient(135deg,#3d2f5d,#172f39);color:#fff;border-radius:18px;padding:16px}.paywall h3{margin:0 0 7px}.featurelist{display:grid;gap:6px;font-size:13px}.feature{background:rgba(255,255,255,.08);border-radius:10px;padding:8px}
 #end{background:linear-gradient(90deg,rgba(2,20,27,.48),rgba(2,20,27,.70));background-size:cover;background-position:center}.endcard{position:absolute;right:5vw;top:50%;transform:translateY(-50%);width:min(650px,92vw);background:rgba(5,34,44,.95);border:1px solid rgba(255,255,255,.15);border-radius:22px;padding:19px;box-shadow:0 30px 80px rgba(0,0,0,.45)}.endcard h1{font-size:42px;margin:6px 0}.endstats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.endstat{background:#0f4050;border-radius:12px;padding:10px}.endactions{display:flex;gap:8px}.endactions button{flex:1}
 @media(max-width:850px){
- .startcard{left:4vw;right:4vw;width:auto}.modeRow,.chargrid{grid-template-columns:repeat(2,1fr)}.hud{grid-template-columns:1fr}.quest{display:none}.statgrid{grid-template-columns:repeat(2,1fr)}.topbuttons{top:168px;right:8px}
- .dpad{display:block}.sceneBox{grid-template-columns:1fr}.sceneArt{min-height:240px}.toolGrid,.skillgrid{grid-template-columns:repeat(2,1fr)}.quickbar{bottom:176px}.challengeStage{height:280px}.budgetgrid{grid-template-columns:repeat(2,1fr)}
+ .startcard{left:4vw;right:4vw;width:auto;max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch}.modeRow,.chargrid{grid-template-columns:repeat(2,1fr)}.hud{grid-template-columns:1fr}.quest{display:none}.statgrid{grid-template-columns:repeat(2,1fr)}.topbuttons{top:168px;right:8px}
+ .dpad{display:block}.sceneBox{display:block;grid-template-columns:1fr;max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}.sceneArt{min-height:220px;height:32vh}.scenePanel{padding-bottom:34px}.panelBox{max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}.toolGrid,.skillgrid{grid-template-columns:repeat(2,1fr)}.quickbar{bottom:176px}.challengeStage{height:280px}.budgetgrid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -113,7 +113,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  <div class="topbuttons"><button id="toolBtn">Toolbox</button><button id="journalBtn">Journal</button><button id="saveBtn">Save</button></div>
  <div id="quickbar" class="quickbar"></div>
  <div id="toast"></div>
- <div id="hint">Tap a location or move around. Skills in the bottom bar are live and can be used at any time.</div>
+ <div id="hint">Tap a location, use the arrows, or drag the map to move around. Skills in the bottom bar are live and can be used at any time.</div>
  <div class="dpad"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="right" data-dir="right">▶</button><button class="down" data-dir="down">▼</button></div>
 </section>
 
@@ -298,6 +298,36 @@ $('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('op
 $('replayBtn').addEventListener('click',()=>{fresh();show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
 window.addEventListener('resize',()=>s&&renderWorld());window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
 document.querySelectorAll('.dpad button').forEach(b=>{const map={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'},k=map[b.dataset.dir];const dn=e=>{e.preventDefault();keys[k]=true},up=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('pointerleave',up)});
+
+// Mobile map drag: swipe the map to move around Hope Springs.
+// Taps on locations/buttons keep their normal behavior.
+let mapTouch=null;
+const vpEl=$('viewport');
+vpEl.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse')return;
+  if(e.target.closest('.location,.topbuttons,.dpad,.quickbar,.hud,button'))return;
+  if(!s||!$('game').classList.contains('active'))return;
+  mapTouch={id:e.pointerId,x:e.clientX,y:e.clientY,sx:s.x,sy:s.y,moved:false};
+  try{vpEl.setPointerCapture(e.pointerId)}catch(_){}
+});
+vpEl.addEventListener('pointermove',e=>{
+  if(!mapTouch||e.pointerId!==mapTouch.id||!s)return;
+  const dx=e.clientX-mapTouch.x,dy=e.clientY-mapTouch.y;
+  if(Math.abs(dx)+Math.abs(dy)<8)return;
+  mapTouch.moved=true;
+  e.preventDefault();
+  const r=vpEl.getBoundingClientRect();
+  s.x=clamp01(mapTouch.sx-dx/(r.width*2.1));
+  s.y=clamp01(mapTouch.sy-dy/(r.height*1.9));
+  renderWorld();
+});
+function endMapTouch(e){
+  if(!mapTouch||e.pointerId!==mapTouch.id)return;
+  try{vpEl.releasePointerCapture(e.pointerId)}catch(_){}
+  mapTouch=null;
+}
+vpEl.addEventListener('pointerup',endMapTouch);
+vpEl.addEventListener('pointercancel',endMapTouch);
 </script>
 
 <style id="sih-auth-hide">html{visibility:hidden}</style>
