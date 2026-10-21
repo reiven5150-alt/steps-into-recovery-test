@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 
-const BASE='http://127.0.0.1:4173/full-journey.html?code=QA-TEST-CODE&v=11.0.0';
+const BASE='http://127.0.0.1:4173/full-journey.html?code=QA-TEST-CODE&v=11.0.1';
 const AUTH='**/functions/v1/full-journey-authorize';
 
 async function authorize(page, ok=true){
@@ -114,7 +114,7 @@ try{
   assert.equal(resp.status(),200);
   assert.match(resp.headers()['content-type']||'',/text\/html/i,'Local host must serve HTML');
   await page.locator('#start').waitFor({state:'visible'});
-  assert.equal(await page.locator('#app').getAttribute('data-build'),'11.0.0');
+  assert.equal(await page.locator('#app').getAttribute('data-build'),'11.0.1');
   assert.equal(await page.locator('#freeMode').isVisible(),false);
   assert.match(await page.locator('#paidMode').innerText(),/Full Journey Access/);
   await page.locator('#startBtn').click();
