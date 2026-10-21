@@ -66,7 +66,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 </style>
 </head>
 <body>
-<div id="app" data-build="11.0.0">
+<div id="app" data-build="11.0.1">
 <section id="start" class="screen active">
  <div class="startcard">
   <div class="brand">Steps Into <span>Recovery</span></div>
@@ -123,7 +123,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  <div class="endcard">
   <div style="color:var(--gold);font-weight:1000">DAY COMPLETE</div><h1 id="endTitle">You made it through.</h1><p id="endBody"></p>
   <div id="endStats" class="endstats"></div>
-  <div class="endactions"><button id="replayBtn" class="btn gold">Replay Day</button><button id="nextBtn" class="btn navy">Continue</button></div>
+  <div class="endactions"><button id="replayBtn" class="btn gold">Restart Journey</button><button id="nextBtn" class="btn navy">Continue</button></div>
  </div>
 </section>
 
@@ -164,7 +164,7 @@ function fresh(){
  selectedMode='paid';
  s={version:11,mode:'paid',day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
  unlocked:['deep','ground'],equipped:['deep','ground'],cooldowns:{},quests:{home:false,park:false,cafe:false,support:false,meeting:false,gym:false,library:false,market:false,work:false,boss:false},
- visited:[],notes:{home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:10};
+ visited:[],completedDays:[],notes:{home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:10};
  Object.entries(chosen.bonus).forEach(([k,v])=>s.stats[k]=clamp(s.stats[k]+v));
  norm()
 }
@@ -183,7 +183,7 @@ function ensureStateShape(){
  s.version=11;s.mode='paid';s.levelCap=10;
  s.quests=Object.assign({home:false,park:false,cafe:false,support:false,meeting:false,gym:false,library:false,market:false,work:false,boss:false},s.quests||{});
  s.notes=Object.assign({home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},s.notes||{});
- s.visited=Array.isArray(s.visited)?s.visited:[];
+ s.visited=Array.isArray(s.visited)?s.visited:[];s.completedDays=Array.isArray(s.completedDays)?s.completedDays:[];
  s.log=Array.isArray(s.log)?s.log:[];
  s.unlocked=Array.isArray(s.unlocked)?s.unlocked:['deep','ground'];
  s.equipped=Array.isArray(s.equipped)?s.equipped.filter(id=>skills[id]).slice(0,4):['deep','ground'];
@@ -199,7 +199,8 @@ function dayRequirements(day){
 }
 function dayReady(){return dayRequirements(s.day).every(k=>!!s.quests[k])}
 function maybeCompleteDay(){
- if(!s||!dayReady())return false;
+ if(!s||!dayReady()||s.completedDays.includes(s.day))return false;
+ s.completedDays.push(s.day);
  $('endTitle').textContent=s.day<3?'Day '+s.day+' complete.':'Full Journey complete.';
  $('endBody').textContent=s.day<3?'You completed today’s recovery actions. Review your progress, then continue when you are ready.':'You completed the three-day Full Journey. You can keep exploring, revisit locations, use your toolbox, and continue your saved progress.';
  $('endStats').innerHTML=['Recovery','Stress','Connection','Energy'].map(k=>'<div class="endstat"><b>'+k+'</b><div>'+s.stats[k.toLowerCase()]+'</div></div>').join('');
@@ -367,7 +368,7 @@ function startBossTimer(){
   if(!challenge||challenge.type!=='boss')return;
   challenge.timer--;challenge.pressure=Math.min(100,challenge.pressure+3);s.stats.stress=Math.min(100,s.stats.stress+1);
   if(challenge.pressure<=0){if(challenge.phase<3){challenge.phase++;challenge.pressure=80;challenge.timer=24;toast('Next phase')}else{finishBoss();return}}
-  if(challenge.timer<=0){challenge.pressure=Math.max(0,challenge.pressure-25);challenge.timer=24}
+  if(challenge.timer<=0){challenge.pressure=Math.min(100,challenge.pressure+12);s.stats.stress=Math.min(100,s.stats.stress+4);challenge.timer=24;toast('Pressure surged — use a recovery skill')}
   drawBoss();setTimeout(tick,1000)
  }setTimeout(tick,1000)
 }
