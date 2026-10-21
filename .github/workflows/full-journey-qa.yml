@@ -54,3 +54,13 @@ jobs:
             sleep 10
           done
           test "$ok" = 1
+      - name: Verify legacy Supabase link redirects without source
+        run: |
+          LEGACY='https://yzexencwfirltxnmexcg.supabase.co/functions/v1/full-journey-access?code=QA-NOT-A-REAL-CUSTOMER-CODE'
+          headers="$(curl -sS -D - -o /tmp/legacy-body "$LEGACY")"
+          printf '%s' "$headers" | head -n 1 | grep -Eq ' 30[12378] '
+          printf '%s' "$headers" | grep -qi '^location: https://reiven5150-alt.github.io/steps-into-recovery-test/full-journey.html'
+          printf '%s' "$headers" | grep -qi 'v=11.1.0'
+          test ! -s /tmp/legacy-body
+          final_headers="$(curl -sSIL "$LEGACY")"
+          printf '%s' "$final_headers" | grep -qi 'content-type:.*text/html'
