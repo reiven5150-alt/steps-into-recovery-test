@@ -36,14 +36,18 @@ jobs:
           exit 1
       - name: Run browser QA
         run: node qa/full-journey.spec.mjs
-      - name: Verify live GitHub Pages serves HTML build 11.1.0
+      - name: Verify live customer pages render as HTML
         run: |
-          URL='https://reiven5150-alt.github.io/steps-into-recovery-test/full-journey.html?v=11.1.0'
+          BASE='https://reiven5150-alt.github.io/steps-into-recovery-test'
           ok=0
           for i in {1..18}; do
-            headers="$(curl -fsSI "$URL" || true)"
-            body="$(curl -fsS "$URL" || true)"
-            if printf '%s' "$headers" | grep -qi 'content-type:.*text/html' && printf '%s' "$body" | grep -q 'data-build="11.1.0"'; then
+            all_html=1
+            for path in index.html full-journey.html purchase.html facility-staff.html plans.html; do
+              headers="$(curl -fsSI "$BASE/$path?v=11.1.0" || true)"
+              printf '%s' "$headers" | grep -qi 'content-type:.*text/html' || all_html=0
+            done
+            body="$(curl -fsS "$BASE/full-journey.html?v=11.1.0" || true)"
+            if [ "$all_html" = 1 ] && printf '%s' "$body" | grep -q 'data-build="11.1.0"'; then
               ok=1
               break
             fi

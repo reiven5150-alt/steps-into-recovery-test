@@ -3,6 +3,12 @@ import assert from 'node:assert/strict';
 
 const BASE='http://127.0.0.1:4173/full-journey.html?code=QA-TEST-CODE&v=11.1.0';
 const AUTH='**/functions/v1/full-journey-authorize';
+const FREE='http://127.0.0.1:4173/index.html';
+const PURCHASE='http://127.0.0.1:4173/purchase.html?session_id=cs_test_qa&v=11.1.0';
+const FACILITY_STAFF='http://127.0.0.1:4173/facility-staff.html?v=11.1.0';
+const PLANS='http://127.0.0.1:4173/plans.html';
+const PURCHASE_API='**/functions/v1/purchase-complete*';
+const STAFF_API='**/functions/v1/facility-staff*';
 
 async function authorize(page, ok=true){
   await page.route(AUTH, route=>route.fulfill({
@@ -238,6 +244,136 @@ try{
   await assertNoErrors(mobileErrors,'mobile');
   await mobile.close();
 
+  // 3. Public Free Journey remains functional and correctly limited.
+  const freeCtx=await browser.newContext({viewport:{width:1280,height:900}});
+  const freePage=await freeCtx.newPage();const freeErrors=[];freePage.on('pageerror',e=>freeErrors.push(e));
+  const freeResp=await freePage.goto(FREE,{waitUntil:'domcontentloaded'});
+  assert.equal(freeResp.status(),200);
+  assert.match(freeResp.headers()['content-type']||'',/text\/html/i);
+  await freePage.locator('#startBtn').click();
+  await freePage.locator('#game.active').waitFor();
+  const freeState=await freePage.evaluate(()=>({mode:s.mode,levelCap:s.levelCap,coach:typeof showRecoveryCoach==='function',wordSearch:typeof openWordSearch==='function'}));
+  assert.equal(freeState.mode,'free');
+  assert.equal(freeState.levelCap,3);
+  assert.equal(freeState.coach,true);
+  assert.equal(freeState.wordSearch,true);
+  assert.equal(await freePage.locator('.location').count(),6,'Free Journey must expose exactly six Chapter One locations');
+  assert.equal(await freePage.locator('.location[data-place="gym"]').count(),0);
+  assert.equal(await freePage.locator('.location[data-place="library"]').count(),0);
+  assert.equal(await freePage.locator('.location[data-place="work"]').count(),0);
+  assert.equal(await freePage.locator('.location[data-place="oldspot"]').count(),0);
+  await freePage.locator('#journalBtn').click();
+  await freePage.locator('#journalModal.open').waitFor();
+  await freePage.locator('#journalWrite').fill('Free Journey journal QA entry.');
+  await freePage.locator('#saveJournalEntry').click();
+  assert.match(await freePage.locator('#savedJournalEntries').innerText(),/Free Journey journal QA entry/);
+  await freePage.locator('#closeJournal').click();
+  await freePage.locator('#gamesBtn').click();
+  await freePage.locator('#gamesModal.open').waitFor();
+  await freePage.locator('[data-game="wordsearch"]').click();
+  await freePage.locator('#wsGrid').waitFor();
+  assert.equal(await freePage.locator('#wsGrid .wsCell').count(),100);
+  await freePage.locator('#miniBack').click();
+  await freePage.locator('#closeGames').click();
+  await freePage.evaluate(()=>nextDay());
+  await freePage.locator('#sceneModal.open').waitFor();
+  assert.match(await freePage.locator('#sceneBox').innerText(),/FULL JOURNEY|paid access/i,'Free Journey must stop at the paid boundary');
+  await assertNoErrors(freeErrors,'free journey');
+  await freeCtx.close();
+
+  // 4. Pricing page exposes the free entry plus exactly 10 live paid Stripe choices.
+  const plansCtx=await browser.newContext({viewport:{width:1280,height:900}});
+  const plansPage=await plansCtx.newPage();const plansErrors=[];plansPage.on('pageerror',e=>plansErrors.push(e));
+  const plansResp=await plansPage.goto(PLANS,{waitUntil:'domcontentloaded'});
+  assert.equal(plansResp.status(),200);
+  assert.match(plansResp.headers()['content-type']||'',/text\/html/i);
+  assert.equal(await plansPage.locator('a[href^="https://buy.stripe.com/"]').count(),10);
+  const plansText=await plansPage.locator('body').innerText();
+  for(const label of ['Full Journey','Game Plus','Recovery Resource Membership','Facility Full Journey','Facility Game Plus','Facility Recovery Membership']) assert.match(plansText,new RegExp(label));
+  assert.match(plansText,/Play Chapter One Free/);
+  await assertNoErrors(plansErrors,'plans');
+  await plansCtx.close();
+
+  // 5. Individual paid purchase handoff renders a normal hosted page and opens current Full Journey.
+  const buyCtx=await browser.newContext({viewport:{width:390,height:844}});
+  const buyPage=await buyCtx.newPage();const buyErrors=[];buyPage.on('pageerror',e=>buyErrors.push(e));
+  await buyPage.route(PURCHASE_API,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+    status:'ready',access_code:'SIR-ACC-QATEST-123456',
+    access_url:'https://reiven5150-alt.github.io/steps-into-recovery-test/full-journey.html?code=SIR-ACC-QATEST-123456&v=11.0.0',
+    member_discount:null
+  })}));
+  const buyResp=await buyPage.goto(PURCHASE,{waitUntil:'domcontentloaded'});
+  assert.match(buyResp.headers()['content-type']||'',/text\/html/i);
+  await buyPage.getByText(/access is ready/i).waitFor();
+  const buyHref=await buyPage.locator('#gameLink').getAttribute('href');
+  assert.match(buyHref,/full-journey\.html\?code=SIR-ACC-QATEST-123456/);
+  assert.match(buyHref,/v=11\.1\.0/,'Purchase page must normalize buyers to current game build');
+  assert.doesNotMatch(await buyPage.locator('body').innerText(),/Deno\.serve|const supabase|<!doctype html>/i);
+  await assertNoErrors(buyErrors,'individual purchase');
+  await buyCtx.close();
+
+  // 6. Facility purchase activation produces game and staff-management access.
+  const facilityCtx=await browser.newContext({viewport:{width:1280,height:900}});
+  const facilityPage=await facilityCtx.newPage();const facilityErrors=[];facilityPage.on('pageerror',e=>facilityErrors.push(e));
+  await facilityPage.route(PURCHASE_API,route=>{
+    if(route.request().method()==='POST') return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+      status:'facility_active',facility_active:true,facility_license_code:'SIR-FAC-QATEST-123456',
+      access_code:'SIR-ACC-FACILITY-123456',
+      access_url:'https://reiven5150-alt.github.io/steps-into-recovery-test/full-journey.html?code=SIR-ACC-FACILITY-123456&v=11.0.0'
+    })});
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+      status:'facility_activation_required',facility_license_code:'SIR-FAC-QATEST-123456',admin_email:'admin@example.com'
+    })});
+  });
+  await facilityPage.goto(PURCHASE,{waitUntil:'domcontentloaded'});
+  await facilityPage.getByText(/Activate your facility license/i).waitFor();
+  await facilityPage.locator('input[name="facility_name"]').fill('QA Recovery Center');
+  await facilityPage.locator('input[name="address1"]').fill('100 Test Way');
+  await facilityPage.locator('input[name="city"]').fill('Greeley');
+  await facilityPage.locator('input[name="state"]').fill('CO');
+  await facilityPage.locator('input[name="postal_code"]').fill('80631');
+  await facilityPage.locator('#facilityForm button[type="submit"]').click();
+  await facilityPage.getByText(/Facility access is ready/i).waitFor();
+  assert.equal(await facilityPage.locator('#staffLink').isVisible(),true);
+  assert.match(await facilityPage.locator('#staffLink').getAttribute('href'),/facility-staff\.html\?admin_code=/);
+  assert.match(await facilityPage.locator('#gameLink').getAttribute('href'),/v=11\.1\.0/);
+  await assertNoErrors(facilityErrors,'facility purchase');
+  await facilityCtx.close();
+
+  // 7. Facility administrator can create a staff invite; staff can redeem to Full Journey.
+  const adminCtx=await browser.newContext({viewport:{width:1280,height:900}});
+  const adminPage=await adminCtx.newPage();const adminErrors=[];adminPage.on('pageerror',e=>adminErrors.push(e));
+  await adminPage.route(STAFF_API,route=>{
+    if(route.request().method()==='POST') return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+      status:'invite_created',staff_email:'staff@example.com',
+      invite_url:'https://reiven5150-alt.github.io/steps-into-recovery-test/facility-staff.html?email=staff%40example.com&invite_code=SIR-STAFF-QATEST-123456&v=11.0.0'
+    })});
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+      status:'ready',facility:{facility_name:'QA Recovery Center',address1:'100 Test Way',city:'Greeley',state:'CO',postal_code:'80631'},staff:[]
+    })});
+  });
+  await adminPage.goto(FACILITY_STAFF.replace('?v=11.1.0','?admin_code=SIR-ACC-FACILITY-123456&v=11.1.0'),{waitUntil:'domcontentloaded'});
+  await adminPage.getByText(/Administrator access verified/i).waitFor();
+  await adminPage.locator('#staffEmail').fill('staff@example.com');
+  await adminPage.locator('#inviteForm button').click();
+  await adminPage.getByText(/Private invitation for staff@example.com/i).waitFor();
+  assert.match(await adminPage.locator('#inviteResult').innerText(),/facility-staff\.html\?email=/);
+  await assertNoErrors(adminErrors,'facility admin');
+  await adminCtx.close();
+
+  const staffCtx=await browser.newContext({viewport:{width:390,height:844}});
+  const staffPage=await staffCtx.newPage();const staffErrors=[];staffPage.on('pageerror',e=>staffErrors.push(e));
+  await staffPage.route(STAFF_API,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+    status:'staff_active',access_code:'SIR-STAFF-QATEST-123456',
+    access_url:'https://reiven5150-alt.github.io/steps-into-recovery-test/full-journey.html?code=SIR-STAFF-QATEST-123456&v=11.0.0'
+  })}));
+  await staffPage.goto('http://127.0.0.1:4173/facility-staff.html?email=staff%40example.com&invite_code=SIR-STAFF-QATEST-123456&v=11.1.0',{waitUntil:'domcontentloaded'});
+  await staffPage.getByText(/Staff access ready/i).waitFor();
+  assert.match(await staffPage.locator('#staffGameLink').getAttribute('href'),/v=11\.1\.0/);
+  assert.doesNotMatch(await staffPage.locator('body').innerText(),/Deno\.serve|const supabase|<!doctype html>/i);
+  await assertNoErrors(staffErrors,'facility staff');
+  await staffCtx.close();
+
   // 3. Invalid authorization fails cleanly instead of exposing source.
   const bad=await browser.newContext({viewport:{width:390,height:844}});
   const bp=await bad.newPage();const badErrors=[];bp.on('pageerror',e=>badErrors.push(e));
@@ -249,7 +385,7 @@ try{
   await assertNoErrors(badErrors,'unauthorized');
   await bad.close();
 
-  console.log('FULL JOURNEY QA PASS: desktop + mobile + auth + 10 locations + 3 days + save/load');
+  console.log('STEPS INTO RECOVERY QA PASS: free + paid + mobile + auth + 10 locations + 3 days + journal + games + purchase + facility + staff');
 } finally {
   await browser.close();
 }

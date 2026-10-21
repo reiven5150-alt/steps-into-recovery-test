@@ -17,7 +17,7 @@ label{display:block;font-weight:800;margin:11px 0 5px}input{width:100%;padding:1
 </style>
 </head>
 <body>
-<main class="card" data-build="11.0.1">
+<main class="card" data-build="11.1.0">
 <div class="brand">Steps Into <span>Recovery</span></div>
 <h1 id="title">Finishing your access…</h1>
 <div id="status" class="status">Your payment was received. We’re securely preparing your access.</div>
@@ -52,9 +52,9 @@ function showReady(d){
  title.textContent=d.facility_active?'Facility access is ready':'Your Steps Into Recovery access is ready';
  statusBox.textContent=d.facility_active?'Your facility license is active and your administrator Full Journey access is ready.':'Your access is active.';
  document.getElementById('accessCode').textContent=d.access_code||'';
- document.getElementById('gameLink').href=d.access_url;
+ const gameUrl=new URL(d.access_url);gameUrl.searchParams.set('v','11.1.0');document.getElementById('gameLink').href=gameUrl.toString();
  const staffLink=document.getElementById('staffLink');
- if(d.facility_active&&d.access_code){staffLink.href='https://reiven5150-alt.github.io/steps-into-recovery-test/facility-staff.html?admin_code='+encodeURIComponent(d.access_code)+'&v=11.0.1';staffLink.hidden=false}else{staffLink.hidden=true}
+ if(d.facility_active&&d.access_code){staffLink.href='https://reiven5150-alt.github.io/steps-into-recovery-test/facility-staff.html?admin_code='+encodeURIComponent(d.access_code)+'&v=11.1.0';staffLink.hidden=false}else{staffLink.hidden=true}
  benefit(d.member_discount,d.member_discount_label||'Active-member product discount');
  ready.hidden=false;form.style.display='none'
 }
