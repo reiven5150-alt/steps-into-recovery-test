@@ -63,10 +63,67 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  .startcard{left:4vw;right:4vw;width:auto;max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch}.modeRow,.chargrid{grid-template-columns:repeat(2,1fr)}.hud{grid-template-columns:1fr}.quest{display:none}.statgrid{grid-template-columns:repeat(2,1fr)}.topbuttons{top:168px;right:8px}
  .dpad{display:block}.overlay.open{align-items:flex-start}.sceneBox{display:block;grid-template-columns:1fr;max-height:calc(100dvh - 16px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;margin:auto 0}.sceneArt{min-height:220px;height:32vh}.scenePanel{padding-bottom:34px}.panelBox{max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}.toolGrid,.skillgrid{grid-template-columns:repeat(2,1fr)}.quickbar{bottom:176px}.challengeStage{height:280px}.budgetgrid{grid-template-columns:repeat(2,1fr)}
 }
+/* v6 personalized recovery coach */
+.coachCard{background:#fff;border:2px solid #d8c8ae;border-radius:16px;padding:13px;margin-top:10px}
+.coachSkill{display:grid;grid-template-columns:64px 1fr;gap:11px;align-items:center;background:#eef5f2;border-radius:14px;padding:10px}
+.coachSkill img{width:64px;height:64px;object-fit:cover;border-radius:12px}
+.coachSkill b{display:block;font-size:18px}.coachSkill small{display:block;color:#51666b;margin-top:3px;line-height:1.3}
+.coachWhy{background:#fff8dc;border:1px solid #e4c36f;border-radius:12px;padding:10px;margin-top:10px;line-height:1.4}
+.coachPractice{display:none;background:#102f3a;color:#fff;border-radius:14px;padding:12px;margin-top:10px;line-height:1.45}
+.coachPractice.open{display:block}.coachPractice b{color:#ffd16b}
+.coachActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.coachActions .btn{width:100%;min-height:46px}
+@media(max-width:520px){.coachActions{grid-template-columns:1fr}.coachSkill{grid-template-columns:54px 1fr}.coachSkill img{width:54px;height:54px}}
+
+
+/* v7 personalized coping picker */
+.copingGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.copingCard{border:2px solid #d8c8ae;background:#fff;color:#142b31;border-radius:14px;padding:10px;text-align:left;min-height:92px}
+.copingCard.recommended{border-color:#d6a52d;background:#fff8dc}
+.copingCard b{display:block;font-size:14px;margin-bottom:3px}.copingCard small{display:block;color:#607276;line-height:1.25}
+.copingEmoji{font-size:25px;display:block;margin-bottom:4px}
+.copingPractice{background:#102f3a;color:#fff;border-radius:15px;padding:13px;margin-top:10px;line-height:1.5}
+.copingPractice h3{margin:0 0 6px;color:#ffd16b}
+.copingActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.copingActions .btn{width:100%;min-height:46px}
+.sceneSubmit{width:100%;margin-top:10px}
+@media(max-width:520px){.copingGrid{grid-template-columns:1fr}.copingCard{min-height:78px}.copingActions{grid-template-columns:1fr}}
+
+
+
+/* v9 journal + mini games */
+.journalTabs{display:flex;gap:7px;margin:8px 0 10px}.journalTabs .btn{flex:1}
+.journalPane{display:none}.journalPane.active{display:block}
+.journalPrompt{width:100%;min-height:46px;border:1px solid var(--line);border-radius:11px;padding:9px;font:inherit;background:#fff;color:var(--ink)}
+.journalWrite{width:100%;min-height:150px;border:2px solid #cfc3b2;border-radius:12px;padding:11px;font:inherit;font-size:16px;line-height:1.4;background:#fff;color:var(--ink);resize:vertical}
+.savedEntry{background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px;margin-top:8px}
+.savedEntry time{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-bottom:5px}
+.savedEntry .entryText{white-space:pre-wrap;line-height:1.4}
+.savedEntry button{margin-top:7px}
+.gamesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+.gameCard{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px;text-align:left;color:var(--ink);min-height:115px}
+.gameCard b{display:block;font-size:17px;margin-bottom:4px}.gameCard small{display:block;color:var(--muted);line-height:1.3}
+.wsGrid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin:10px 0;max-width:520px}
+.wsCell{aspect-ratio:1;border:1px solid #cdbfa9;border-radius:6px;background:#fff;color:#17343d;font-weight:1000;font-size:15px;display:grid;place-items:center;padding:0;min-height:30px}
+.wsCell.pick{outline:3px solid #efb648}.wsCell.found{background:#dff2e5;border-color:#5d9c72}
+.wordBank{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.wordChip{background:#e8eee9;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900}.wordChip.found{text-decoration:line-through;opacity:.55}
+.miniQuestion{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:9px}
+.miniQuestion input{width:100%;min-height:44px;border:2px solid #cfc3b2;border-radius:10px;padding:8px;font:inherit;font-size:16px;margin-top:6px}
+.tileGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.orderTile{min-height:58px;border:2px solid #cfc3b2;background:#fff;border-radius:12px;padding:9px;font-weight:900}.orderTile.sel{background:#fff3ca;border-color:#d5a62f}
+.scenarioOption{display:block;width:100%;text-align:left;margin-top:7px;min-height:48px}
+.gameFeedback{background:#eef5f2;border-radius:12px;padding:10px;margin-top:9px;line-height:1.4}
+@media(max-width:520px){.gamesGrid{grid-template-columns:1fr}.wsCell{font-size:12px;min-height:26px}.tileGrid{grid-template-columns:1fr}}
+
+
+
+.sceneClose{position:absolute;right:18px;top:14px;z-index:70;border:0;border-radius:999px;padding:9px 13px;background:#f5ead9;color:#14333b;font-weight:1000;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.28);cursor:pointer;display:none}
+#sceneModal.open .sceneClose{display:block}
+@media(max-width:850px){.sceneClose{position:fixed;right:14px;top:12px;font-size:14px;padding:10px 13px}}
+
 </style>
 </head>
 <body>
-<div id="app" data-build="11.0.1">
+<div id="app" data-build="11.1.0">
 <section id="start" class="screen active">
  <div class="startcard">
   <div class="brand">Steps Into <span>Recovery</span></div>
@@ -112,7 +169,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   </div>
   <div class="hudbox quest"><strong>Current Quests</strong><div id="questList"></div></div>
  </div>
- <div class="topbuttons"><button id="toolBtn">Toolbox</button><button id="journalBtn">Journal</button><button id="saveBtn">Save</button></div>
+ <div class="topbuttons"><button id="toolBtn">Toolbox</button><button id="journalBtn">My Journal</button><button id="gamesBtn">Games</button><button id="saveBtn">Save</button></div>
  <div id="quickbar" class="quickbar"></div>
  <div id="toast"></div>
  <div id="hint">Tap a location, use the arrows, or drag the map to move around. Skills in the bottom bar are live and can be used at any time.</div>
@@ -127,9 +184,23 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
  </div>
 </section>
 
-<div id="sceneModal" class="overlay"><div id="sceneBox" class="sceneBox"></div></div>
+<div id="sceneModal" class="overlay"><button type="button" id="sceneClose" class="sceneClose" aria-label="Back to map">← Map</button><div id="sceneBox" class="sceneBox"></div></div>
 <div id="toolModal" class="overlay"><div class="panelBox"><button class="close" id="closeTools">×</button><h2>Recovery Toolbox</h2><img src="" data-asset="toolbox" class="toolboxBanner" alt=""><p>Equip up to four skills. Equipped skills appear in the live quickbar during exploration and challenges.</p><div id="toolGrid" class="toolGrid"></div></div></div>
-<div id="journalModal" class="overlay"><div class="panelBox"><button class="close" id="closeJournal">×</button><h2>Journey Log</h2><img src="" data-asset="journal" class="journalBanner" alt=""><div id="journalList"></div></div></div>
+<div id="journalModal" class="overlay"><div class="panelBox"><button class="close" id="closeJournal">×</button><h2>My Journal / Journey Log</h2><img src="" data-asset="journal" class="journalBanner" alt="">
+<div class="journalTabs"><button id="myJournalTab" class="btn green">My Journal</button><button id="journeyLogTab" class="btn navy">Journey Log</button></div>
+<div id="myJournalPane" class="journalPane active">
+<select id="journalPrompt" class="journalPrompt">
+<option value="">Free write — no prompt</option>
+<option>What am I feeling right now?</option><option>What helped me today?</option><option>What triggered me and how did I respond?</option><option>What do I need most right now?</option><option>What is one thing I am proud of today?</option><option>What is one thing I am grateful for today?</option>
+</select>
+<textarea id="journalWrite" class="journalWrite" maxlength="4000" placeholder="Write whatever you need to get out of your head…"></textarea>
+<button id="saveJournalEntry" class="btn green" style="width:100%;margin-top:8px">Save journal entry</button>
+<div id="journalSaveError" style="display:none;color:#9b2f38;font-weight:900;margin-top:6px">Write something before saving.</div>
+<h3 style="margin:14px 0 4px">Saved entries</h3><div id="savedJournalEntries"></div>
+</div>
+<div id="journeyLogPane" class="journalPane"><div id="journalList"></div></div>
+</div></div>
+<div id="gamesModal" class="overlay"><div class="panelBox"><button class="close" id="closeGames">×</button><h2>Recovery Games</h2><p>Practice recovery skills without losing progress. The Full Journey includes the world challenges plus replayable recovery activities.</p><div id="gamesGrid" class="gamesGrid"></div></div></div>
 </div>
 
 <script>
@@ -154,17 +225,141 @@ const skills={
  reach:{name:'Reach Out',img:ASSET.reach_out,desc:'Connection +10',power:13,cd:5000,fx:s=>s.connection+=10},
  gratitude:{name:'Gratitude',img:ASSET.gratitude,desc:'Recovery +4 · Stress -3',power:8,cd:3000,fx:s=>{s.recovery+=4;s.stress-=3}}
 };
+const copingTools={
+ breathe:{name:'Longer-Exhale Breathing',emoji:'🌬️',desc:'Settle physical stress',practice:'Breathe in gently for 4 counts and out for 6. Repeat 5 times. Keep it comfortable rather than forcing a deep breath.',fx:s=>s.stress-=8},
+ box:{name:'Box Breathing',emoji:'⬜',desc:'Give racing attention a steady rhythm',practice:'Inhale 4, hold 4, exhale 4, hold 4. Repeat 4 rounds at a comfortable pace.',fx:s=>s.stress-=7},
+ ground54321:{name:'5-4-3-2-1 Grounding',emoji:'🌿',desc:'Come back to the present',practice:'Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, and 1 you taste or can imagine tasting.',fx:s=>{s.stress-=7;s.recovery+=3}},
+ sensory:{name:'Sensory Soothing',emoji:'🕯️',desc:'Use safe sensory input to settle',practice:'Choose one soothing input: warm water, a soft blanket, calming scent, dimmer light, or quiet music. Stay with it for two minutes and notice what shifts.',fx:s=>s.stress-=6},
+ bath:{name:'Bath or Shower Reset',emoji:'🛁',desc:'Use routine and warmth to reset',practice:'Take a shower or bath without rushing. Notice the temperature, sound, and physical sensations. Let it be a reset, not another task to complete.',fx:s=>{s.stress-=7;s.energy+=3}},
+ music:{name:'Music Reset',emoji:'🎵',desc:'Shift mood without denying it',practice:'Choose one song that matches what you feel, then one that moves you one step toward how you want to feel. Notice the difference.',fx:s=>s.stress-=5},
+ movement:{name:'Movement Reset',emoji:'🚶',desc:'Release built-up activation',practice:'Walk, stretch, pace, or shake out your hands and shoulders for 2–5 minutes. Check whether the intensity changes afterward.',fx:s=>{s.stress-=5;s.energy+=4}},
+ hydrate:{name:'Food & Hydration Check',emoji:'🥤',desc:'Meet a basic physical need',practice:'Ask when you last ate and drank water. If needed, have something simple and nourishing before making the next decision.',fx:s=>{s.energy+=6;s.stress-=2}},
+ halt:{name:'HALT Check',emoji:'🧭',desc:'Check Hungry, Angry, Lonely, Tired',practice:'Ask: Am I Hungry, Angry, Lonely, or Tired? Pick the strongest one and meet that need first if you can.',fx:s=>{s.recovery+=4;s.stress-=3}},
+ rest:{name:'Rest Reset',emoji:'😴',desc:'Protect energy before it crashes',practice:'Give yourself a defined rest period. Lower stimulation and set a gentle endpoint so rest does not quietly turn into avoidance.',fx:s=>{s.energy+=8;s.stress-=3}},
+ reach:{name:'Reach Out',emoji:'📱',desc:'Interrupt isolation',practice:'Choose one safe person and send a simple message: “I could use a little support right now. Are you available?”',fx:s=>s.connection+=9},
+ meeting:{name:'Use Your Support Network',emoji:'🤝',desc:'Bring another safe person into the moment',practice:'Choose a meeting, peer, sponsor, counselor, friend, or family member who is safe. Decide exactly who you will contact and how.',fx:s=>{s.connection+=8;s.recovery+=3}},
+ boundary:{name:'Boundary Script',emoji:'🛑',desc:'Protect recovery without overexplaining',practice:'Try: “I cannot do that right now.” Or: “I can help with X, but not Y.” Keep it short and do not argue with your boundary.',fx:s=>{s.recovery+=5;s.stress-=3}},
+ selftalk:{name:'Balanced Self-Talk',emoji:'💬',desc:'Challenge harsh inner talk',practice:'Replace the harshest thought with something accurate and usable: “This is hard, but one hard moment does not define me.” Rewrite it in your own words.',fx:s=>s.recovery+=6},
+ compassion:{name:'Self-Compassion Break',emoji:'💛',desc:'Respond without adding shame',practice:'Name the pain without attacking yourself: “This hurts.” Then add: “I do not have to make it worse by tearing myself apart.”',fx:s=>{s.recovery+=5;s.stress-=3}},
+ journal:{name:'Three-Line Journal',emoji:'📝',desc:'Separate facts, thoughts, and needs',practice:'Write three lines: What happened? What am I telling myself about it? What do I need next?',fx:s=>{s.recovery+=5;s.stress-=2}},
+ thoughtdump:{name:'Thought Dump',emoji:'🧠',desc:'Get mental clutter out of your head',practice:'Write everything circling in your mind for two minutes without organizing it. Then circle just one thing you can act on.',fx:s=>s.stress-=5},
+ onestep:{name:'One Small Step',emoji:'👣',desc:'Shrink an overwhelming task',practice:'Make the task smaller until it feels almost too easy. Choose one action you can finish in 5–10 minutes and do only that first.',fx:s=>{s.recovery+=4;s.energy+=2}},
+ pause:{name:'Pause Before Acting',emoji:'⏸️',desc:'Create space between feeling and action',practice:'Set a 10-minute pause before you act. During the pause, change rooms, drink water, breathe, or contact someone safe.',fx:s=>{s.stress-=4;s.recovery+=4}},
+ delay:{name:'Delay the Urge',emoji:'⏳',desc:'Do not let the urge make the decision',practice:'Tell yourself: “I am not deciding forever. I am waiting 20 minutes.” Recheck the urge after the delay.',fx:s=>{s.stress-=4;s.recovery+=5}},
+ urge:{name:'Urge Surfing',emoji:'🌊',desc:'Ride an urge without obeying it',practice:'Notice where the urge sits in your body. Describe it like a wave—rising, peaking, falling—while you avoid acting on it for the next few minutes.',fx:s=>{s.stress-=5;s.recovery+=7}},
+ tape:{name:'Play the Tape Forward',emoji:'🎬',desc:'Look past the immediate relief',practice:'Imagine the next hour, tomorrow morning, and next week if you act on the urge. Then imagine those same points if you protect your recovery.',fx:s=>s.recovery+=7},
+ environment:{name:'Change the Environment',emoji:'🚪',desc:'Reduce exposure to a trigger',practice:'Move to a safer room or place, leave the triggering situation, remove access if possible, and put distance between you and the cue.',fx:s=>{s.stress-=4;s.recovery+=5}},
+ opposite:{name:'Opposite Action',emoji:'↔️',desc:'Act against an unhelpful impulse',practice:'Name the impulse. If following it would make things worse, choose one safe action in the opposite direction—connect instead of isolate, move instead of freeze.',fx:s=>{s.recovery+=5;s.connection+=3}},
+ accept:{name:'Acceptance Statement',emoji:'🪨',desc:'Stop fighting what is already true',practice:'Try: “I do not have to like this, but this is what is happening right now.” Then ask what is still within your control.',fx:s=>{s.stress-=4;s.recovery+=3}},
+ gratitude:{name:'What Is Still Working?',emoji:'☀️',desc:'Widen attention without fake positivity',practice:'Name one thing that is helping today and why it matters. Keep it specific and believable.',fx:s=>{s.recovery+=4;s.stress-=2}},
+ values:{name:'Values Check',emoji:'🧭',desc:'Choose the next action on purpose',practice:'Ask: “What kind of person do I want to be in the next 10 minutes?” Pick one action that matches that value.',fx:s=>s.recovery+=5},
+ proscons:{name:'Quick Pros & Cons',emoji:'⚖️',desc:'Slow down an impulsive decision',practice:'List two short-term benefits and two costs of acting now, then two benefits and two costs of waiting or choosing differently.',fx:s=>s.recovery+=4}
+};
+
 const places={
  home:{x:.12,y:.76},park:{x:.34,y:.42},cafe:{x:.48,y:.57},support:{x:.77,y:.66},meeting:{x:.57,y:.73},
  gym:{x:.86,y:.82},library:{x:.73,y:.33},market:{x:.24,y:.63},work:{x:.87,y:.49},oldspot:{x:.91,y:.24}
 };
 let selectedMode='paid',chosen=chars[0],s=null,keys={},last=0,travelRAF=null,challenge=null;
 
+function analyzeRecoveryResponse(text,contextLabel){
+ const t=String(text||'').toLowerCase(),ctx=String(contextLabel||'').toLowerCase(),r=[];
+ const has=a=>a.some(w=>t.includes(w)),add=(...ids)=>ids.forEach(id=>{if(!r.includes(id))r.push(id)});
+ if(has(['suicidal','suicide','kill myself','want to die','hurt myself','self harm','self-harm']))return {crisis:true,theme:'a possible immediate safety concern',recommendations:[]};
+ let theme='a moment that deserves a deliberate next step';
+ if(has(['bath','bathe','shower','hot water','soak'])){theme='a self-care reset';add('bath','sensory','rest')}
+ if(has(['hungry','eat','food','meal','thirsty','water','dehydrated'])){theme='a basic-needs issue';add('halt','hydrate','onestep')}
+ if(has(['tired','exhausted','sleep','nap','worn out','drained'])){theme='low energy or exhaustion';add('rest','halt','boundary')}
+ if(has(['music','song','playlist','tv','movie'])){theme='using a low-demand activity to regulate';add('music','sensory','rest')}
+ if(has(['walk','walking','exercise','workout','stretch','outside'])){theme='a need to move or change state';add('movement','environment','ground54321')}
+ if(has(['craving','crave','urge','relapse','get high','use again','using','drink','triggered','trigger'])){theme='a craving or strong trigger';add('urge','delay','tape','environment','reach')}
+ if(has(['alone','lonely','isolated','isolate','nobody','no one','by myself','withdraw'])){theme='isolation or disconnection';add('reach','meeting','opposite','selftalk')}
+ if(has(['ashamed','shame','guilty','guilt','failure','worthless','hate myself','stupid','loser','not good enough'])){theme='shame or harsh self-talk';add('compassion','selftalk','journal','reach')}
+ if(has(['panic','panicked','anxious','anxiety','racing','overwhelmed','overwhelm','cant breathe',"can't breathe",'heart racing','nervous'])){theme='high stress or racing thoughts';add('breathe','ground54321','sensory','pause')}
+ if(has(['angry','anger','mad','furious','restless','agitated','pissed','frustrated','frustration'])){theme='built-up tension or agitation';add('movement','pause','boundary','breathe')}
+ if(has(['confused','stuck','ruminating','overthinking','overthink','dont know',"don't know",'mixed up','cant decide',"can't decide"])) {theme='mental overload or uncertainty';add('thoughtdump','journal','onestep','values')}
+ if(has(['hopeless','nothing good','everything sucks','pointless','never gets better','negative','miserable'])){theme='hopelessness or narrowed attention';add('compassion','accept','gratitude','reach')}
+ if(has(['argument','fight','conflict','yelling','pressure me','keeps asking','say no','boundary'])){theme='interpersonal pressure or conflict';add('boundary','pause','reach','values')}
+ if(has(['too much to do','so much to do','chores','clean','laundry','mess','task','procrastinat'])){theme='task overload';add('onestep','thoughtdump','music','pause')}
+ if(has(['bored','boredom','nothing to do'])){theme='boredom or unstructured time';add('values','movement','reach','onestep')}
+ if(!r.length){
+   if(ctx.includes('home'))add('halt','bath','music','rest','onestep');
+   else if(ctx.includes('meeting')||ctx.includes('café')||ctx.includes('cafe')||ctx.includes('support'))add('reach','boundary','selftalk','values');
+   else if(ctx.includes('library'))add('journal','thoughtdump','values','compassion');
+   else if(ctx.includes('work'))add('boundary','onestep','pause','values');
+   else if(ctx.includes('park'))add('ground54321','movement','sensory','breathe');
+   else if(ctx.includes('gym'))add('breathe','movement','ground54321','sensory');
+   else if(ctx.includes('market'))add('halt','hydrate','values','proscons');
+   else if(ctx.includes('old spot'))add('urge','delay','tape','environment','reach');
+   else add('halt','ground54321','pause','values');
+ }
+ return {theme,recommendations:r.slice(0,5)};
+}
+function copingWhy(id){
+ const m={
+ bath:'You already identified a soothing self-care action. The game should support that choice instead of replacing it.',
+ halt:'Checking basic needs can reveal when hunger, anger, loneliness, or fatigue is making everything feel harder.',
+ hydrate:'Meeting a physical need first can make emotional decisions easier to handle.',
+ rest:'Protecting energy can prevent exhaustion from turning into impulsive choices.',
+ music:'Music or another low-demand activity can help shift intensity without pretending the feeling is gone.',
+ movement:'Movement can release physical activation and create a state change.',
+ urge:'Urges rise and fall. You can experience one without automatically obeying it.',
+ delay:'A delay creates distance between an urge and an action.',
+ tape:'Looking past immediate relief can reconnect you with consequences and recovery goals.',
+ environment:'Changing your surroundings can lower exposure to a trigger.',
+ reach:'Connection can interrupt isolation and add another safe brain to the problem.',
+ meeting:'Recovery support is often stronger when you do not carry the moment alone.',
+ boundary:'A short boundary protects energy and recovery without requiring a long explanation.',
+ selftalk:'Balanced self-talk challenges the harshest interpretation without pretending everything is fine.',
+ compassion:'Reducing shame makes it easier to make a useful next choice.',
+ journal:'Writing can separate facts, thoughts, feelings, and needs.',
+ thoughtdump:'Getting thoughts out of your head reduces the pressure to hold everything at once.',
+ onestep:'Making the task smaller can turn overwhelm into something actionable.',
+ pause:'A short pause creates room for choice instead of reaction.',
+ opposite:'A safe action opposite to an unhelpful impulse can break the pattern.',
+ accept:'Acceptance frees energy that is being spent fighting what has already happened.',
+ gratitude:'Specific gratitude widens attention without denying what is difficult.',
+ values:'Values can guide the next small choice even when feelings are messy.',
+ proscons:'A quick comparison slows impulsive decisions long enough to see tradeoffs.',
+ breathe:'A longer exhale can help lower physical arousal.',
+ box:'A steady breathing rhythm gives racing attention something simple to follow.',
+ ground54321:'Grounding redirects attention to what is actually happening in the present.',
+ sensory:'Safe sensory input can lower intensity without requiring you to solve everything.'
+ };return m[id]||'This may be useful in this moment.';
+}
+function showCopingPractice(id,text,contextLabel,onContinue,rec){
+ const c=copingTools[id];if(!c)return showCopingPicker(text,contextLabel,onContinue,rec);
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">TRY A COPING TOOL</span><h2>'+c.emoji+' '+c.name+'</h2><div class="coachWhy"><b>Why it may fit:</b><br>'+copingWhy(id)+'</div><div class="copingPractice"><h3>Try it now</h3>'+c.practice+'</div><div class="copingActions"><button id="copingDidIt" class="btn gold">I did this</button><button id="copingBack" class="btn navy">Choose a different tool</button><button id="copingContinue" class="btn green">Continue without doing it</button></div></div>';
+ $('copingDidIt').addEventListener('click',()=>{if(c.fx)c.fx(s.stats);norm();gain(4,2);s.coachHistory=s.coachHistory||[];s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:id,practiced:true});addLog('Practiced '+c.name+' at '+contextLabel);save();onContinue()});
+ $('copingBack').addEventListener('click',()=>showCopingPicker(text,contextLabel,onContinue,rec));
+ $('copingContinue').addEventListener('click',()=>{s.coachHistory=s.coachHistory||[];s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:id,practiced:false});addLog('Considered '+c.name+' at '+contextLabel);save();onContinue()});
+}
+function showCopingPicker(text,contextLabel,onContinue,rec){
+ rec=rec||analyzeRecoveryResponse(text,contextLabel);
+ const ids=Object.keys(copingTools);
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">COPING TOOLBOX</span><h2>Choose what fits you</h2><p>You do not have to use the first suggestion. Pick the tool that makes the most sense for this moment.</p><div class="copingGrid">'+ids.map(id=>{const c=copingTools[id],hot=(rec.recommendations||[]).includes(id);return '<button type="button" class="copingCard '+(hot?'recommended':'')+'" data-coping="'+id+'"><span class="copingEmoji">'+c.emoji+'</span><b>'+c.name+(hot?' · Suggested':'')+'</b><small>'+c.desc+'</small></button>'}).join('')+'</div><button id="copingNone" class="btn navy" style="width:100%;margin-top:10px">Continue without a coping tool</button></div>';
+ $('sceneBox').querySelectorAll('.copingCard').forEach(b=>b.addEventListener('click',()=>showCopingPractice(b.dataset.coping,text,contextLabel,onContinue,rec)));
+ $('copingNone').addEventListener('click',()=>{s.coachHistory=s.coachHistory||[];s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:null,practiced:false});addLog('Continued using own response at '+contextLabel);save();onContinue()});
+}
+function showRecoveryCoach(text,contextLabel,onContinue){
+ const rec=analyzeRecoveryResponse(text,contextLabel);s.coachHistory=s.coachHistory||[];
+ if(rec.crisis){
+  $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">SAFETY FIRST</span><h2>Get real-time support</h2><div class="coachWhy"><b>What you wrote may involve immediate safety.</b><br>If you might act on thoughts of harming yourself, call or text <b>988</b> in the U.S., call <b>911</b> for immediate danger, or get to a trusted person or emergency setting now. The game should not try to handle this alone.</div><button id="coachContinue" class="btn navy" style="width:100%;margin-top:12px">Continue when safe</button></div>';
+  $('coachContinue').addEventListener('click',()=>{addLog('Recovery Coach flagged a safety concern');save();onContinue()});return;
+ }
+ const primary=rec.recommendations[0],c=copingTools[primary];
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">RECOVERY COACH</span><h2>Your response counts</h2><div class="coachCard"><p style="margin-top:0">The game picked up <b>'+rec.theme+'</b>. Your typed response remains your action; this is only an optional tool.</p><div class="coachSkill"><div style="font-size:42px;text-align:center">'+c.emoji+'</div><div><b>'+c.name+'</b><small>'+c.desc+'</small></div></div><div class="coachWhy"><b>Why this may fit:</b><br>'+copingWhy(primary)+'</div><div class="copingActions"><button id="coachTry" class="btn green">Try '+c.name+'</button><button id="coachChoose" class="btn blue">Choose another tool</button><button id="coachOwn" class="btn gold">Continue with my own response</button></div></div></div>';
+ $('coachTry').addEventListener('click',()=>showCopingPractice(primary,text,contextLabel,onContinue,rec));
+ $('coachChoose').addEventListener('click',()=>showCopingPicker(text,contextLabel,onContinue,rec));
+ $('coachOwn').addEventListener('click',()=>{s.coachHistory.push({time:Date.now(),context:contextLabel||'',theme:rec.theme,skill:null,practiced:false});addLog('Used own response at '+contextLabel);gain(2,1);save();onContinue()});
+}
+
+
 function fresh(){
  selectedMode='paid';
  s={version:11,mode:'paid',day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
  unlocked:['deep','ground'],equipped:['deep','ground'],cooldowns:{},quests:{home:false,park:false,cafe:false,support:false,meeting:false,gym:false,library:false,market:false,work:false,boss:false},
- visited:[],completedDays:[],notes:{home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:10};
+ visited:[],completedDays:[],coachHistory:[],journalEntries:[],minigames:{wordsearch:false},notes:{home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:10};
  Object.entries(chosen.bonus).forEach(([k,v])=>s.stats[k]=clamp(s.stats[k]+v));
  norm()
 }
@@ -183,7 +378,7 @@ function ensureStateShape(){
  s.version=11;s.mode='paid';s.levelCap=10;
  s.quests=Object.assign({home:false,park:false,cafe:false,support:false,meeting:false,gym:false,library:false,market:false,work:false,boss:false},s.quests||{});
  s.notes=Object.assign({home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},s.notes||{});
- s.visited=Array.isArray(s.visited)?s.visited:[];s.completedDays=Array.isArray(s.completedDays)?s.completedDays:[];
+ s.visited=Array.isArray(s.visited)?s.visited:[];s.completedDays=Array.isArray(s.completedDays)?s.completedDays:[];s.coachHistory=Array.isArray(s.coachHistory)?s.coachHistory:[];s.journalEntries=Array.isArray(s.journalEntries)?s.journalEntries:[];s.minigames=Object.assign({wordsearch:false},s.minigames||{});
  s.log=Array.isArray(s.log)?s.log:[];
  s.unlocked=Array.isArray(s.unlocked)?s.unlocked:['deep','ground'];
  s.equipped=Array.isArray(s.equipped)?s.equipped.filter(id=>skills[id]).slice(0,4):['deep','ground'];
@@ -207,6 +402,7 @@ function maybeCompleteDay(){
  $('nextBtn').textContent=s.day<3?'Start Day '+(s.day+1):'Keep Exploring';
  save(true);show('end');return true
 }
+function closeSceneWithoutCompleting(){challenge=null;$('sceneModal').classList.remove('open');if(s){renderWorld();save(true)}}
 function sceneComplete(message){
  const panel=$('sceneBox').querySelector('.scenePanel'); if(!panel)return;
  const old=panel.querySelector('.sceneStatus');if(old)old.remove();
@@ -278,14 +474,14 @@ function homeScene(){
  const prior=esc(s.notes.home||'');
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET.park}')"></div><div class="scenePanel"><span class="pill">HOME BASE</span><h2>Pause, plan, recharge</h2><div class="dialog"><b>You</b><p>What would make the next few hours safer, steadier, or more manageable?</p></div><label class="formLabel" for="homeNote">Write your plan in your own words</label><textarea id="homeNote" class="reflectionField" maxlength="1500" placeholder="Example: Eat something, text a safe person, shower, and stay away from the place I usually go when I’m overwhelmed.">${prior}</textarea><div class="sceneActions"><button type="button" id="saveHomePlan" class="btn green">Save my plan</button><button type="button" id="homeRecharge" class="btn blue">Recharge without writing</button></div><div id="homeErr"></div></div>`;
  $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
- $('saveHomePlan').addEventListener('click',()=>{const v=$('homeNote').value.trim();if(v.length<3){$('homeErr').innerHTML='<div class="fieldError">Write at least a few words so this action can be saved.</div>';return}s.notes.home=v;s.quests.home=true;s.stats.energy+=10;s.stats.stress-=5;gain(10,6);addLog('Saved a Home Base plan');norm();advance(30);sceneComplete('Your Home Base plan is saved on this device.')});
+ $('saveHomePlan').addEventListener('click',()=>{const v=$('homeNote').value.trim();if(v.length<3){$('homeErr').innerHTML='<div class="fieldError">Write at least a few words so this action can be saved.</div>';return}s.notes.home=v;save(true);showRecoveryCoach(v,'Home Base',()=>{s.quests.home=true;s.stats.energy+=10;s.stats.stress-=5;gain(10,6);addLog('Saved a Home Base plan');norm();advance(30);sceneComplete('Your Home Base plan is saved on this device.')})});
  $('homeRecharge').addEventListener('click',()=>{s.quests.home=true;s.stats.energy+=12;s.stats.stress-=4;gain(8,4);addLog('Recharged at Home Base');norm();advance(30);sceneComplete('You chose to recharge. That still counts as a recovery-supporting action.')})
 }
 function meetingScene(){
  const prior=esc(s.notes.meeting||'');
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET.meeting}')"></div><div class="scenePanel"><span class="pill">MEETING HALL</span><h2>Share, listen, or simply stay</h2><div class="dialog"><b>Marcus</b><p>“You can share, listen, or just be here. There is no perfect thing to say.”</p></div><label class="formLabel" for="meetingShare">What would you say if you chose to share?</label><textarea id="meetingShare" class="reflectionField" maxlength="1500" placeholder="One honest sentence is enough.">${prior}</textarea><div class="sceneActions"><button type="button" id="submitShare" class="btn green">Share what I wrote</button><button type="button" id="listenOnly" class="btn blue">Listen today</button><button type="button" id="stayAfter" class="btn navy">Stay and talk after</button></div><div id="meetingErr"></div></div>`;
  $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
- $('submitShare').addEventListener('click',()=>{const v=$('meetingShare').value.trim();if(v.length<3){$('meetingErr').innerHTML='<div class="fieldError">Write at least a few words before sharing.</div>';return}s.notes.meeting=v;s.quests.meeting=true;s.stats.connection+=10;s.stats.recovery+=7;s.relationships.marcus+=10;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(16,9);addLog('Shared honestly at Meeting Hall');norm();advance(30);sceneComplete('You shared. Your words are saved only in this browser’s game save.')});
+ $('submitShare').addEventListener('click',()=>{const v=$('meetingShare').value.trim();if(v.length<3){$('meetingErr').innerHTML='<div class="fieldError">Write at least a few words before sharing.</div>';return}s.notes.meeting=v;save(true);showRecoveryCoach(v,'Meeting Hall',()=>{s.quests.meeting=true;s.stats.connection+=10;s.stats.recovery+=7;s.relationships.marcus+=10;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(16,9);addLog('Shared honestly at Meeting Hall');norm();advance(30);sceneComplete('You shared. Your words are saved only in this browser’s game save.')})});
  $('listenOnly').addEventListener('click',()=>{s.quests.meeting=true;s.stats.connection+=5;s.relationships.marcus+=5;gain(10,5);addLog('Stayed and listened at Meeting Hall');norm();advance(30);sceneComplete('Listening and staying present counts too.')});
  $('stayAfter').addEventListener('click',()=>{s.quests.meeting=true;s.relationships.marcus+=14;s.stats.connection+=6;gain(14,7);addLog('Stayed after Meeting Hall to connect');norm();advance(30);sceneComplete('You made space for connection after the meeting.')})
 }
@@ -293,7 +489,7 @@ function libraryScene(){
  const prior=esc(s.notes.library||'');
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET.journal}')"></div><div class="scenePanel"><span class="pill">REFLECTION LIBRARY</span><h2>Write down what worked</h2><div class="dialog"><b>Mara</b><p>“Write it down before your brain edits the story.”</p></div><label class="formLabel" for="libraryNote">What helped you get through something difficult before?</label><textarea id="libraryNote" class="reflectionField" maxlength="1500" placeholder="Write a short reflection...">${prior}</textarea><div class="sceneActions"><button type="button" id="saveReflection" class="btn green">Save reflection</button></div><div id="libraryErr"></div></div>`;
  $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
- $('saveReflection').addEventListener('click',()=>{const v=$('libraryNote').value.trim();if(v.length<3){$('libraryErr').innerHTML='<div class="fieldError">Write at least a few words before saving.</div>';return}s.notes.library=v;s.quests.library=true;s.stats.recovery+=6;s.stats.stress-=3;if(!s.unlocked.includes('journal'))s.unlocked.push('journal');gain(12,6);addLog('Saved a Reflection Library entry');norm();advance(30);sceneComplete('Reflection saved on this device. Journaling is now available in your toolbox.')})
+ $('saveReflection').addEventListener('click',()=>{const v=$('libraryNote').value.trim();if(v.length<3){$('libraryErr').innerHTML='<div class="fieldError">Write at least a few words before saving.</div>';return}s.notes.library=v;save(true);showRecoveryCoach(v,'Reflection Library',()=>{s.quests.library=true;s.stats.recovery+=6;s.stats.stress-=3;if(!s.unlocked.includes('journal'))s.unlocked.push('journal');gain(12,6);addLog('Saved a Reflection Library entry');norm();advance(30);sceneComplete('Reflection saved on this device. Journaling is now available in your toolbox.')})})
 }
 function cafeScene(){return simpleScene('cafe','Corner Café','Lena','“Rough day?”',[
  ['Tell Lena you are having a rough day',()=>{s.relationships.lena+=12;s.stats.connection+=8;s.quests.cafe=true;if(!s.unlocked.includes('gratitude'))s.unlocked.push('gratitude');gain(12,7)},'You told the truth instead of carrying it alone.'],
@@ -352,7 +548,7 @@ function supportQuest(){
  $('saveSupport').addEventListener('click',()=>{
   const vals=[$('supportNeed').value.trim(),$('supportAsk').value.trim(),$('supportBoundary').value.trim()];
   if(vals.some(v=>v.length<3)){$('supportErr').innerHTML='<div class="fieldError">Complete all three parts before saving.</div>';return}
-  [s.notes.supportNeed,s.notes.supportAsk,s.notes.supportBoundary]=vals;s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);addLog('Completed a clear support request');norm();advance(30);sceneComplete('Your support request is saved on this device. Reach Out is now available in your toolbox.')
+  [s.notes.supportNeed,s.notes.supportAsk,s.notes.supportBoundary]=vals;save(true);showRecoveryCoach(vals.join(' '),'Support Center',()=>{s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);addLog('Completed a clear support request');norm();advance(30);sceneComplete('Your support request is saved on this device. Reach Out is now available in your toolbox.')})
  })
 }
 function bossFight(){
@@ -379,14 +575,73 @@ function openTools(){
  $('toolGrid').querySelectorAll('.equipTool').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.skill;if(s.equipped.includes(id))s.equipped=s.equipped.filter(x=>x!==id);else if(s.equipped.length<4)s.equipped.push(id);else toast('Equip up to 4 skills');openTools();renderQuickbar()}));
  $('toolModal').classList.add('open')
 }
+function renderSavedJournalEntries(){
+ s.journalEntries=s.journalEntries||[];
+ const box=$('savedJournalEntries');if(!box)return;
+ if(!s.journalEntries.length){box.innerHTML='<div class="logline">No personal journal entries yet.</div>';return}
+ box.innerHTML=s.journalEntries.map((e,i)=>'<div class="savedEntry"><time>'+esc(e.when)+'</time>'+(e.prompt?'<b>'+esc(e.prompt)+'</b>':'')+'<div class="entryText">'+esc(e.text)+'</div><button class="btn navy deleteJournal" data-i="'+i+'">Delete</button></div>').join('');
+ box.querySelectorAll('.deleteJournal').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.i);s.journalEntries.splice(i,1);save();renderSavedJournalEntries()}));
+}
+function showJournalPane(which){
+ const mine=which==='mine';$('myJournalPane').classList.toggle('active',mine);$('journeyLogPane').classList.toggle('active',!mine);
+ $('myJournalTab').className='btn '+(mine?'green':'navy');$('journeyLogTab').className='btn '+(!mine?'green':'navy');
+}
 function openJournal(){
  ensureStateShape();
- const notes=[['Home Base plan',s.notes.home],['Meeting share',s.notes.meeting],['Reflection Library',s.notes.library]].filter(x=>x[1]);
  $('journalList').innerHTML='';
- if(notes.length){const h=document.createElement('h3');h.textContent='Your saved reflections';$('journalList').appendChild(h);notes.forEach(([label,value])=>{const d=document.createElement('div');d.className='logline';const b=document.createElement('b');b.textContent=label;const p=document.createElement('p');p.textContent=value;d.append(b,p);$('journalList').appendChild(d)})}
+ const notes=[['Home Base plan',s.notes.home],['Meeting share',s.notes.meeting],['Reflection Library',s.notes.library]].filter(x=>x[1]);
+ if(notes.length){const h=document.createElement('h3');h.textContent='Saved journey reflections';$('journalList').appendChild(h);notes.forEach(([label,value])=>{const d=document.createElement('div');d.className='logline';const b=document.createElement('b');b.textContent=label;const p=document.createElement('p');p.textContent=value;d.append(b,p);$('journalList').appendChild(d)})}
  const h2=document.createElement('h3');h2.textContent='Journey log';$('journalList').appendChild(h2);
  s.log.forEach(x=>{const d=document.createElement('div');d.className='logline';d.textContent=x;$('journalList').appendChild(d)});
- $('journalModal').classList.add('open');$('journalModal').scrollTop=0
+ $('journalWrite').value='';$('journalPrompt').value='';$('journalSaveError').style.display='none';renderSavedJournalEntries();showJournalPane('mine');$('journalModal').classList.add('open');$('journalModal').scrollTop=0
+}
+function awardMiniGame(key,label,xp=12,hope=6){
+ s.minigames=s.minigames||{};
+ if(!s.minigames[key]){s.minigames[key]=true;gain(xp,hope);addLog('Completed '+label);save();toast(label+' complete')}
+ else toast('Completed again — practice still counts')
+}
+
+function openGames(){
+ ensureStateShape();
+ const done=s.minigames.wordsearch?' · Completed':'';
+ $('gamesGrid').innerHTML='<button type="button" class="gameCard" data-game="wordsearch"><span style="font-size:28px">🔎</span><b>Recovery Word Search</b><small>Find recovery words hidden in the grid'+done+'.</small></button>'+
+ '<div class="gameCard"><span style="font-size:28px">🌿</span><b>Grounding Run</b><small>Playable at Riverside Park.</small></div>'+
+ '<div class="gameCard"><span style="font-size:28px">🛒</span><b>Budget Puzzle</b><small>Playable at Market Square.</small></div>'+
+ '<div class="gameCard"><span style="font-size:28px">🌬️</span><b>Breathing Rhythm</b><small>Unlocks at the Day 2 Gym.</small></div>'+
+ '<div class="gameCard"><span style="font-size:28px">🌊</span><b>The Hard Evening</b><small>Day 3 boss challenge at the Old Spot.</small></div>';
+ $('gamesGrid').querySelector('[data-game="wordsearch"]').addEventListener('click',()=>{$('gamesModal').classList.remove('open');openWordSearch()});
+ $('gamesModal').classList.add('open')
+}
+function miniGameBack(){$('sceneModal').classList.remove('open');openGames()}
+function openWordSearch(){
+ const words=['SUPPORT','BREATHE','SOBER','PAUSE','HOPE'];
+ const placements=[
+  {word:'SUPPORT',r:0,c:1,dr:0,dc:1},
+  {word:'BREATHE',r:1,c:9,dr:1,dc:0},
+  {word:'SOBER',r:8,c:7,dr:0,dc:-1},
+  {word:'PAUSE',r:2,c:1,dr:1,dc:1},
+  {word:'HOPE',r:4,c:0,dr:1,dc:0}
+ ];
+ const N=10,letters='RECOVERYHOPESTRENGTHCALM',grid=Array.from({length:N},(_,r)=>Array.from({length:N},(_,c)=>letters[(r*7+c*3+r+c)%letters.length]));
+ placements.forEach(p=>[...p.word].forEach((ch,i)=>grid[p.r+p.dr*i][p.c+p.dc*i]=ch));
+ let first=null,found=new Set();
+ $('sceneBox').innerHTML='<div class="scenePanel"><span class="pill">MINI GAME</span><h2>Recovery Word Search</h2><p>Tap the <b>first</b> and <b>last</b> letter of a word. Words may go across, down, diagonal, or backward.</p><div id="wordBank" class="wordBank">'+words.map(w=>'<span class="wordChip" data-word="'+w+'">'+w+'</span>').join('')+'</div><div id="wsGrid" class="wsGrid">'+grid.flatMap((row,r)=>row.map((ch,c)=>'<button type="button" class="wsCell" data-r="'+r+'" data-c="'+c+'">'+ch+'</button>')).join('')+'</div><div id="wsMsg" class="gameFeedback">Find all 5 words.</div><button id="miniBack" class="btn navy" style="width:100%;margin-top:10px">Back to games</button></div>';
+ $('sceneModal').classList.add('open');$('miniBack').addEventListener('click',miniGameBack);
+ const cell=(r,c)=>$('wsGrid').querySelector('[data-r="'+r+'"][data-c="'+c+'"]');
+ function pathBetween(a,b){
+  const dr=b.r-a.r,dc=b.c-a.c,steps=Math.max(Math.abs(dr),Math.abs(dc));if(!steps)return [];
+  const sr=dr===0?0:dr/Math.abs(dr),sc=dc===0?0:dc/Math.abs(dc);
+  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return [];
+  return Array.from({length:steps+1},(_,i)=>({r:a.r+sr*i,c:a.c+sc*i}));
+ }
+ $('wsGrid').querySelectorAll('.wsCell').forEach(btn=>btn.addEventListener('click',()=>{
+   const p={r:Number(btn.dataset.r),c:Number(btn.dataset.c)};
+   if(!first){first=p;btn.classList.add('pick');$('wsMsg').textContent='Now tap the last letter.';return}
+   cell(first.r,first.c).classList.remove('pick');const path=pathBetween(first,p),str=path.map(q=>grid[q.r][q.c]).join(''),match=words.find(w=>!found.has(w)&&(str===w||str===[...w].reverse().join('')));
+   if(match){found.add(match);path.forEach(q=>cell(q.r,q.c).classList.add('found'));const chip=$('wordBank').querySelector('[data-word="'+match+'"]');if(chip)chip.classList.add('found');$('wsMsg').textContent='Found '+match+'! '+found.size+'/5'}
+   else $('wsMsg').textContent='Not one of the words. Try another line.';
+   first=null;if(found.size===words.length){$('wsMsg').innerHTML='<b>Great job — you found every recovery word.</b>';awardMiniGame('wordsearch','Recovery Word Search',14,7)}
+ }))
 }
 function nextDay(){
  ensureStateShape();
@@ -400,8 +655,8 @@ $('freeMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').cl
 $('paidMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
 document.querySelectorAll('.location').forEach(b=>b.addEventListener('click',()=>travelTo(b.dataset.place)));
 $('startBtn').addEventListener('click',()=>{selectedMode='paid';fresh();save(true);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});
-$('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);
-$('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));
+$('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);$('gamesBtn').addEventListener('click',openGames);
+$('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));$('closeGames').addEventListener('click',()=>$('gamesModal').classList.remove('open'));$('sceneClose').addEventListener('click',closeSceneWithoutCompleting);$('myJournalTab').addEventListener('click',()=>showJournalPane('mine'));$('journeyLogTab').addEventListener('click',()=>showJournalPane('log'));$('saveJournalEntry').addEventListener('click',()=>{const text=$('journalWrite').value.trim();if(!text){$('journalSaveError').style.display='block';$('journalWrite').focus();return}$('journalSaveError').style.display='none';const prompt=$('journalPrompt').value||'';s.journalEntries.unshift({when:new Date().toLocaleString(),prompt,text});addLog('Saved a personal journal entry');gain(3,1);save(true);$('journalWrite').value='';$('journalPrompt').value='';renderSavedJournalEntries();toast('Journal entry saved')});
 $('replayBtn').addEventListener('click',()=>{selectedMode='paid';fresh();save(true);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
 window.addEventListener('resize',()=>s&&renderWorld());window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
 document.querySelectorAll('.dpad button').forEach(b=>{const map={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'},k=map[b.dataset.dir];const dn=e=>{e.preventDefault();keys[k]=true},up=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('pointerleave',up)});
