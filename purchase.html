@@ -25,7 +25,7 @@ label{display:block;font-weight:800;margin:11px 0 5px}input{width:100%;padding:1
   <p>Your personal Full Journey access code:</p>
   <div id="accessCode" class="code"></div>
   <div id="memberBenefit"></div>
-  <div class="actions"><a id="gameLink" class="btn" href="#">Open Full Journey</a></div>
+  <div class="actions"><a id="gameLink" class="btn" href="#">Open Full Journey</a><a id="staffLink" class="btn gold" href="#" hidden>Manage Facility Staff</a></div>
   <p class="small">Keep this code private. Your game progress and written reflections stay in this browser’s local game save.</p>
 </div>
 <form id="facilityForm">
@@ -53,6 +53,8 @@ function showReady(d){
  statusBox.textContent=d.facility_active?'Your facility license is active and your administrator Full Journey access is ready.':'Your access is active.';
  document.getElementById('accessCode').textContent=d.access_code||'';
  document.getElementById('gameLink').href=d.access_url;
+ const staffLink=document.getElementById('staffLink');
+ if(d.facility_active&&d.access_code){staffLink.href='https://reiven5150-alt.github.io/steps-into-recovery-test/facility-staff.html?admin_code='+encodeURIComponent(d.access_code)+'&v=11.0.0';staffLink.hidden=false}else{staffLink.hidden=true}
  benefit(d.member_discount,d.member_discount_label||'Active-member product discount');
  ready.hidden=false;form.style.display='none'
 }
