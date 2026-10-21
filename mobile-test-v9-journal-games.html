@@ -264,8 +264,8 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
       <div class="upgradeFeature">Deeper scenarios & challenges</div>
     </div>
     <div class="upgradeActions">
-      <a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a>
-      <a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">View Subscription Access</a>
+      <a class="btn gold" href="https://buy.stripe.com/dRm5kD15A9NK107dqj04805" target="_blank" rel="noopener">Purchase Full Journey</a>
+      <a class="btn navy" href="./plans.html">View Subscription Access</a>
     </div>
   </div>
   <div id="chargrid" class="chargrid"></div>
@@ -313,7 +313,7 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
   <div style="color:var(--gold);font-weight:1000">DAY COMPLETE</div><h1 id="endTitle">You made it through.</h1><p id="endBody"></p>
   <div id="endStats" class="endstats"></div>
   <div class="endactions"><button id="replayBtn" class="btn gold">Replay Day</button><button id="nextBtn" class="btn navy">Continue</button></div>
-  <div id="endUpgradeCard" class="upgradeCard" style="display:none"><h3>Keep going with the Full Journey</h3><p>Continue into more levels, locations, mini-games, scenarios, and recovery challenges with paid game access or a paid subscription.</p><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">Subscription Access</a></div></div>
+  <div id="endUpgradeCard" class="upgradeCard" style="display:none"><h3>Keep going with the Full Journey</h3><p>Continue into more levels, locations, mini-games, scenarios, and recovery challenges with paid game access or a paid subscription.</p><div class="upgradeActions"><a class="btn gold" href="https://buy.stripe.com/dRm5kD15A9NK107dqj04805" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="./plans.html">Subscription Access</a></div></div>
  </div>
 </section>
 
@@ -459,7 +459,7 @@ function renderWorld(){renderPositionOnly();renderHUD()}
 
 function showPaywall(id){
  const title=id==='oldspot'?'Continue the Journey':'More of Hope Springs';
- $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">FULL JOURNEY</span><h2>${title}</h2><div class="upgradeCard"><h3>More opens with paid access</h3><p>Unlock additional levels, locations, recovery challenges, mini-games, scenarios, and longer character progression with the paid Full Journey or a paid Steps Into Hope subscription.</p><div class="upgradeFeatures"><div class="upgradeFeature">More levels</div><div class="upgradeFeature">More locations</div><div class="upgradeFeature">More mini-games</div><div class="upgradeFeature">Deeper scenarios</div></div><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">Subscription Access</a></div></div><button id="lockedBack" class="btn navy" style="width:100%;margin-top:8px">Back to map</button></div>`;
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.toolbox)"></div><div class="scenePanel"><span class="pill">FULL JOURNEY</span><h2>${title}</h2><div class="upgradeCard"><h3>More opens with paid access</h3><p>Unlock additional levels, locations, recovery challenges, mini-games, scenarios, and longer character progression with the paid Full Journey or a paid Steps Into Hope subscription.</p><div class="upgradeFeatures"><div class="upgradeFeature">More levels</div><div class="upgradeFeature">More locations</div><div class="upgradeFeature">More mini-games</div><div class="upgradeFeature">Deeper scenarios</div></div><div class="upgradeActions"><a class="btn gold" href="https://buy.stripe.com/dRm5kD15A9NK107dqj04805" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="./plans.html">Subscription Access</a></div></div><button id="lockedBack" class="btn navy" style="width:100%;margin-top:8px">Back to map</button></div>`;
  $('sceneModal').classList.add('open');
  $('lockedBack').addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld()})
 }
@@ -709,7 +709,7 @@ function awardMiniGame(key,label,xp=12,hope=6){
 function openGames(){
  const freeCard='<button type="button" class="gameCard" data-game="wordsearch"><span style="font-size:28px">🔎</span><b>Recovery Word Search</b><small>Find recovery words hidden in the grid.'+(s.minigames&&s.minigames.wordsearch?' · Completed':'')+'</small></button>';
  const paidPreview='<div class="gameCard lockedGame"><span class="lockTag">FULL JOURNEY</span><span style="font-size:28px">✏️</span><b>More Recovery Games</b><small>Crosswords, coping puzzles, scenario practice, and additional games continue in the Full Journey.</small></div>';
- $('gamesGrid').innerHTML=freeCard+paidPreview+'<div style="grid-column:1/-1" class="upgradeCard"><h3>Continue beyond Chapter One</h3><p>Full Journey and subscription access add more levels, locations, recovery games, scenarios, challenges, and ongoing progression.</p><div class="upgradeActions"><a class="btn gold" href="https://stepsintohope.com" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="https://stepsintohope.com" target="_blank" rel="noopener">Subscription Access</a></div></div>';
+ $('gamesGrid').innerHTML=freeCard+paidPreview+'<div style="grid-column:1/-1" class="upgradeCard"><h3>Continue beyond Chapter One</h3><p>Full Journey and subscription access add more levels, locations, recovery games, scenarios, challenges, and ongoing progression.</p><div class="upgradeActions"><a class="btn gold" href="https://buy.stripe.com/dRm5kD15A9NK107dqj04805" target="_blank" rel="noopener">Purchase Full Journey</a><a class="btn navy" href="./plans.html">Subscription Access</a></div></div>';
  $('gamesGrid').querySelector('[data-game="wordsearch"]').addEventListener('click',()=>{$('gamesModal').classList.remove('open');openWordSearch()});
  $('gamesModal').classList.add('open')
 }
