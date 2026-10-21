@@ -326,7 +326,7 @@ try{
     })});
   });
   await facilityPage.goto(PURCHASE,{waitUntil:'domcontentloaded'});
-  await facilityPage.getByText(/Activate your facility license/i).waitFor();
+  await facilityPage.locator('#facilityForm h2').filter({hasText:/Activate your facility license/i}).waitFor();
   await facilityPage.locator('input[name="facility_name"]').fill('QA Recovery Center');
   await facilityPage.locator('input[name="address1"]').fill('100 Test Way');
   await facilityPage.locator('input[name="city"]').fill('Greeley');
