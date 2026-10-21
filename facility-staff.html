@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Steps Into Recovery — Facility Staff Access</title>
+<style>
+:root{--navy:#082b36;--teal:#1c5a58;--gold:#e5b547;--cream:#f5efe5;--ink:#17343d;--muted:#5d6d72;--line:#d9cdbb}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(145deg,#06242e,#0d4555);font-family:Arial,sans-serif;color:var(--ink);padding:20px}.card{max-width:760px;margin:4vh auto;background:var(--cream);border-radius:22px;padding:24px;box-shadow:0 30px 80px #0006}.brand{font-size:28px;font-weight:900;color:var(--navy)}.brand span{color:var(--gold)}.note,.status,.staff{padding:12px;border-radius:12px;background:#fff;border:1px solid var(--line);margin:10px 0}.err{background:#ffe1dd}.warn{background:#fff2cc}.code{font:800 16px ui-monospace,monospace;background:#fff;padding:12px;border-radius:11px;word-break:break-all;border:1px solid var(--line)}label{display:block;font-weight:800;margin:12px 0 5px}input{width:100%;padding:12px;border:2px solid var(--line);border-radius:10px;font-size:16px}.btn,button{display:inline-block;border:0;border-radius:11px;background:var(--teal);color:#fff;font-weight:900;font-size:16px;padding:13px 17px;text-decoration:none;cursor:pointer}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.small{font-size:13px;color:var(--muted)}#adminPanel,#staffReady{display:none}
+</style></head>
+<body><main class="card" data-build="11.0.0">
+<div class="brand">Steps Into <span>Recovery</span></div>
+<h1 id="title">Facility access</h1><div id="status" class="status">Checking access…</div>
+<section id="adminPanel">
+ <div id="facilityInfo" class="note"></div>
+ <h2>Invite staff</h2><form id="inviteForm"><label>Staff email<input id="staffEmail" type="email" required></label><button type="submit">Create private staff invite</button></form>
+ <div id="inviteResult"></div><h2>Staff</h2><div id="staffList"></div>
+</section>
+<section id="staffReady">
+ <h2>Your staff access is ready</h2><p>Your personal Full Journey access code:</p><div id="staffAccessCode" class="code"></div>
+ <div class="actions"><a id="staffGameLink" class="btn" href="#">Open Full Journey</a></div>
+ <p class="small">Your access remains tied to the active facility license for this location.</p>
+</section>
+</main>
+<script>
+const API='https://yzexencwfirltxnmexcg.supabase.co/functions/v1/facility-staff';
+const qs=new URLSearchParams(location.search);
+const incomingAdmin=(qs.get('admin_code')||'').trim().toUpperCase();
+const savedAdmin=(localStorage.getItem('sih_facility_admin_code')||'').trim().toUpperCase();
+const adminCode=incomingAdmin||savedAdmin;
+const email=(qs.get('email')||'').trim().toLowerCase(),inviteCode=(qs.get('invite_code')||'').trim().toUpperCase();
+const statusBox=document.getElementById('status'),title=document.getElementById('title');
+function fail(msg){statusBox.className='status err';statusBox.textContent=msg+' Contact support@stepsintohope.com if you need help.'}
+function renderStaff(rows){const box=document.getElementById('staffList');box.innerHTML='';if(!rows?.length){box.innerHTML='<div class="note">No staff invited yet.</div>';return}rows.forEach(r=>{const d=document.createElement('div');d.className='staff';d.textContent=r.email+' — '+r.role+' — '+r.status;box.appendChild(d)})}
+async function adminLoad(){
+ try{
+  const r=await fetch(API+'?api=1&admin_code='+encodeURIComponent(adminCode),{cache:'no-store'}),d=await r.json();
+  if(!r.ok){fail(d.message||'Facility administrator access is not valid.');return}
+  if(incomingAdmin){localStorage.setItem('sih_facility_admin_code',adminCode);history.replaceState(null,'',location.pathname)}
+  title.textContent='Facility staff access';statusBox.textContent='Administrator access verified.';
+  document.getElementById('facilityInfo').textContent=d.facility.facility_name+' — '+d.facility.address1+', '+d.facility.city+', '+d.facility.state+' '+d.facility.postal_code;
+  renderStaff(d.staff);document.getElementById('adminPanel').style.display='block'
+ }catch(e){fail('We could not reach the staff-access service.')}
+}
+document.getElementById('inviteForm').addEventListener('submit',async e=>{
+ e.preventDefault();const btn=e.currentTarget.querySelector('button');btn.disabled=true;const staffEmail=document.getElementById('staffEmail').value.trim().toLowerCase();
+ try{
+  const r=await fetch(API+'?api=1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'invite_staff',admin_code:adminCode,staff_email:staffEmail})}),d=await r.json();
+  if(!r.ok){fail(d.message||'Staff invitation could not be created.');btn.disabled=false;return}
+  const box=document.getElementById('inviteResult');box.innerHTML='';const p=document.createElement('div');p.className='note warn';p.textContent='Private invitation for '+d.staff_email+':';const c=document.createElement('div');c.className='code';c.textContent=d.invite_url;box.append(p,c);
+  btn.disabled=false;document.getElementById('staffEmail').value='';await adminLoad()
+ }catch(e){fail('Staff invitation could not be created.');btn.disabled=false}
+});
+async function redeem(){
+ try{
+  const r=await fetch(API+'?api=1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'redeem_staff',email,invite_code:inviteCode})}),d=await r.json();
+  if(!r.ok){fail(d.message||'This staff invitation is invalid or has already been used.');return}
+  title.textContent='Staff access ready';statusBox.textContent='Your facility staff access is active.';
+  document.getElementById('staffAccessCode').textContent=d.access_code;document.getElementById('staffGameLink').href=d.access_url;document.getElementById('staffReady').style.display='block';
+  history.replaceState(null,'',location.pathname)
+ }catch(e){fail('We could not redeem this staff invitation.')}
+}
+if(email&&inviteCode)redeem();else if(adminCode)adminLoad();else fail('Open this page from your facility purchase or private staff invitation.');
+</script></body></html>
