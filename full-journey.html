@@ -42,6 +42,8 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 .overlay{position:absolute;inset:0;background:rgba(0,0,0,.68);z-index:40;display:none;align-items:center;justify-content:center;padding:10px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.overlay.open{display:flex}
 .sceneBox{width:min(1120px,96vw);max-height:94vh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;background:var(--cream);color:var(--ink);border-radius:22px;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .sceneArt{min-height:590px;background-size:cover;background-position:center}.scenePanel{padding:18px}.pill{display:inline-block;background:#e7efe7;color:#1b5746;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900}.scenePanel h2{font-size:34px;margin:8px 0 4px}.dialog{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px;margin:11px 0}
+.reflectionField{width:100%;min-height:110px;box-sizing:border-box;border:2px solid var(--line);border-radius:12px;padding:12px;font:inherit;font-size:16px;line-height:1.4;background:#fff;color:var(--ink);resize:vertical;touch-action:pan-y}.reflectionField:focus{outline:3px solid rgba(50,126,112,.22);border-color:var(--green)}
+.formLabel{display:block;font-weight:900;margin:12px 0 6px}.sceneStatus{margin-top:12px;padding:11px;border-radius:12px;background:#e8f3eb;border:1px solid #b8d6c3}.sceneActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.sceneActions .btn{flex:1;min-width:150px}.fieldError{background:#fff1f1;border:1px solid #e0a9ad;color:#7f272f;border-radius:10px;padding:9px;margin-top:8px}
 .panelBox{width:min(1000px,95vw);max-height:93vh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;background:var(--cream);color:var(--ink);border-radius:22px;padding:16px;box-shadow:0 30px 80px rgba(0,0,0,.5)}.close{float:right;border:none;width:36px;height:36px;border-radius:50%;background:#e9dfd0;font-size:20px;cursor:pointer}
 .toolboxBanner,.journalBanner{width:100%;border-radius:16px;display:block;margin:9px 0}.toolGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.toolCard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;text-align:center}.toolCard.lock{opacity:.32}.toolCard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}.toolCard b{font-size:12px;display:block;margin-top:4px}.toolCard small{font-size:10px;color:var(--muted);display:block;min-height:26px}.toolCard button{width:100%;margin-top:6px;padding:9px}.logline{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px;margin-top:7px}
 
@@ -59,19 +61,19 @@ button{font:inherit}.screen{position:absolute;inset:0;display:none}.screen.activ
 #end{background:linear-gradient(90deg,rgba(2,20,27,.48),rgba(2,20,27,.70));background-size:cover;background-position:center}.endcard{position:absolute;right:5vw;top:50%;transform:translateY(-50%);width:min(650px,92vw);background:rgba(5,34,44,.95);border:1px solid rgba(255,255,255,.15);border-radius:22px;padding:19px;box-shadow:0 30px 80px rgba(0,0,0,.45)}.endcard h1{font-size:42px;margin:6px 0}.endstats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.endstat{background:#0f4050;border-radius:12px;padding:10px}.endactions{display:flex;gap:8px}.endactions button{flex:1}
 @media(max-width:850px){
  .startcard{left:4vw;right:4vw;width:auto;max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch}.modeRow,.chargrid{grid-template-columns:repeat(2,1fr)}.hud{grid-template-columns:1fr}.quest{display:none}.statgrid{grid-template-columns:repeat(2,1fr)}.topbuttons{top:168px;right:8px}
- .dpad{display:block}.sceneBox{display:block;grid-template-columns:1fr;max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}.sceneArt{min-height:220px;height:32vh}.scenePanel{padding-bottom:34px}.panelBox{max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}.toolGrid,.skillgrid{grid-template-columns:repeat(2,1fr)}.quickbar{bottom:176px}.challengeStage{height:280px}.budgetgrid{grid-template-columns:repeat(2,1fr)}
+ .dpad{display:block}.overlay.open{align-items:flex-start}.sceneBox{display:block;grid-template-columns:1fr;max-height:calc(100dvh - 16px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;margin:auto 0}.sceneArt{min-height:220px;height:32vh}.scenePanel{padding-bottom:34px}.panelBox{max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}.toolGrid,.skillgrid{grid-template-columns:repeat(2,1fr)}.quickbar{bottom:176px}.challengeStage{height:280px}.budgetgrid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
 <body>
-<div id="app">
+<div id="app" data-build="11.0.0">
 <section id="start" class="screen active">
  <div class="startcard">
   <div class="brand">Steps Into <span>Recovery</span></div>
   <div class="tag">Hope Springs · Explore freely · survive pressure events · build relationships · use real skills in real-time challenges.</div>
-  <div class="modeRow">
-   <button id="freeMode" class="modeBtn"><b>Free Journey</b><small>Day 1 story arc · Levels 1–3 · 6 locations · 4 core skills · 3 playable challenges.</small></button>
-   <button id="paidMode" class="modeBtn sel"><b>Extended Journey</b><small>Days 1–3+ · Levels 1–10+ · all 10 locations · all 8 skills · boss encounters and deeper progression.</small></button>
+  <div class="modeRow" style="grid-template-columns:1fr">
+   <button id="freeMode" class="modeBtn" style="display:none" aria-hidden="true"><b>Free Journey</b></button>
+   <button id="paidMode" class="modeBtn sel" type="button"><b>Full Journey Access</b><small>3-day guided journey · all 10 locations · all 8 recovery skills · interactive reflections · challenges · boss encounter · save/continue.</small></button>
   </div>
   <div id="chargrid" class="chargrid"></div>
   <button id="startBtn" class="btn gold">Start Full Journey →</button>
@@ -159,24 +161,67 @@ const places={
 let selectedMode='paid',chosen=chars[0],s=null,keys={},last=0,travelRAF=null,challenge=null;
 
 function fresh(){
- const free=selectedMode==='free';
- s={mode:selectedMode,day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
- unlocked:['deep','ground'],equipped:['deep','ground'],cooldowns:{},quests:{park:false,support:false,meeting:false,gym:false,market:false,boss:false},
- visited:[],log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:free?3:10};
- Object.entries(chosen.bonus).forEach(([k,v])=>s.stats[k]=clamp(s.stats[k]+v))
+ selectedMode='paid';
+ s={version:11,mode:'paid',day:1,h:9,m:0,level:1,xp:0,hope:0,money:28,x:.50,y:.62,stats:{recovery:68,stress:34,connection:46,energy:66},
+ unlocked:['deep','ground'],equipped:['deep','ground'],cooldowns:{},quests:{home:false,park:false,cafe:false,support:false,meeting:false,gym:false,library:false,market:false,work:false,boss:false},
+ visited:[],notes:{home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},log:['9:00 AM — You arrive in Hope Springs.'],char:chosen.id,relationships:{lena:10,marcus:8,mara:5},levelCap:10};
+ Object.entries(chosen.bonus).forEach(([k,v])=>s.stats[k]=clamp(s.stats[k]+v));
+ norm()
 }
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active')}
 function tm(){let h=s.h,ap=h>=12?'PM':'AM';h%=12;if(!h)h=12;return `${h}:${String(s.m).padStart(2,'0')} ${ap}`}
-function advance(min){let t=s.h*60+s.m+min;s.h=Math.floor(t/60);s.m=t%60}
+function advance(min){
+ let t=Math.min(23*60+59,s.h*60+s.m+min);
+ s.h=Math.floor(t/60);s.m=t%60
+}
 function addLog(t){s.log.unshift(`${tm()} — ${t}`)}
 function norm(){Object.keys(s.stats).forEach(k=>s.stats[k]=clamp(s.stats[k]))}
 function gain(xp,hope){s.xp+=xp;s.hope+=hope;while(s.xp>=100&&s.level<s.levelCap){s.xp-=100;s.level++;toast('Level up! Level '+s.level)}if(s.level>=s.levelCap)s.xp=Math.min(s.xp,99)}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function ensureStateShape(){
+ if(!s)return;
+ s.version=11;s.mode='paid';s.levelCap=10;
+ s.quests=Object.assign({home:false,park:false,cafe:false,support:false,meeting:false,gym:false,library:false,market:false,work:false,boss:false},s.quests||{});
+ s.notes=Object.assign({home:'',meeting:'',library:'',supportNeed:'',supportAsk:'',supportBoundary:''},s.notes||{});
+ s.visited=Array.isArray(s.visited)?s.visited:[];
+ s.log=Array.isArray(s.log)?s.log:[];
+ s.unlocked=Array.isArray(s.unlocked)?s.unlocked:['deep','ground'];
+ s.equipped=Array.isArray(s.equipped)?s.equipped.filter(id=>skills[id]).slice(0,4):['deep','ground'];
+ if(!s.equipped.length)s.equipped=['deep','ground'];
+ s.cooldowns=s.cooldowns||{};s.relationships=Object.assign({lena:10,marcus:8,mara:5},s.relationships||{});
+ s.stats=Object.assign({recovery:68,stress:34,connection:46,energy:66},s.stats||{});
+ norm()
+}
+function dayRequirements(day){
+ if(day===1)return ['park','support','meeting','market'];
+ if(day===2)return ['home','cafe','gym','library','work'];
+ return ['boss']
+}
+function dayReady(){return dayRequirements(s.day).every(k=>!!s.quests[k])}
+function maybeCompleteDay(){
+ if(!s||!dayReady())return false;
+ $('endTitle').textContent=s.day<3?'Day '+s.day+' complete.':'Full Journey complete.';
+ $('endBody').textContent=s.day<3?'You completed today’s recovery actions. Review your progress, then continue when you are ready.':'You completed the three-day Full Journey. You can keep exploring, revisit locations, use your toolbox, and continue your saved progress.';
+ $('endStats').innerHTML=['Recovery','Stress','Connection','Energy'].map(k=>'<div class="endstat"><b>'+k+'</b><div>'+s.stats[k.toLowerCase()]+'</div></div>').join('');
+ $('nextBtn').textContent=s.day<3?'Start Day '+(s.day+1):'Keep Exploring';
+ save(true);show('end');return true
+}
+function sceneComplete(message){
+ const panel=$('sceneBox').querySelector('.scenePanel'); if(!panel)return;
+ const old=panel.querySelector('.sceneStatus');if(old)old.remove();
+ const div=document.createElement('div');div.className='sceneStatus';div.textContent=message;panel.appendChild(div);
+ let actions=panel.querySelector('.sceneActions');if(!actions){actions=document.createElement('div');actions.className='sceneActions';panel.appendChild(actions)}
+ actions.innerHTML='<button type="button" class="btn navy returnMap">Return to map</button>';
+ actions.querySelector('.returnMap').addEventListener('click',()=>{$('sceneModal').classList.remove('open');renderWorld();save(true);setTimeout(maybeCompleteDay,50)})
+}
+
 function premiumPlace(id){return ['gym','library','work','oldspot'].includes(id)}
 function unlockedPlace(id){if(s.mode==='free'&&premiumPlace(id))return false;if(id==='work')return s.day>=2;if(id==='oldspot')return s.day>=3;return true}
 function renderHUD(){
- norm();$('heroName').textContent=chosen.name;$('clock').textContent=`${s.mode==='free'?'FREE':'EXTENDED'} · Day ${s.day} · ${tm()} · Lv ${s.level}/${s.levelCap} · ${s.hope} Hope`;$('xpBar').style.width=Math.min(100,s.xp)+'%';
+ ensureStateShape();norm();$('heroName').textContent=chosen.name;$('clock').textContent=`FULL JOURNEY · Day ${s.day} · ${tm()} · Lv ${s.level}/${s.levelCap} · ${s.hope} Hope`;$('xpBar').style.width=Math.min(100,s.xp)+'%';
  for(const k of ['recovery','stress','connection','energy']){const map={recovery:['rv','rb'],stress:['sv','sb'],connection:['cv','cb'],energy:['ev','eb']}[k];$(map[0]).textContent=s.stats[k];$(map[1]).style.width=s.stats[k]+'%'}
- $('questList').innerHTML=[['park','Grounding Run'],['support','Support Quest'],['meeting','Meeting Hall'],['gym','Breathing Rhythm'],['market','Budget Puzzle'],['boss','Day 3 Boss']].map(([k,l])=>`<div class="qline">${s.quests[k]?'✓':'□'} ${l}</div>`).join('');
+ const labels={home:'Home Plan',park:'Grounding Run',cafe:'Connection Check-In',support:'Support Request',meeting:'Meeting Share',gym:'Breathing Rhythm',library:'Reflection',market:'Budget Puzzle',work:'Work Decision',boss:'Hard Evening'};
+ $('questList').innerHTML=dayRequirements(s.day).map(k=>`<div class="qline">${s.quests[k]?'✓':'□'} ${labels[k]}</div>`).join('');
  $('playerImg').src=chosen.img;document.querySelectorAll('.location').forEach(b=>{b.classList.toggle('locked',!unlockedPlace(b.dataset.place));b.classList.toggle('visited',s.visited.includes(b.dataset.place))});renderQuickbar()
 }
 function renderQuickbar(){
@@ -184,8 +229,15 @@ function renderQuickbar(){
  $('quickbar').querySelectorAll('.qskill').forEach(b=>b.addEventListener('click',()=>useSkill(b.dataset.skill)))
 }
 function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.display='none',1400)}
-function save(){try{localStorage.setItem('sir-v10',JSON.stringify(s));toast('Saved')}catch(e){toast('Save unavailable in preview')}}
-function load(){let raw=null;try{raw=localStorage.getItem('sir-v10')}catch(e){}if(!raw){alert('No save yet');return}s=JSON.parse(raw);selectedMode=s.mode||'free';chosen=chars.find(c=>c.id===s.char)||chars[0];show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function save(silent=false){
+ try{ensureStateShape();localStorage.setItem('sir-v11',JSON.stringify(s));if(!silent)toast('Saved')}catch(e){if(!silent)toast('Save unavailable')}
+}
+function load(){
+ let raw=null;try{raw=localStorage.getItem('sir-v11')||localStorage.getItem('sir-v10')}catch(e){}
+ if(!raw){alert('No save yet');return}
+ try{s=JSON.parse(raw)}catch(e){alert('Saved game could not be read. Start a new journey.');return}
+ ensureStateShape();selectedMode='paid';chosen=chars.find(c=>c.id===s.char)||chars[0];save(true);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)
+}
 function renderWorld(){
  $('player').style.left=(s.x*100)+'%';$('player').style.top=(s.y*100)+'%';const vp=$('viewport').getBoundingClientRect(),pw=vp.width*2.1,ph=vp.height*1.9;
  let tx=vp.width/2-s.x*pw,ty=vp.height/2-s.y*ph;tx=Math.min(0,Math.max(vp.width-pw,tx));ty=Math.min(0,Math.max(vp.height-ph,ty));$('worldplane').style.transform=`translate(${tx}px,${ty}px)`;renderHUD()
@@ -209,21 +261,56 @@ function useSkill(id){
  renderHUD();toast(skills[id].name+' used');setTimeout(renderQuickbar,skills[id].cd+50)
 }
 function openLocation(id){
- if(!s.visited.includes(id))s.visited.push(id);
+ ensureStateShape();if(!s.visited.includes(id))s.visited.push(id);
  if(id==='park')return groundRun();
  if(id==='gym')return breathingRhythm();
  if(id==='market')return budgetPuzzle();
  if(id==='oldspot')return bossFight();
  if(id==='support')return supportQuest();
- if(id==='meeting')return simpleScene('meeting','Meeting Hall','Marcus','“You can share, listen, or just be here.”',[['Share one honest sentence',()=>{s.stats.connection+=10;s.stats.recovery+=7;s.relationships.marcus+=10;s.quests.meeting=true;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(16,9)}],['Stay and talk after',()=>{s.relationships.marcus+=14;s.stats.connection+=6;s.quests.meeting=true;gain(14,7)}]]);
- if(id==='cafe')return simpleScene('cafe','Corner Café','Lena','“Rough day?”',[['Tell Lena the truth',()=>{s.relationships.lena+=12;s.stats.connection+=8;if(!s.unlocked.includes('gratitude'))s.unlocked.push('gratitude');gain(12,7)}],['Ask what helps her on bad nights',()=>{s.relationships.lena+=8;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(12,6)}]]);
- if(id==='library')return simpleScene('journal','Reflection Library','Mara','“Write down what worked before your brain edits the story.”',[['Write a short reflection',()=>{s.stats.recovery+=6;if(!s.unlocked.includes('journal'))s.unlocked.push('journal');gain(12,6)}]]);
- if(id==='home')return simpleScene('park','Home Base','You','Your apartment is quiet. What do you do?',[['Cook and recharge',()=>{s.stats.energy+=12;s.stats.stress-=4;gain(8,4)}],['Use a skill from your quickbar instead',()=>{toast('Use the live skill bar at the bottom')} ]]);
- if(id==='work')return simpleScene('cafe','Work Hub','Theo','“Short shift available.”',[['Take the shift',()=>{s.money+=18;s.stats.energy-=12;gain(16,8)}],['Protect your energy today',()=>{s.stats.recovery+=5;gain(10,5)}]]);
+ if(id==='meeting')return meetingScene();
+ if(id==='home')return homeScene();
+ if(id==='library')return libraryScene();
+ if(id==='cafe')return cafeScene();
+ if(id==='work')return workScene()
 }
+function homeScene(){
+ const prior=esc(s.notes.home||'');
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET.park}')"></div><div class="scenePanel"><span class="pill">HOME BASE</span><h2>Pause, plan, recharge</h2><div class="dialog"><b>You</b><p>What would make the next few hours safer, steadier, or more manageable?</p></div><label class="formLabel" for="homeNote">Write your plan in your own words</label><textarea id="homeNote" class="reflectionField" maxlength="1500" placeholder="Example: Eat something, text a safe person, shower, and stay away from the place I usually go when I’m overwhelmed.">${prior}</textarea><div class="sceneActions"><button type="button" id="saveHomePlan" class="btn green">Save my plan</button><button type="button" id="homeRecharge" class="btn blue">Recharge without writing</button></div><div id="homeErr"></div></div>`;
+ $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
+ $('saveHomePlan').addEventListener('click',()=>{const v=$('homeNote').value.trim();if(v.length<3){$('homeErr').innerHTML='<div class="fieldError">Write at least a few words so this action can be saved.</div>';return}s.notes.home=v;s.quests.home=true;s.stats.energy+=10;s.stats.stress-=5;gain(10,6);addLog('Saved a Home Base plan');norm();advance(30);sceneComplete('Your Home Base plan is saved on this device.')});
+ $('homeRecharge').addEventListener('click',()=>{s.quests.home=true;s.stats.energy+=12;s.stats.stress-=4;gain(8,4);addLog('Recharged at Home Base');norm();advance(30);sceneComplete('You chose to recharge. That still counts as a recovery-supporting action.')})
+}
+function meetingScene(){
+ const prior=esc(s.notes.meeting||'');
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET.meeting}')"></div><div class="scenePanel"><span class="pill">MEETING HALL</span><h2>Share, listen, or simply stay</h2><div class="dialog"><b>Marcus</b><p>“You can share, listen, or just be here. There is no perfect thing to say.”</p></div><label class="formLabel" for="meetingShare">What would you say if you chose to share?</label><textarea id="meetingShare" class="reflectionField" maxlength="1500" placeholder="One honest sentence is enough.">${prior}</textarea><div class="sceneActions"><button type="button" id="submitShare" class="btn green">Share what I wrote</button><button type="button" id="listenOnly" class="btn blue">Listen today</button><button type="button" id="stayAfter" class="btn navy">Stay and talk after</button></div><div id="meetingErr"></div></div>`;
+ $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
+ $('submitShare').addEventListener('click',()=>{const v=$('meetingShare').value.trim();if(v.length<3){$('meetingErr').innerHTML='<div class="fieldError">Write at least a few words before sharing.</div>';return}s.notes.meeting=v;s.quests.meeting=true;s.stats.connection+=10;s.stats.recovery+=7;s.relationships.marcus+=10;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(16,9);addLog('Shared honestly at Meeting Hall');norm();advance(30);sceneComplete('You shared. Your words are saved only in this browser’s game save.')});
+ $('listenOnly').addEventListener('click',()=>{s.quests.meeting=true;s.stats.connection+=5;s.relationships.marcus+=5;gain(10,5);addLog('Stayed and listened at Meeting Hall');norm();advance(30);sceneComplete('Listening and staying present counts too.')});
+ $('stayAfter').addEventListener('click',()=>{s.quests.meeting=true;s.relationships.marcus+=14;s.stats.connection+=6;gain(14,7);addLog('Stayed after Meeting Hall to connect');norm();advance(30);sceneComplete('You made space for connection after the meeting.')})
+}
+function libraryScene(){
+ const prior=esc(s.notes.library||'');
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET.journal}')"></div><div class="scenePanel"><span class="pill">REFLECTION LIBRARY</span><h2>Write down what worked</h2><div class="dialog"><b>Mara</b><p>“Write it down before your brain edits the story.”</p></div><label class="formLabel" for="libraryNote">What helped you get through something difficult before?</label><textarea id="libraryNote" class="reflectionField" maxlength="1500" placeholder="Write a short reflection...">${prior}</textarea><div class="sceneActions"><button type="button" id="saveReflection" class="btn green">Save reflection</button></div><div id="libraryErr"></div></div>`;
+ $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
+ $('saveReflection').addEventListener('click',()=>{const v=$('libraryNote').value.trim();if(v.length<3){$('libraryErr').innerHTML='<div class="fieldError">Write at least a few words before saving.</div>';return}s.notes.library=v;s.quests.library=true;s.stats.recovery+=6;s.stats.stress-=3;if(!s.unlocked.includes('journal'))s.unlocked.push('journal');gain(12,6);addLog('Saved a Reflection Library entry');norm();advance(30);sceneComplete('Reflection saved on this device. Journaling is now available in your toolbox.')})
+}
+function cafeScene(){return simpleScene('cafe','Corner Café','Lena','“Rough day?”',[
+ ['Tell Lena you are having a rough day',()=>{s.relationships.lena+=12;s.stats.connection+=8;s.quests.cafe=true;if(!s.unlocked.includes('gratitude'))s.unlocked.push('gratitude');gain(12,7)},'You told the truth instead of carrying it alone.'],
+ ['Ask what helps her on hard nights',()=>{s.relationships.lena+=8;s.stats.connection+=5;s.quests.cafe=true;if(!s.unlocked.includes('self'))s.unlocked.push('self');gain(12,6)},'You asked for perspective and stayed connected.']
+])}
+function workScene(){return simpleScene('cafe','Work Hub','Theo','“A short shift is available. What supports recovery today?”',[
+ ['Take the shift',()=>{s.money+=18;s.stats.energy-=12;s.quests.work=true;gain(16,8)},'You took the shift and protected the rest of your day.'],
+ ['Protect your energy today',()=>{s.stats.recovery+=5;s.stats.energy+=4;s.quests.work=true;gain(10,5)},'You chose recovery-supporting limits over pressure.']
+])}
+
 function simpleScene(art,title,speaker,dialog,opts){
- $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET[art]}')"></div><div class="scenePanel"><span class="pill">STORY</span><h2>${title}</h2><div class="dialog"><b>${speaker}</b><p>${dialog}</p></div>${opts.map((o,i)=>`<button class="btn ${i%2?'blue':'green'} sceneChoice" data-i="${i}" style="width:100%;margin-top:8px">${o[0]}</button>`).join('')}</div>`;
- $('sceneModal').classList.add('open');$('sceneBox').querySelectorAll('.sceneChoice').forEach(b=>b.addEventListener('click',()=>{opts[Number(b.dataset.i)][1]();norm();advance(30);$('sceneModal').classList.remove('open');renderWorld();save()}))
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET[art]}')"></div><div class="scenePanel"><span class="pill">STORY</span><h2>${title}</h2><div class="dialog"><b>${speaker}</b><p>${dialog}</p></div><div class="sceneActions">${opts.map((o,i)=>`<button type="button" class="btn ${i%2?'blue':'green'} sceneChoice" data-i="${i}">${o[0]}</button>`).join('')}</div></div>`;
+ $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
+ $('sceneBox').querySelectorAll('.sceneChoice').forEach(b=>b.addEventListener('click',()=>{
+   const opt=opts[Number(b.dataset.i)];opt[1]();norm();advance(30);
+   $('sceneBox').querySelectorAll('.sceneChoice').forEach(x=>x.disabled=true);
+   sceneComplete(opt[2]||'Choice saved. Take a moment, then return to the map.')
+ }))
 }
 function groundRun(){
  challenge={type:'ground',x:50,y:72,shield:25,collected:0,target:5,objects:[
@@ -235,17 +322,17 @@ function groundRun(){
 function drawGround(){
  const c=challenge;
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.park)"></div><div class="scenePanel"><span class="pill">ACTIVE CHALLENGE</span><h2>Grounding Run</h2><p>Move through the park. Collect 5 grounding cues. Avoid stress spikes. Your live quickbar skills can protect you.</p><div class="challengeShell"><div class="challengeStage" id="groundStage"><div class="avatar" id="gavatar" style="left:${c.x}%;top:${c.y}%"><img src="${chosen.img}"></div>${c.objects.map((o,i)=>`<div class="${o.t}" data-i="${i}" style="left:${o.x}%;top:${o.y}%">${o.e}</div>`).join('')}</div><div class="challengeHud"><div class="challengeCard">Grounding cues <b>${c.collected}/${c.target}</b></div><div class="challengeCard">Calm shield <b>${c.shield}</b></div></div><div class="challengeControls"><button class="btn navy moveg" data-dx="-7" data-dy="0">←</button><button class="btn navy moveg" data-dx="0" data-dy="-7">↑</button><button class="btn navy moveg" data-dx="0" data-dy="7">↓</button><button class="btn navy moveg" data-dx="7" data-dy="0">→</button></div><p style="font-size:12px">Tip: you can close this challenge only by finishing it.</p></div></div>`;
- $('sceneBox').querySelectorAll('.moveg').forEach(b=>b.addEventListener('click',()=>{c.x=clamp(c.x+Number(b.dataset.dx));c.y=clamp(c.y+Number(b.dataset.dy));checkGround();drawGround()}))
+ $('sceneBox').querySelectorAll('.moveg').forEach(b=>b.addEventListener('click',()=>{if(!challenge)return;c.x=clamp(c.x+Number(b.dataset.dx));c.y=clamp(c.y+Number(b.dataset.dy));checkGround();if(challenge)drawGround()}))
 }
 function checkGround(){
  const c=challenge;for(let i=c.objects.length-1;i>=0;i--){const o=c.objects[i],d=Math.hypot(c.x-o.x,c.y-o.y);if(d<10){if(o.t==='pickup'){c.collected++;c.objects.splice(i,1);gain(2,1)}else{c.shield-=18;c.objects.splice(i,1);s.stats.stress+=5}}}
- if(c.collected>=c.target){s.quests.park=true;s.stats.stress-=10;s.stats.recovery+=7;if(!s.unlocked.includes('move'))s.unlocked.push('move');gain(20,12);addLog('Completed Grounding Run');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Grounding Run complete')}
+ if(c.collected>=c.target){s.quests.park=true;s.stats.stress-=10;s.stats.recovery+=7;if(!s.unlocked.includes('move'))s.unlocked.push('move');gain(20,12);addLog('Completed Grounding Run');challenge=null;$('sceneModal').classList.remove('open');renderWorld();save(true);toast('Grounding Run complete');setTimeout(maybeCompleteDay,80)}
 }
 function breathingRhythm(){
  challenge={type:'breath',phase:0,score:0,pos:0,dir:1,seq:['INHALE','HOLD','EXHALE','INHALE','HOLD','EXHALE']};drawBreath();$('sceneModal').classList.add('open');startBreathTicker()
 }
 function drawBreath(){
- const c=challenge;$('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.park)"></div><div class="scenePanel"><span class="pill">TIMING CHALLENGE</span><h2>Breathing Rhythm</h2><p>Tap when the moving marker enters the green zone. Build a full breathing cycle.</p><div class="challengeShell"><div class="breatheCircle ${c.seq[c.phase]==='INHALE'?'in':''}">${c.seq[c.phase]}</div><div class="timingTrack"><div class="zone"></div><div class="marker" id="marker" style="left:${c.pos}%"></div></div><button id="breathTap" class="btn green" style="width:100%;margin-top:12px">Tap in the green zone</button><p>Hits ${c.score}/6</p></div></div>`;$('breathTap').addEventListener('click',()=>{const ok=c.pos>=42&&c.pos<=58;if(ok){c.score++;c.phase++}else{s.stats.stress+=2}if(c.phase>=c.seq.length){s.quests.gym=true;s.stats.stress-=12;s.stats.energy+=6;if(!s.unlocked.includes('move'))s.unlocked.push('move');gain(22,12);addLog('Completed Breathing Rhythm');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Breathing Rhythm complete')}else drawBreath()})
+ const c=challenge;$('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.park)"></div><div class="scenePanel"><span class="pill">TIMING CHALLENGE</span><h2>Breathing Rhythm</h2><p>Tap when the moving marker enters the green zone. Build a full breathing cycle.</p><div class="challengeShell"><div class="breatheCircle ${c.seq[c.phase]==='INHALE'?'in':''}">${c.seq[c.phase]}</div><div class="timingTrack"><div class="zone"></div><div class="marker" id="marker" style="left:${c.pos}%"></div></div><button id="breathTap" class="btn green" style="width:100%;margin-top:12px">Tap in the green zone</button><p>Hits ${c.score}/6</p></div></div>`;$('breathTap').addEventListener('click',()=>{const ok=c.pos>=42&&c.pos<=58;if(ok){c.score++;c.phase++}else{s.stats.stress+=2}if(c.phase>=c.seq.length){s.quests.gym=true;s.stats.stress-=12;s.stats.energy+=6;if(!s.unlocked.includes('move'))s.unlocked.push('move');gain(22,12);addLog('Completed Breathing Rhythm');challenge=null;$('sceneModal').classList.remove('open');renderWorld();save(true);toast('Breathing Rhythm complete');setTimeout(maybeCompleteDay,80)}else drawBreath()})
 }
 function startBreathTicker(){function tick(){if(!challenge||challenge.type!=='breath')return;challenge.pos+=challenge.dir*1.6;if(challenge.pos>=95||challenge.pos<=0)challenge.dir*=-1;const m=$('marker');if(m)m.style.left=challenge.pos+'%';requestAnimationFrame(tick)}requestAnimationFrame(tick)}
 function budgetPuzzle(){
@@ -255,10 +342,17 @@ function drawBudget(){
  const c=challenge,total=c.sel.reduce((a,i)=>a+c.items[i][1],0);
  $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.cafe)"></div><div class="scenePanel"><span class="pill">PUZZLE</span><h2>Market Square</h2><p>You have $12. Pick enough to eat without going over budget.</p><div class="challengeShell"><div class="budgetgrid">${c.items.map((it,i)=>`<button class="item ${c.sel.includes(i)?'sel':''}" data-i="${i}">${it[0]}<br>$${it[1]}</button>`).join('')}</div><p>Total: <b>$${total}</b> / $12</p><button id="budgetSubmit" class="btn green" style="width:100%">Check cart</button></div></div>`;
  $('sceneBox').querySelectorAll('.item').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.i);c.sel.includes(i)?c.sel=c.sel.filter(x=>x!==i):c.sel.push(i);drawBudget()}));
- $('budgetSubmit').addEventListener('click',()=>{const t=c.sel.reduce((a,i)=>a+c.items[i][1],0);if(t<=12&&c.sel.length>=2){s.money-=t;s.stats.recovery+=5;s.quests.market=true;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(16,8);addLog('Completed Market budget puzzle');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Budget challenge complete')}else toast(t>12?'Over budget':'Pick at least 2 items')})
+ $('budgetSubmit').addEventListener('click',()=>{const t=c.sel.reduce((a,i)=>a+c.items[i][1],0);if(t<=12&&c.sel.length>=2){s.money-=t;s.stats.recovery+=5;s.quests.market=true;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(16,8);addLog('Completed Market budget puzzle');challenge=null;$('sceneModal').classList.remove('open');renderWorld();save(true);toast('Budget challenge complete');setTimeout(maybeCompleteDay,80)}else toast(t>12?'Over budget':'Pick at least 2 items')})
 }
 function supportQuest(){
- challenge={type:'support',need:50};$('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url(ASSET.cafe)"></div><div class="scenePanel"><span class="pill">SUPPORT QUEST</span><h2>Ask Clearly</h2><div class="dialog"><b>Mara</b><p>“Tell me what kind of help you need, not what you think you should say.”</p></div><div class="challengeShell"><p>Build a clear request by completing all three actions:</p><button id="nameNeed" class="btn blue" style="width:100%;margin-top:7px">1. Name the need</button><button id="nameAsk" class="btn green" style="width:100%;margin-top:7px">2. Make a specific ask</button><button id="acceptNo" class="btn orange" style="width:100%;margin-top:7px">3. Leave room for “no”</button><p id="supportProgress">0/3 complete</p></div></div>`;$('sceneModal').classList.add('open');let n=0;['nameNeed','nameAsk','acceptNo'].forEach(id=>$(id).addEventListener('click',e=>{if(e.currentTarget.disabled)return;e.currentTarget.disabled=true;n++;$('supportProgress').textContent=n+'/3 complete';if(n===3){s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);addLog('Completed support request challenge');setTimeout(()=>{$('sceneModal').classList.remove('open');renderWorld();toast('Reach Out unlocked')},250)}}))
+ ensureStateShape();
+ $('sceneBox').innerHTML=`<div class="sceneArt" style="background-image:url('${ASSET.cafe}')"></div><div class="scenePanel"><span class="pill">SUPPORT QUEST</span><h2>Ask clearly</h2><div class="dialog"><b>Mara</b><p>“Tell me what kind of help you need, not what you think you should say.”</p></div><label class="formLabel" for="supportNeed">1. Name the need</label><textarea id="supportNeed" class="reflectionField" maxlength="700" placeholder="What do you need right now?">${esc(s.notes.supportNeed||'')}</textarea><label class="formLabel" for="supportAsk">2. Make a specific ask</label><textarea id="supportAsk" class="reflectionField" maxlength="700" placeholder="What could you clearly ask a safe person to do?">${esc(s.notes.supportAsk||'')}</textarea><label class="formLabel" for="supportBoundary">3. Leave room for “no”</label><textarea id="supportBoundary" class="reflectionField" maxlength="700" placeholder="How can you respect their answer and still take care of yourself?">${esc(s.notes.supportBoundary||'')}</textarea><div class="sceneActions"><button type="button" id="saveSupport" class="btn green">Save my support request</button></div><div id="supportErr"></div></div>`;
+ $('sceneModal').classList.add('open');$('sceneBox').scrollTop=0;
+ $('saveSupport').addEventListener('click',()=>{
+  const vals=[$('supportNeed').value.trim(),$('supportAsk').value.trim(),$('supportBoundary').value.trim()];
+  if(vals.some(v=>v.length<3)){$('supportErr').innerHTML='<div class="fieldError">Complete all three parts before saving.</div>';return}
+  [s.notes.supportNeed,s.notes.supportAsk,s.notes.supportBoundary]=vals;s.quests.support=true;s.stats.connection+=10;if(!s.unlocked.includes('reach'))s.unlocked.push('reach');gain(18,10);addLog('Completed a clear support request');norm();advance(30);sceneComplete('Your support request is saved on this device. Reach Out is now available in your toolbox.')
+ })
 }
 function bossFight(){
  challenge={type:'boss',phase:1,pressure:100,timer:30};
@@ -277,25 +371,37 @@ function startBossTimer(){
   drawBoss();setTimeout(tick,1000)
  }setTimeout(tick,1000)
 }
-function finishBoss(){s.quests.boss=true;if(!s.unlocked.includes('urge'))s.unlocked.push('urge');gain(40,25);addLog('Cleared The Hard Evening');challenge=null;$('sceneModal').classList.remove('open');renderWorld();toast('Boss cleared — Urge Surfing unlocked')}
+function finishBoss(){s.quests.boss=true;if(!s.unlocked.includes('urge'))s.unlocked.push('urge');gain(40,25);addLog('Cleared The Hard Evening');challenge=null;$('sceneModal').classList.remove('open');renderWorld();save(true);toast('Boss cleared — Urge Surfing unlocked');setTimeout(maybeCompleteDay,100)}
 function openTools(){
  $('toolGrid').innerHTML=Object.entries(skills).map(([id,sk])=>{const allowed=s.mode==='paid'||['deep','ground','self','reach'].includes(id),un=allowed&&s.unlocked.includes(id),eq=s.equipped.includes(id);return `<div class="toolCard ${un?'':'lock'}"><img src="${sk.img}"><b>${sk.name}</b><small>${allowed?sk.desc:'Extended Journey skill'}</small><button class="btn ${un?'green':'navy'} useTool" data-skill="${id}" ${un?'':'disabled'}>${un?'Use now':'Locked'}</button><button class="btn navy equipTool" data-skill="${id}" ${un?'':'disabled'}>${eq?'Unequip':'Equip'}</button></div>`}).join('');
  $('toolGrid').querySelectorAll('.useTool').forEach(b=>b.addEventListener('click',()=>{useSkill(b.dataset.skill);openTools()}));
  $('toolGrid').querySelectorAll('.equipTool').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.skill;if(s.equipped.includes(id))s.equipped=s.equipped.filter(x=>x!==id);else if(s.equipped.length<4)s.equipped.push(id);else toast('Equip up to 4 skills');openTools();renderQuickbar()}));
  $('toolModal').classList.add('open')
 }
-function openJournal(){$('journalList').innerHTML=s.log.map(x=>`<div class="logline">${x}</div>`).join('');$('journalModal').classList.add('open')}
-function nextDay(){if(s.mode==='free'){showPaywall('work');return}if(s.day<3)s.day++;s.h=9;s.m=0;s.x=.5;s.y=.62;s.stats.energy=clamp(s.stats.energy+15);s.stats.stress=clamp(s.stats.stress-5);addLog(`Day ${s.day} begins.`);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)}
+function openJournal(){
+ ensureStateShape();
+ const notes=[['Home Base plan',s.notes.home],['Meeting share',s.notes.meeting],['Reflection Library',s.notes.library]].filter(x=>x[1]);
+ $('journalList').innerHTML='';
+ if(notes.length){const h=document.createElement('h3');h.textContent='Your saved reflections';$('journalList').appendChild(h);notes.forEach(([label,value])=>{const d=document.createElement('div');d.className='logline';const b=document.createElement('b');b.textContent=label;const p=document.createElement('p');p.textContent=value;d.append(b,p);$('journalList').appendChild(d)})}
+ const h2=document.createElement('h3');h2.textContent='Journey log';$('journalList').appendChild(h2);
+ s.log.forEach(x=>{const d=document.createElement('div');d.className='logline';d.textContent=x;$('journalList').appendChild(d)});
+ $('journalModal').classList.add('open');$('journalModal').scrollTop=0
+}
+function nextDay(){
+ ensureStateShape();
+ if(s.day<3){s.day++;s.h=9;s.m=0;s.x=.5;s.y=.62;s.stats.energy=clamp(s.stats.energy+15);s.stats.stress=clamp(s.stats.stress-5);addLog(`Day ${s.day} begins.`);save(true)}
+ show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)
+}
 function buildChars(){chars.forEach((c,i)=>{const b=document.createElement('button');b.className='char'+(i===0?' sel':'');b.innerHTML=`<img src="${c.img}"><b>${c.name}</b><small>${c.role}</small>`;b.addEventListener('click',()=>{chosen=c;document.querySelectorAll('.char').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')});$('chargrid').appendChild(b)})}
 
 buildChars();
-$('freeMode').addEventListener('click',()=>{selectedMode='paid';$('freeMode').classList.add('sel');$('paidMode').classList.remove('sel')});
+$('freeMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
 $('paidMode').addEventListener('click',()=>{selectedMode='paid';$('paidMode').classList.add('sel');$('freeMode').classList.remove('sel')});
 document.querySelectorAll('.location').forEach(b=>b.addEventListener('click',()=>travelTo(b.dataset.place)));
-$('startBtn').addEventListener('click',()=>{fresh();show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});
+$('startBtn').addEventListener('click',()=>{selectedMode='paid';fresh();save(true);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});
 $('continueBtn').addEventListener('click',load);$('saveBtn').addEventListener('click',save);$('toolBtn').addEventListener('click',openTools);$('journalBtn').addEventListener('click',openJournal);
 $('closeTools').addEventListener('click',()=>$('toolModal').classList.remove('open'));$('closeJournal').addEventListener('click',()=>$('journalModal').classList.remove('open'));
-$('replayBtn').addEventListener('click',()=>{fresh();show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
+$('replayBtn').addEventListener('click',()=>{selectedMode='paid';fresh();save(true);show('game');renderWorld();last=performance.now();requestAnimationFrame(loop)});$('nextBtn').addEventListener('click',nextDay);
 window.addEventListener('resize',()=>s&&renderWorld());window.addEventListener('keydown',e=>{keys[e.key]=true;if(['1','2','3','4'].includes(e.key)){const id=s&&s.equipped[Number(e.key)-1];if(id)useSkill(id)}});window.addEventListener('keyup',e=>keys[e.key]=false);
 document.querySelectorAll('.dpad button').forEach(b=>{const map={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'},k=map[b.dataset.dir];const dn=e=>{e.preventDefault();keys[k]=true},up=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('pointerleave',up)});
 
