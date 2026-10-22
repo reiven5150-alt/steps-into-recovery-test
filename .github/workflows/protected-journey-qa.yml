@@ -1,0 +1,53 @@
+name: Protected Journey QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'secure-preview.html'
+      - '.github/workflows/protected-journey-qa.yml'
+  workflow_dispatch:
+jobs:
+  protected-journey:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify denial without a valid license
+        shell: bash
+        run: |
+          endpoint='https://yzexencwfirltxnmexcg.supabase.co/functions/v1/protected-journey-content'
+          code=$(curl -sS -o /tmp/denied.json -w '%{http_code}' -X POST "$endpoint" -H 'Content-Type: application/json' -d '{"code":"INVALID-UNLICENSED-TEST-ONLY"}')
+          test "$code" = "403"
+          node -e "const fs=require('fs');let x=JSON.parse(fs.readFileSync('/tmp/denied.json'));if(x.authorized||x.html)process.exit(1)"
+      - name: Verify temporary authorized game delivery
+        shell: bash
+        run: |
+          endpoint='https://yzexencwfirltxnmexcg.supabase.co/functions/v1/protected-journey-content'
+          code=$(curl -sS -o /tmp/paid.json -w '%{http_code}' -X POST "$endpoint" -H 'Content-Type: application/json' -d '{"code":"SIH-PROTECTED-QA-20261022-C5EA71AE-981F"}')
+          test "$code" = "200"
+          node -e "const fs=require('fs');let x=JSON.parse(fs.readFileSync('/tmp/paid.json'));if(!x.authorized||typeof x.html!=='string'||x.html.length<100000||!x.html.includes('id=\"app\"')||!x.html.includes('startBtn'))process.exit(1);console.log('Authorized game delivery passed')"
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Browser test for the staged player
+        shell: bash
+        run: |
+          python3 -m http.server 4173 >/tmp/security-preview-server.log 2>&1 &
+          node --input-type=module <<'NODE'
+          import {chromium} from 'playwright';
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:390,height:844}});
+          const errors=[];
+          page.on('pageerror',e=>errors.push(e.message));
+          await page.goto('http://127.0.0.1:4173/secure-preview.html?code=SIH-PROTECTED-QA-20261022-C5EA71AE-981F',{waitUntil:'domcontentloaded'});
+          await page.locator('#start.active').waitFor({timeout:20000});
+          await page.locator('#startBtn').click();
+          await page.locator('#game.active').waitFor({timeout:10000});
+          if(errors.length) throw new Error('Browser errors: '+errors.join('; '));
+          console.log('Paid game opens in browser after server authorization');
+          await browser.close();
+          NODE
