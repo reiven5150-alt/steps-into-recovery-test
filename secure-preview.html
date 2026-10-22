@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Steps Into Recovery — Secure Full Journey</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#072631;color:#f9f3e7;font-family:system-ui,Arial,sans-serif;display:grid;place-items:center;padding:20px}
+main{max-width:520px;background:#0c3a49;padding:26px;border:1px solid #f1b846;border-radius:18px;box-shadow:0 20px 60px #0005}
+h1{margin-top:0}p{line-height:1.55}a{color:#ffd16b}
+</style>
+</head>
+<body>
+<main id="access-status" data-build="11.1.0">
+<h1>Steps Into Recovery</h1>
+<p id="access-message" role="status">Verifying your Full Journey access…</p>
+<p>If this does not open, contact <a href="mailto:support@stepsintohope.com">support@stepsintohope.com</a>.</p>
+</main>
+<script>
+(async function() {
+  'use strict';
+  const endpoint="https://yzexencwfirltxnmexcg.supabase.co/functions/v1/protected-journey-content";
+  const params=new URLSearchParams(location.search);
+  const incoming=(params.get('code')||'').trim().toUpperCase();
+  let saved='';
+  try { saved=(localStorage.getItem('sih_full_journey_code')||'').trim().toUpperCase(); } catch(e) {}
+  const code=incoming||saved;
+  const status=document.getElementById('access-message');
+  function deny(message) { status.textContent=message; }
+  if(!code) {
+    deny('Your access link is missing a code. Open the private link sent with your purchase or complimentary access.');
+    return;
+  }
+  try {
+    const response=await fetch(endpoint,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({code}),
+      cache:'no-store',
+      referrerPolicy:'no-referrer'
+    });
+    const result=await response.json();
+    if(!response.ok||!result.authorized||typeof result.html!=='string'||!result.html.includes('id="app"')) {
+      deny('Your Full Journey access could not be verified. Check your access link or contact support.');
+      return;
+    }
+    try { localStorage.setItem('sih_full_journey_code',code); } catch(e) {}
+    if(incoming) history.replaceState(null,'',location.pathname);
+    document.open();
+    document.write(result.html);
+    document.close();
+  } catch(e) {
+    deny('We could not verify access right now. Please retry, or contact support.');
+  }
+})();
+</script>
+</body></html>
