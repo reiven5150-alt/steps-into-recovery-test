@@ -1,4 +1,4 @@
-name: Full Journey QA
+name: Full Journey Public QA
 on:
   push:
     branches: [main]
@@ -9,6 +9,7 @@ on:
       - 'facility-staff.html'
       - 'plans.html'
       - 'qa/full-journey.spec.mjs'
+      - 'qa/secure-smoke.spec.mjs'
       - '.github/workflows/full-journey-qa.yml'
   workflow_dispatch:
 
@@ -35,7 +36,7 @@ jobs:
           for i in {1..20}; do curl -fsS http://127.0.0.1:4173/full-journey.html >/dev/null && exit 0; sleep 1; done
           exit 1
       - name: Run browser QA
-        run: node qa/full-journey.spec.mjs
+        run: node qa/secure-smoke.spec.mjs
       - name: Verify live customer pages render as HTML
         run: |
           BASE='https://reiven5150-alt.github.io/steps-into-recovery-test'
