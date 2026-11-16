@@ -1,0 +1,22 @@
+{%- comment -%}
+Steps Into Hope: paste this block near the TOP of Shopify's Shipping confirmation email body,
+not in Order confirmation. It runs only for Steps Into Recovery digital purchases
+where tracking number marks game access. It does not affect physical shipments.
+Keep the rest of your existing notification template below this block.
+{%- endcomment -%}
+{%- assign access_url = fulfillment.tracking_urls | first -%}
+{%- if access_url and fulfillment.tracking_numbers contains 'OPEN-FULL-JOURNEY' -%}
+  <div style="padding:24px;margin:16px 0;border:2px solid #e4b450;background:#f9f4e8;border-radius:14px;text-align:center;">
+    <h2 style="margin:0 0 12px;color:#113c46;font-family:Arial,sans-serif;">Your Steps Into Recovery game is ready</h2>
+    <p style="font-family:Arial,sans-serif;color:#23464e;">Thank you for your purchase. Your Full Journey access is active. This is a digital product — nothing will be shipped.</p>
+    <a href="{{ access_url }}" style="display:inline-block;padding:15px 24px;background:#135763;color:#ffffff;font:bold 17px Arial,sans-serif;text-decoration:none;border-radius:10px;">OPEN YOUR FULL JOURNEY</a>
+    <p style="font:14px Arial,sans-serif;color:#436067;margin:16px 0 0;">Keep this link private. For help, email hello@stepsintohope.com.</p>
+  </div>
+{%- elsif access_url and fulfillment.tracking_numbers contains 'ACTIVATE-FACILITY' -%}
+  <div style="padding:24px;margin:16px 0;border:2px solid #e4b450;background:#f9f4e8;border-radius:14px;text-align:center;">
+    <h2 style="margin:0 0 12px;color:#113c46;font-family:Arial,sans-serif;">Activate your Steps Into Recovery facility license</h2>
+    <p style="font-family:Arial,sans-serif;color:#23464e;">Your purchase is complete. Register your one licensed physical location to unlock the game for your facility. Nothing will be shipped.</p>
+    <a href="{{ access_url }}" style="display:inline-block;padding:15px 24px;background:#135763;color:#ffffff;font:bold 17px Arial,sans-serif;text-decoration:none;border-radius:10px;">ACTIVATE FACILITY ACCESS</a>
+    <p style="font:14px Arial,sans-serif;color:#436067;margin:16px 0 0;">Keep this link private. For help, email hello@stepsintohope.com.</p>
+  </div>
+{%- endif -%}
