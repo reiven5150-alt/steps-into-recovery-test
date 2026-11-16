@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>Activate Your Facility — Steps Into Recovery</title>
+<style>
+:root{--teal:#0b3d49;--gold:#e7b34f;--ink:#15313a;--cream:#fff9ed}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#05232e,#14525b);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;padding:20px;min-height:100vh}
+main{max-width:680px;margin:3vh auto;background:var(--cream);padding:clamp(20px,5vw,35px);border-radius:22px;box-shadow:0 25px 70px #001d2a80}
+h1{margin:0;color:var(--teal);font-size:clamp(26px,5vw,37px);line-height:1.12}p{margin:12px 0 20px}.tag{color:#815b13;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:12px;margin-bottom:10px}
+label{display:block;font-size:14px;font-weight:750;margin:12px 0 4px}input{display:block;width:100%;padding:12px;border:1px solid #aebdb8;border-radius:10px;background:#fff;font:inherit}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 13px}button,.btn{border:0;border-radius:12px;padding:13px 18px;background:var(--teal);color:white;font-size:16px;font-weight:800;cursor:pointer;display:inline-block;text-decoration:none}button[disabled]{opacity:.6;cursor:wait}
+#feedback{background:#f5efd9;border-radius:12px;padding:13px;margin:16px 0;min-height:55px}
+.note{color:#425a5e;font-size:14px}a{color:#17636f}
+@media(max-width:550px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<main>
+<div class="tag">Steps Into Hope · Secure digital purchase</div>
+<h1>Activate your facility's recovery journey</h1>
+<p>Register the one physical facility or program location covered by your purchase. Once activated, you'll receive the link to begin your Steps Into Recovery Full Journey.</p>
+<div id="feedback" role="status">Checking your purchased access…</div>
+<form id="activate" hidden>
+<label for="facility">Facility / program name</label><input id="facility" name="facility_name" required maxlength="160" autocomplete="organization">
+<label for="street">Street address</label><input id="street" name="address1" required maxlength="200" autocomplete="address-line1">
+<label for="street2">Address line 2 (optional)</label><input id="street2" name="address2" maxlength="200" autocomplete="address-line2">
+<div class="grid"><div><label for="city">City</label><input id="city" name="city" required maxlength="120" autocomplete="address-level2"></div><div><label for="state">State</label><input id="state" name="state" required maxlength="80" autocomplete="address-level1"></div></div>
+<div class="grid"><div><label for="postal">ZIP / postal code</label><input id="postal" name="postal_code" required maxlength="20" autocomplete="postal-code"></div><div><label for="email">Facility administrator email</label><input id="email" name="admin_email" required type="email" autocomplete="email"></div></div>
+<p class="note">The facility license will be linked to this location. Additional physical locations require separate licenses.</p>
+<button id="activateButton" type="submit">Activate this facility</button>
+</form>
+<div id="ready" hidden><p><strong>Your facility access is activated.</strong></p><a id="play" class="btn" rel="noreferrer" href="#">Open Full Journey</a><p class="note">You can return to this private link to open the game again. Do not share it publicly.</p></div>
+<p class="note">Need help? <a href="mailto:hello@stepsintohope.com">hello@stepsintohope.com</a></p>
+</main>
+<script>
+'use strict';
+const endpoint="https://yzexencwfirltxnmexcg.supabase.co/functions/v1/shopify-facility-activate";
+const code=(new URLSearchParams(location.search).get("code")||"").trim().toUpperCase();
+const feedback=document.getElementById("feedback"), form=document.getElementById("activate"),ready=document.getElementById("ready");
+async function request(body){const url=endpoint+"?code="+encodeURIComponent(code);const r=await fetch(url,{method:body?"POST":"GET",headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined,cache:"no-store",referrerPolicy:"no-referrer"});const j=await r.json();if(!r.ok)throw new Error(j.message||"Could not verify access");return j}
+function show(d){if(d.status==="facility_active"&&d.access_url){feedback.textContent="Your facility is registered and your journey is ready.";document.getElementById("play").href=d.access_url;form.hidden=true;ready.hidden=false}else{feedback.textContent="Purchase verified. Please register your facility location.";form.hidden=false;ready.hidden=true;if(d.admin_email)document.getElementById("email").value=d.admin_email}}
+(async()=>{if(!code){feedback.textContent="The private purchase link is incomplete. Please use the access link from your Shopify order.";return}try{show(await request())}catch(e){feedback.textContent=String(e.message||e)}})();
+form.addEventListener("submit",async e=>{e.preventDefault();const b=document.getElementById("activateButton");b.disabled=true;feedback.textContent="Activating your facility license…";try{show(await request(Object.fromEntries(new FormData(form).entries())))}catch(err){feedback.textContent=String(err.message||err)}finally{b.disabled=false}});
+</script></body></html>
