@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'visual-polish.css'
+      - 'facility-activate.html'
       - 'full-journey.html'
       - 'purchase.html'
       - 'facility-staff.html'
@@ -43,7 +45,7 @@ jobs:
           ok=0
           for i in {1..18}; do
             all_html=1
-            for path in index.html full-journey.html purchase.html facility-staff.html plans.html; do
+            for path in index.html full-journey.html purchase.html facility-staff.html facility-activate.html plans.html; do
               headers="$(curl -fsSI "$BASE/$path?v=11.1.0" || true)"
               printf '%s' "$headers" | grep -qi 'content-type:.*text/html' || all_html=0
             done
@@ -55,6 +57,12 @@ jobs:
             sleep 10
           done
           test "$ok" = 1
+      - name: Verify visual stylesheet and facility activation page
+        run: |
+          BASE="https://reiven5150-alt.github.io/steps-into-recovery-test"
+          curl -fsS "$BASE/visual-polish.css?v=1" | grep -q "#start .startcard"
+          curl -fsS "$BASE/facility-activate.html" | grep -q "shopify-facility-activate"
+          curl -fsS "$BASE/index.html" | grep -q "visual-polish.css"
       - name: Verify legacy Supabase link redirects without source
         run: |
           LEGACY='https://yzexencwfirltxnmexcg.supabase.co/functions/v1/full-journey-access?code=QA-NOT-A-REAL-CUSTOMER-CODE'
